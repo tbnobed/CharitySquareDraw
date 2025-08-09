@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import splashLogo from "@/assets/splash-logo.png";
+import splashLogo from "../assets/splash-logo.png";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -10,7 +10,10 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   const [, setLocation] = useLocation();
   const [fadeOut, setFadeOut] = useState(false);
 
+  console.log("SplashScreen component rendered");
+
   useEffect(() => {
+    console.log("SplashScreen useEffect triggered");
     const timer = setTimeout(() => {
       setFadeOut(true);
       // Wait for fade out animation to complete

@@ -27,9 +27,12 @@ function Router() {
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
+  console.log("App component rendered, showSplash:", showSplash);
+
   // Check if user has already seen splash screen in this session
   useEffect(() => {
     const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+    console.log("hasSeenSplash from sessionStorage:", hasSeenSplash);
     if (hasSeenSplash) {
       setShowSplash(false);
     }
