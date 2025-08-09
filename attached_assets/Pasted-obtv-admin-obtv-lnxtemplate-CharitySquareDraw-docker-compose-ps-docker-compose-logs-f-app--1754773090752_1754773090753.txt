@@ -1,0 +1,87 @@
+obtv-admin@obtv-lnxtemplate:~/CharitySquareDraw$ docker-compose ps
+docker-compose logs -f app
+         Name                       Command                       State                           Ports
+------------------------------------------------------------------------------------------------------------------------
+chicken-poop-bingo-app   docker-entrypoint.sh node  ...   Up (health: starting)   0.0.0.0:5000->5000/tcp,:::5000-
+                                                                                  >5000/tcp
+chicken-poop-bingo-db    docker-entrypoint.sh postgres    Up (healthy)            0.0.0.0:5432->5432/tcp,:::5432-
+                                                                                  >5432/tcp
+Attaching to chicken-poop-bingo-app
+chicken-poop-bingo-app | WebSocket server disabled - using polling for real-time updates
+chicken-poop-bingo-app | 8:57:31 PM [express] serving on port 5000
+chicken-poop-bingo-app | Error getting current game round: NeonDbError: Error connecting to database: fetch failed
+chicken-poop-bingo-app |     at execute (file:///app/node_modules/@neondatabase/serverless/index.mjs:1549:24)
+chicken-poop-bingo-app |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+chicken-poop-bingo-app |     at async NeonHttpPreparedQuery.execute (file:///app/node_modules/drizzle-orm/neon-http/session.js:40:20)
+chicken-poop-bingo-app |     at async PostgresStorage.getCurrentGameRound (file:///app/dist/server-bundle.js:137:22)
+chicken-poop-bingo-app |     at async PostgresStorage.initializeDatabase (file:///app/dist/server-bundle.js:120:27) {
+chicken-poop-bingo-app |   severity: undefined,
+chicken-poop-bingo-app |   code: undefined,
+chicken-poop-bingo-app |   detail: undefined,
+chicken-poop-bingo-app |   hint: undefined,
+chicken-poop-bingo-app |   position: undefined,
+chicken-poop-bingo-app |   internalPosition: undefined,
+chicken-poop-bingo-app |   internalQuery: undefined,
+chicken-poop-bingo-app |   where: undefined,
+chicken-poop-bingo-app |   schema: undefined,
+chicken-poop-bingo-app |   table: undefined,
+chicken-poop-bingo-app |   column: undefined,
+chicken-poop-bingo-app |   dataType: undefined,
+chicken-poop-bingo-app |   constraint: undefined,
+chicken-poop-bingo-app |   file: undefined,
+chicken-poop-bingo-app |   line: undefined,
+chicken-poop-bingo-app |   routine: undefined,
+chicken-poop-bingo-app |   sourceError: TypeError: fetch failed
+chicken-poop-bingo-app |       at node:internal/deps/undici/undici:13510:13
+chicken-poop-bingo-app |       at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+chicken-poop-bingo-app |       at async execute (file:///app/node_modules/@neondatabase/serverless/index.mjs:1548:15)
+chicken-poop-bingo-app |       at async NeonHttpPreparedQuery.execute (file:///app/node_modules/drizzle-orm/neon-http/session.js:40:20)
+chicken-poop-bingo-app |       at async PostgresStorage.getCurrentGameRound (file:///app/dist/server-bundle.js:137:22)
+chicken-poop-bingo-app |       at async PostgresStorage.initializeDatabase (file:///app/dist/server-bundle.js:120:27) {
+chicken-poop-bingo-app |     [cause]: Error: connect ECONNREFUSED 172.18.0.2:443
+chicken-poop-bingo-app |         at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) {
+chicken-poop-bingo-app |       errno: -111,
+chicken-poop-bingo-app |       code: 'ECONNREFUSED',
+chicken-poop-bingo-app |       syscall: 'connect',
+chicken-poop-bingo-app |       address: '172.18.0.2',
+chicken-poop-bingo-app |       port: 443
+chicken-poop-bingo-app |     }
+chicken-poop-bingo-app |   }
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app | Failed to initialize database: NeonDbError: Error connecting to database: fetch failed
+chicken-poop-bingo-app |     at execute (file:///app/node_modules/@neondatabase/serverless/index.mjs:1549:24)
+chicken-poop-bingo-app |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+chicken-poop-bingo-app |     at async PostgresStorage.createGameRound (file:///app/dist/server-bundle.js:158:5)
+chicken-poop-bingo-app |     at async PostgresStorage.initializeDatabase (file:///app/dist/server-bundle.js:122:28) {
+chicken-poop-bingo-app |   severity: undefined,
+chicken-poop-bingo-app |   code: undefined,
+chicken-poop-bingo-app |   detail: undefined,
+chicken-poop-bingo-app |   hint: undefined,
+chicken-poop-bingo-app |   position: undefined,
+chicken-poop-bingo-app |   internalPosition: undefined,
+chicken-poop-bingo-app |   internalQuery: undefined,
+chicken-poop-bingo-app |   where: undefined,
+chicken-poop-bingo-app |   schema: undefined,
+chicken-poop-bingo-app |   table: undefined,
+chicken-poop-bingo-app |   column: undefined,
+chicken-poop-bingo-app |   dataType: undefined,
+chicken-poop-bingo-app |   constraint: undefined,
+chicken-poop-bingo-app |   file: undefined,
+chicken-poop-bingo-app |   line: undefined,
+chicken-poop-bingo-app |   routine: undefined,
+chicken-poop-bingo-app |   sourceError: TypeError: fetch failed
+chicken-poop-bingo-app |       at node:internal/deps/undici/undici:13510:13
+chicken-poop-bingo-app |       at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+chicken-poop-bingo-app |       at async execute (file:///app/node_modules/@neondatabase/serverless/index.mjs:1548:15)
+chicken-poop-bingo-app |       at async PostgresStorage.createGameRound (file:///app/dist/server-bundle.js:158:5)
+chicken-poop-bingo-app |       at async PostgresStorage.initializeDatabase (file:///app/dist/server-bundle.js:122:28) {
+chicken-poop-bingo-app |     [cause]: Error: connect ECONNREFUSED 172.18.0.2:443
+chicken-poop-bingo-app |         at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) {
+chicken-poop-bingo-app |       errno: -111,
+chicken-poop-bingo-app |       code: 'ECONNREFUSED',
+chicken-poop-bingo-app |       syscall: 'connect',
+chicken-poop-bingo-app |       address: '172.18.0.2',
+chicken-poop-bingo-app |       port: 443
+chicken-poop-bingo-app |     }
+chicken-poop-bingo-app |   }
+chicken-poop-bingo-app | }
