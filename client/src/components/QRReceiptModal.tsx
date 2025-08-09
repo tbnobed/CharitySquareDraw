@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,20 +24,36 @@ export function QRReceiptModal({
   totalAmount 
 }: QRReceiptModalProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const { toast } = useToast();
 
   // Generate the receipt URL
   const receiptUrl = `${window.location.origin}/receipt?id=${participantId}`;
 
   useEffect(() => {
-    if (isOpen && canvasRef.current) {
-      QRCode.toCanvas(canvasRef.current, receiptUrl, {
-        width: 200,
-        margin: 2,
-        color: {
-          dark: '#1f2937',
-          light: '#ffffff'
-        }
+    if (isOpen) {
+      // Generate QR code as both canvas and data URL for reliability
+      Promise.all([
+        // Generate data URL for fallback image display
+        QRCode.toDataURL(receiptUrl, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#1f2937',
+            light: '#ffffff'
+          }
+        }),
+        // Generate canvas if available
+        canvasRef.current ? QRCode.toCanvas(canvasRef.current, receiptUrl, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#1f2937',
+            light: '#ffffff'
+          }
+        }).catch(() => null) : Promise.resolve(null)
+      ]).then(([dataUrl]) => {
+        setQrDataUrl(dataUrl);
       }).catch(console.error);
     }
   }, [isOpen, receiptUrl]);
@@ -76,10 +92,12 @@ export function QRReceiptModal({
   };
 
   const handleDownloadQR = () => {
-    if (canvasRef.current) {
+    // Use the generated data URL or fall back to canvas
+    const dataUrl = qrDataUrl || (canvasRef.current ? canvasRef.current.toDataURL() : '');
+    if (dataUrl) {
       const link = document.createElement('a');
       link.download = `receipt-qr-${participantId.slice(0, 8)}.png`;
-      link.href = canvasRef.current.toDataURL();
+      link.href = dataUrl;
       link.click();
     }
   };
@@ -120,11 +138,27 @@ export function QRReceiptModal({
           {/* QR Code */}
           <div className="flex justify-center">
             <div className="p-4 bg-white rounded-lg shadow-sm border">
-              <canvas 
-                ref={canvasRef}
-                className="mx-auto"
-                data-testid="receipt-qr-code"
-              />
+              {qrDataUrl ? (
+                <img 
+                  src={qrDataUrl} 
+                  alt="Receipt QR Code"
+                  className="mx-auto"
+                  width={200}
+                  height={200}
+                  data-testid="receipt-qr-code"
+                />
+              ) : (
+                <canvas 
+                  ref={canvasRef}
+                  className="mx-auto"
+                  data-testid="receipt-qr-code"
+                />
+              )}
+              {!qrDataUrl && !canvasRef.current && (
+                <div className="w-[200px] h-[200px] bg-gray-100 flex items-center justify-center mx-auto">
+                  <QrCode className="w-12 h-12 text-gray-400" />
+                </div>
+              )}
             </div>
           </div>
 
