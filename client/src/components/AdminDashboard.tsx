@@ -153,7 +153,7 @@ export function AdminDashboard({
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Game Board Preview */}
         <div className="lg:col-span-1">
-          <Card className="w-[90%]">
+          <Card>
             <CardHeader>
               <CardTitle>Game Board Status</CardTitle>
             </CardHeader>
@@ -167,7 +167,7 @@ export function AdminDashboard({
 
         {/* Recent Participants */}
         <div className="lg:col-span-1">
-          <Card className="w-[110%]">
+          <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 Recent Participants
