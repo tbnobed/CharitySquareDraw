@@ -22,9 +22,9 @@ WORKDIR /app
 # Copy source code
 COPY . .
 
-# Build the Vite frontend and bundle server with esbuild
+# Build the Vite frontend and bundle production server with esbuild
 RUN npm run build
-RUN npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server-bundle.js
+RUN npx esbuild server/production-entry.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server-bundle.js
 
 # Production image
 FROM node:20-alpine AS runner
