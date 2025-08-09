@@ -270,7 +270,7 @@ export default function SellerPage() {
             <div className="flex items-center space-x-4">
               <Heart className="text-blue-500 h-8 w-8" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Square Game Manager</h1>
+                <h1 className="text-xl font-bold text-gray-900">Chicken Poop Bingo</h1>
                 <p className="text-sm text-gray-500">Seller Interface</p>
               </div>
             </div>

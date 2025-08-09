@@ -1,8 +1,8 @@
-# Square Game Manager - Nonprofit Fundraising Platform
+# Chicken Poop Bingo - Nonprofit Fundraising Platform
 
 ## Overview
 
-Square Game Manager is a real-time fundraising application designed for nonprofit organizations to manage square game events. The system provides an interactive grid-based game where participants can purchase squares for fundraising purposes. It features a dual-interface design with a seller-facing interface for participant registration and square selection, and an admin dashboard for event management and oversight.
+Chicken Poop Bingo is a real-time fundraising application designed for nonprofit organizations to manage square game events. The system provides an interactive grid-based game where participants can purchase squares for fundraising purposes. It features a dual-interface design with a seller-facing interface for participant registration and square selection, and an admin dashboard for event management and oversight.
 
 The application operates as a full-stack web platform with real-time updates, payment processing capabilities, and comprehensive game management tools. It's built to handle multiple game rounds and provides detailed analytics and participant management features.
 
