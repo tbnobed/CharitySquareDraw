@@ -153,7 +153,7 @@ export function AdminDashboard({
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Game Board Preview */}
         <div className="lg:col-span-1">
-          <Card>
+          <Card className="w-[90%]">
             <CardHeader>
               <CardTitle>Game Board Status</CardTitle>
             </CardHeader>
