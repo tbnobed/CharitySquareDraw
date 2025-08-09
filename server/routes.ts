@@ -325,25 +325,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const currentRound = await storage.getCurrentGameRound();
       if (!currentRound) {
-        return res.status(404).json({ error: "No active game round" });
+        // Return empty data instead of error if no game round
+        return res.json({ 
+          participants: [], 
+          gameRound: null,
+          message: "No active game round" 
+        });
       }
 
       const participants = await storage.getParticipants(currentRound.id);
       
-      // Format for CSV export
-      const csvData = participants.map(p => ({
-        Name: p.name,
-        Email: p.email,
-        Phone: p.phone,
-        Squares: p.squares.join(", "),
-        Amount: `$${p.totalAmount}`,
-        Status: p.paymentStatus,
-        Date: p.createdAt.toISOString(),
-      }));
-
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', `attachment; filename="participants-round-${currentRound.roundNumber}.json"`);
-      res.json(csvData);
+      res.json({
+        participants,
+        gameRound: currentRound,
+        exportDate: new Date().toISOString()
+      });
     } catch (error) {
       res.status(500).json({ error: "Failed to export data" });
     }

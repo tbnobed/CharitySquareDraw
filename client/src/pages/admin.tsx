@@ -135,25 +135,48 @@ export default function AdminPage() {
     },
   });
 
-  // Export data
+  // Export data as CSV
   const handleExportData = async () => {
     try {
       const response = await fetch('/api/export');
       const data = await response.json();
       
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      // Convert to CSV format
+      const csvHeaders = ['Name', 'Email', 'Phone', 'Squares', 'Total Amount', 'Payment Status', 'Date'];
+      const csvRows = [csvHeaders.join(',')];
+      
+      if (data.participants && data.participants.length > 0) {
+        data.participants.forEach((participant: Participant) => {
+          const row = [
+            `"${participant.name}"`,
+            `"${participant.email}"`,
+            `"${participant.phone}"`,
+            `"${participant.squares.map(s => `#${s}`).join('; ')}"`,
+            participant.totalAmount,
+            participant.paymentStatus,
+            `"${new Date(participant.createdAt || Date.now()).toLocaleDateString()}"`
+          ];
+          csvRows.push(row.join(','));
+        });
+      } else {
+        // Add empty row if no participants
+        csvRows.push('"No participants yet","","","","","",""');
+      }
+      
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `participants-round-${stats.currentRound}.json`;
+      a.download = `square-game-participants-round-${data.gameRound?.roundNumber || 'current'}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
       toast({
-        title: "Data Exported",
-        description: "Participant data has been downloaded successfully.",
+        title: "CSV Exported",
+        description: "Participant data has been downloaded as CSV file.",
       });
     } catch (error) {
       toast({
