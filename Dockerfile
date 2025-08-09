@@ -46,6 +46,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy client assets to serve statically
 COPY --from=builder /app/client/src/assets ./client/src/assets
 
+# Make production server executable
+RUN chmod +x server/production.js
+
 # Set ownership
 RUN chown -R chicken-poop-bingo:nodejs /app
 USER chicken-poop-bingo
@@ -57,5 +60,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/game', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Start the application
-CMD ["npm", "start"]
+# Start the application using our production server
+CMD ["node", "server/production.js"]
