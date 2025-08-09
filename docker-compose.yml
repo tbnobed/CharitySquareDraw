@@ -29,6 +29,10 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+      args:
+        VITE_VENMO_USERNAME: ${VITE_VENMO_USERNAME}
+        VITE_ZELLE_EMAIL: ${VITE_ZELLE_EMAIL}
+        VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY}
     container_name: chicken-poop-bingo-app
     restart: unless-stopped
     depends_on:
@@ -40,6 +44,9 @@ services:
       DATABASE_URL: postgresql://app_user:${DB_PASSWORD:-secure_password_123}@database:5432/chicken_poop_bingo
       # Add your Stripe keys here
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      # Payment account information (already embedded during build)
+      VITE_VENMO_USERNAME: ${VITE_VENMO_USERNAME}
+      VITE_ZELLE_EMAIL: ${VITE_ZELLE_EMAIL}
       VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY}
     ports:
       - "5000:5000"

@@ -19,6 +19,16 @@ RUN npm ci
 FROM build-deps AS builder
 WORKDIR /app
 
+# Declare build arguments for Vite environment variables
+ARG VITE_VENMO_USERNAME
+ARG VITE_ZELLE_EMAIL
+ARG VITE_STRIPE_PUBLIC_KEY
+
+# Set environment variables for the build process
+ENV VITE_VENMO_USERNAME=$VITE_VENMO_USERNAME
+ENV VITE_ZELLE_EMAIL=$VITE_ZELLE_EMAIL
+ENV VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
+
 # Copy source code
 COPY . .
 
