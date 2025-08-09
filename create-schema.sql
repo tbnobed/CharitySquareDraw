@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS participants CASCADE;
 DROP TABLE IF EXISTS game_rounds CASCADE;
 DROP TABLE IF EXISTS health_check CASCADE;
 
--- Create game_rounds table
+-- Create game_rounds table (matching the exact schema from shared/schema.ts)
 CREATE TABLE game_rounds (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     round_number INTEGER NOT NULL,
@@ -19,32 +19,34 @@ CREATE TABLE game_rounds (
     total_revenue INTEGER NOT NULL DEFAULT 0,
     winner_square INTEGER,
     completed_at TIMESTAMP WITH TIME ZONE,
+    started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create participants table
+-- Create participants table (matching the exact schema from shared/schema.ts)
 CREATE TABLE participants (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
     game_round_id UUID NOT NULL REFERENCES game_rounds(id) ON DELETE CASCADE,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20),
-    email VARCHAR(255),
-    payment_method VARCHAR(50),
-    payment_status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    squares JSONB NOT NULL,
+    total_amount INTEGER NOT NULL,
+    payment_status TEXT NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create squares table
+-- Create squares table (matching the exact schema from shared/schema.ts)
 CREATE TABLE squares (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     number INTEGER NOT NULL,
     game_round_id UUID NOT NULL REFERENCES game_rounds(id) ON DELETE CASCADE,
     participant_id UUID REFERENCES participants(id) ON DELETE SET NULL,
-    status VARCHAR(20) NOT NULL DEFAULT 'available',
+    status TEXT NOT NULL DEFAULT 'available',
     reserved_at TIMESTAMP WITH TIME ZONE,
+    sold_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(number, game_round_id)
