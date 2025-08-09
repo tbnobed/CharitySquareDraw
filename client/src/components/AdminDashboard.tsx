@@ -150,7 +150,7 @@ export function AdminDashboard({
         </CardContent>
       </Card>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8">
         {/* Game Board Preview */}
         <div className="lg:col-span-1">
           <Card>
@@ -158,7 +158,7 @@ export function AdminDashboard({
               <CardTitle>Game Board Status</CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <div className="w-full max-w-3xl mx-auto">
+              <div className="w-full">
                 <GameBoard squares={squares} selectedSquares={[]} readonly />
               </div>
             </CardContent>
@@ -166,7 +166,7 @@ export function AdminDashboard({
         </div>
 
         {/* Recent Participants */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-1">
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
