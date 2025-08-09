@@ -85,7 +85,7 @@ export function PaymentModal({
                 <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="venmo-qr">
                   <img src={venmoQR} alt="Venmo QR Code" className="w-32 h-32 mx-auto mb-3" />
                   <p className="text-sm text-gray-600">Scan to pay with Venmo</p>
-                  <p className="text-xs text-gray-500 mt-1">@nonprofitname</p>
+                  <p className="text-xs text-gray-500 mt-1">@{import.meta.env.VITE_VENMO_USERNAME || 'venmo-username'}</p>
                 </div>
               )}
             </div>
@@ -113,7 +113,7 @@ export function PaymentModal({
                 <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="zelle-qr">
                   <img src={zelleQR} alt="Zelle QR Code" className="w-32 h-32 mx-auto mb-3" />
                   <p className="text-sm text-gray-600">Scan to pay with Zelle</p>
-                  <p className="text-xs text-gray-500 mt-1">nonprofit@email.com</p>
+                  <p className="text-xs text-gray-500 mt-1">{import.meta.env.VITE_ZELLE_EMAIL || 'zelle@email.com'}</p>
                 </div>
               )}
             </div>
