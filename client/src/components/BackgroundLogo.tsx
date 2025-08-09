@@ -1,4 +1,4 @@
-import logoPath from "../assets/chicken-poop-bingo-logo.png";
+import logoPath from "@assets/Chicken Poop Bingo Logo_1754776738392.png";
 
 export function BackgroundLogo() {
   return (
