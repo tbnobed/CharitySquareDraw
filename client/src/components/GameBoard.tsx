@@ -63,10 +63,10 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               disabled={isDisabled || readonly}
               className={`aspect-square flex items-center justify-center ${
                 readonly ? 'font-medium text-xs' : 'font-semibold text-sm'
-              } rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
+              } ${readonly ? 'rounded-md' : 'rounded-lg'} transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                minHeight: readonly ? '36px' : '44px',
-                minWidth: readonly ? '36px' : '44px'
+                minHeight: readonly ? '28px' : '44px',
+                minWidth: readonly ? '28px' : '44px'
               }}
             >
               {number}
