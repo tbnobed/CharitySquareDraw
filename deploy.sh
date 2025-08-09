@@ -79,6 +79,7 @@ if docker-compose ps | grep -q "Up"; then
     print_status "Application URL: http://localhost:5000"
     print_status "Admin Dashboard: http://localhost:5000/admin"
     print_status "Seller Interface: http://localhost:5000/seller"
+    print_status "History Page: http://localhost:5000/history"
     
     echo ""
     print_status "Useful commands:"

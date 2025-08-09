@@ -24,7 +24,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Main Application
+  # Main Application (Direct Access - No Nginx)
   app:
     build: 
       context: .
@@ -54,21 +54,7 @@ services:
       timeout: 10s
       retries: 3
 
-  # Nginx Reverse Proxy (Optional - for production)
-  nginx:
-    image: nginx:alpine
-    container_name: chicken-poop-bingo-nginx
-    restart: unless-stopped
-    depends_on:
-      - app
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-    networks:
-      - chicken-poop-network
+
 
 volumes:
   postgres_data:
