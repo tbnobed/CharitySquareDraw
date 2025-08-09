@@ -158,7 +158,7 @@ export function AdminDashboard({
               <CardTitle>Game Board Status</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
-              <div className="w-full">
+              <div className="overflow-x-auto">
                 <GameBoard squares={squares} selectedSquares={[]} readonly />
               </div>
             </CardContent>
