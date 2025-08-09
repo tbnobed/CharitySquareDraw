@@ -167,7 +167,7 @@ export function AdminDashboard({
 
         {/* Recent Participants */}
         <div className="lg:col-span-1">
-          <Card>
+          <Card className="w-[110%]">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 Recent Participants
