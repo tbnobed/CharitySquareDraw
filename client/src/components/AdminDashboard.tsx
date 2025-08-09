@@ -32,7 +32,7 @@ export function AdminDashboard({
   onUpdatePrice,
   isLoading 
 }: AdminDashboardProps) {
-  const formatCurrency = (amount: number) => `$${amount.toLocaleString()}`;
+  const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`;
   const [priceInput, setPriceInput] = useState((gameRound?.pricePerSquare || 1000) / 100);
 
   const formatPhone = (phone: string) => {
