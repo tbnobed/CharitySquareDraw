@@ -70,7 +70,7 @@ export default function SellerPage() {
         const { squares: updatedSquares, status, action: updateAction } = data.data;
         
         // If squares were reserved/sold by others, remove them from our selection
-        if (action === 'reserve' || action === 'confirm') {
+        if (updateAction === 'reserve' || updateAction === 'confirm') {
           setSelectedSquares(prev => prev.filter(sq => !updatedSquares.includes(sq)));
         }
         
@@ -225,19 +225,12 @@ export default function SellerPage() {
             </div>
             
             <div className="flex items-center space-x-4">
-              {/* Connection Status */}
+              {/* Connection Status - using polling for updates */}
               <div className="flex items-center space-x-2">
-                {isConnected ? (
-                  <div className="flex items-center text-green-600" title="Real-time updates active">
-                    <Wifi className="h-4 w-4" />
-                    <span className="text-xs ml-1">Live</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center text-red-500" title="Connection lost">
-                    <WifiOff className="h-4 w-4" />
-                    <span className="text-xs ml-1">Offline</span>
-                  </div>
-                )}
+                <div className="flex items-center text-green-600" title="Real-time updates via polling">
+                  <Wifi className="h-4 w-4" />
+                  <span className="text-xs ml-1">Live</span>
+                </div>
               </div>
               
               <div className="bg-gray-100 rounded-lg p-1 flex">
