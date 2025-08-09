@@ -4,8 +4,8 @@
 -- We're already connected to chicken_poop_bingo database via POSTGRES_DB
 -- No need to create or connect to database
 
--- Create extensions if needed
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Create extensions if needed (use pgcrypto instead of uuid-ossp for gen_random_uuid)
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- The app_user is already created by POSTGRES_USER env var
 -- Grant additional permissions to ensure everything works
