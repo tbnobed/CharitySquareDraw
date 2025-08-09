@@ -48,7 +48,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   return (
     <div className="space-y-6">
       <div 
-        className={`grid grid-cols-10 ${readonly ? 'gap-3' : 'gap-2'}`} 
+        className={`grid grid-cols-10 ${readonly ? 'gap-4' : 'gap-2'}`} 
         data-testid="game-board"
       >
         {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
@@ -65,9 +65,9 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 readonly ? 'font-medium text-xs' : 'font-semibold text-sm'
               } rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                minHeight: readonly ? '28px' : '44px',
-                minWidth: readonly ? '28px' : '44px',
-                fontSize: readonly ? '11px' : '14px'
+                minHeight: readonly ? '36px' : '44px',
+                minWidth: readonly ? '36px' : '44px',
+                fontSize: readonly ? '13px' : '14px'
               }}
             >
               {number}
