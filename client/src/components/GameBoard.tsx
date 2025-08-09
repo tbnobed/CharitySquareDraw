@@ -4,16 +4,18 @@ import { type Square } from "@shared/schema";
 interface GameBoardProps {
   squares: Square[];
   selectedSquares: number[];
+  otherSelections?: number[];
   onSquareSelect?: (squareNumber: number) => void;
   readonly?: boolean;
 }
 
-export function GameBoard({ squares, selectedSquares, onSquareSelect, readonly = false }: GameBoardProps) {
+export function GameBoard({ squares, selectedSquares, otherSelections = [], onSquareSelect, readonly = false }: GameBoardProps) {
   const getSquareStatus = (squareNumber: number) => {
     const square = squares.find(s => s.number === squareNumber);
     if (!square) return 'available';
     
     if (selectedSquares.includes(squareNumber)) return 'selected';
+    if (otherSelections.includes(squareNumber)) return 'other-selected';
     return square.status;
   };
 
@@ -25,6 +27,8 @@ export function GameBoard({ squares, selectedSquares, onSquareSelect, readonly =
         return 'bg-gray-400 text-white cursor-not-allowed';
       case 'selected':
         return 'bg-yellow-500 text-white hover:bg-yellow-600';
+      case 'other-selected':
+        return 'bg-orange-400 text-white cursor-pointer hover:bg-orange-500 border-2 border-orange-600';
       case 'available':
       default:
         return 'bg-green-500 text-white hover:bg-green-600 active:scale-95';
@@ -36,6 +40,7 @@ export function GameBoard({ squares, selectedSquares, onSquareSelect, readonly =
     
     const status = getSquareStatus(squareNumber);
     if (status === 'sold' || status === 'reserved') return;
+    // Allow clicking on squares selected by others to take them
     
     onSquareSelect?.(squareNumber);
   };

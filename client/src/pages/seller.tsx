@@ -41,6 +41,26 @@ export default function SellerPage() {
 
   const squares: Square[] = (gameData as any)?.squares || [];
 
+  // Generate a session ID to track this user's selections
+  const [sessionId] = useState(() => Math.random().toString(36).substring(7));
+  const [otherSelections, setOtherSelections] = useState<number[]>([]);
+
+  // Fetch temporary selections from other users
+  const { data: selectionsData, refetch: refetchSelections } = useQuery({
+    queryKey: ['/api/selections'],
+    refetchInterval: 1000, // Poll every 1 second for selections
+  });
+
+  // Update other users' selections
+  useEffect(() => {
+    if (selectionsData?.selections) {
+      const otherUserSelections = selectionsData.selections
+        .filter((sel: any) => sel.selectedBy !== sessionId)
+        .map((sel: any) => sel.square);
+      setOtherSelections(otherUserSelections);
+    }
+  }, [selectionsData, sessionId]);
+
   // Polling for real-time updates (temporary replacement for WebSocket)
   useEffect(() => {
     const interval = setInterval(() => {
@@ -173,19 +193,15 @@ export default function SellerPage() {
         ? prev.filter(sq => sq !== squareNumber)
         : [...prev, squareNumber];
       
-      // WebSocket disabled temporarily - using polling instead
-      // if (isConnected && sendMessage) {
-      //   const message = {
-      //     type: 'SQUARE_SELECTION',
-      //     data: {
-      //       square: squareNumber,
-      //       action: prev.includes(squareNumber) ? 'deselect' : 'select',
-      //       timestamp: Date.now()
-      //     }
-      //   };
-      //   console.log('Broadcasting square selection:', message);
-      //   sendMessage(message);
-      // }
+      // Update temporary selections on server
+      const action = prev.includes(squareNumber) ? 'deselect' : 'select';
+      apiRequest('POST', '/api/selections', {
+        squares: [squareNumber],
+        action,
+        sessionId
+      }).catch(error => {
+        console.error('Failed to update selection on server:', error);
+      });
       
       return newSelection;
     });
@@ -302,6 +318,7 @@ export default function SellerPage() {
                 <GameBoard
                   squares={squares}
                   selectedSquares={selectedSquares}
+                  otherSelections={otherSelections}
                   onSquareSelect={handleSquareSelect}
                 />
               </CardContent>

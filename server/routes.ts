@@ -7,6 +7,9 @@ import { z } from "zod";
 
 const clients = new Set<WebSocket>();
 
+// Track temporary square selections across all users
+const temporarySelections = new Map<number, { selectedBy: string, timestamp: number }>();
+
 function broadcast(message: BoardUpdate) {
   const data = JSON.stringify(message);
   console.log(`Broadcasting message to ${clients.size} clients:`, message);
@@ -251,6 +254,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to draw winner" });
+    }
+  });
+
+  // Get temporary selections
+  app.get("/api/selections", async (req, res) => {
+    try {
+      // Clean up old selections (older than 30 seconds)
+      const now = Date.now();
+      const entries = Array.from(temporarySelections.entries());
+      for (const [square, selection] of entries) {
+        if (now - selection.timestamp > 30000) {
+          temporarySelections.delete(square);
+        }
+      }
+      
+      const selections = Array.from(temporarySelections.entries()).map(([square, data]) => ({
+        square,
+        selectedBy: data.selectedBy,
+        timestamp: data.timestamp
+      }));
+      
+      res.json({ selections });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get selections" });
+    }
+  });
+
+  // Update temporary selections
+  app.post("/api/selections", async (req, res) => {
+    try {
+      const { squares, action, sessionId } = req.body;
+      
+      if (action === 'select') {
+        squares.forEach((square: number) => {
+          temporarySelections.set(square, {
+            selectedBy: sessionId || 'anonymous',
+            timestamp: Date.now()
+          });
+        });
+      } else if (action === 'deselect') {
+        squares.forEach((square: number) => {
+          temporarySelections.delete(square);
+        });
+      } else if (action === 'clear') {
+        // Clear all selections for this session
+        const entries = Array.from(temporarySelections.entries());
+        for (const [square, data] of entries) {
+          if (data.selectedBy === sessionId) {
+            temporarySelections.delete(square);
+          }
+        }
+      }
+      
+      res.json({ success: true, totalSelections: temporarySelections.size });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update selections" });
     }
   });
 
