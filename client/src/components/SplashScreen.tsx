@@ -10,10 +10,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   const [, setLocation] = useLocation();
   const [fadeOut, setFadeOut] = useState(false);
 
-  console.log("SplashScreen component rendered");
-
   useEffect(() => {
-    console.log("SplashScreen useEffect triggered");
     const timer = setTimeout(() => {
       setFadeOut(true);
       // Wait for fade out animation to complete
