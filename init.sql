@@ -1,34 +1,15 @@
 -- Database initialization script for Chicken Poop Bingo
 -- This will run when the PostgreSQL container starts for the first time
 
--- Create the application database (if not exists)
--- Note: The database is already created by POSTGRES_DB env var, but this ensures it exists
-SELECT 'CREATE DATABASE chicken_poop_bingo'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'chicken_poop_bingo')\gexec
-
--- Connect to the application database
-\c chicken_poop_bingo;
+-- We're already connected to chicken_poop_bingo database via POSTGRES_DB
+-- No need to create or connect to database
 
 -- Create extensions if needed
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Create app user with necessary permissions (if not exists)
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = 'app_user') THEN
-        CREATE USER app_user WITH PASSWORD 'secure_password_123';
-    END IF;
-END
-$$;
-
--- Grant permissions
-GRANT ALL PRIVILEGES ON DATABASE chicken_poop_bingo TO app_user;
+-- The app_user is already created by POSTGRES_USER env var
+-- Grant additional permissions to ensure everything works
 GRANT ALL ON SCHEMA public TO app_user;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO app_user;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app_user;
-GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO app_user;
-
--- Set default privileges for future objects
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO app_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO app_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO app_user;

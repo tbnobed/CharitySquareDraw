@@ -44,6 +44,9 @@ COPY --from=builder /app/shared ./shared
 COPY --from=builder /app/package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 
+# Copy the built public folder from vite (this contains index.html and assets)
+COPY --from=builder /app/dist/public ./dist/public
+
 # Make bundled server executable
 RUN chmod +x dist/server-bundle.js
 

@@ -60,8 +60,8 @@ app.use((req, res, next) => {
     throw err;
   });
 
-  // Serve static files from dist
-  const publicPath = path.join(__dirname, "../dist");
+  // Serve static files from dist/public (where Vite builds to)
+  const publicPath = path.join(__dirname, "../dist/public");
   app.use(express.static(publicPath));
 
   // Catch-all handler for client-side routing
