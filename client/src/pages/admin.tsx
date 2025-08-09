@@ -172,7 +172,7 @@ export default function AdminPage() {
             `"${participant.email}"`,
             `"${participant.phone}"`,
             `"${participant.squares.map(s => `#${s}`).join('; ')}"`,
-            participant.totalAmount,
+            `$${(participant.totalAmount / 100).toFixed(2)}`,
             participant.paymentStatus,
             `"${new Date(participant.createdAt || Date.now()).toLocaleDateString()}"`
           ];
