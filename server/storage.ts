@@ -30,6 +30,7 @@ export interface IStorage {
   
   // System
   resetSystem(): Promise<void>;
+  cleanupExpiredReservations(gameRoundId: string): Promise<Square[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -281,6 +282,32 @@ export class MemStorage implements IStorage {
 
   async getSquareByNumber(number: number, gameRoundId: string): Promise<Square | undefined> {
     return this.getSquare(number, gameRoundId);
+  }
+
+  async cleanupExpiredReservations(gameRoundId: string): Promise<Square[]> {
+    const squares = await this.getSquaresByGameRound(gameRoundId);
+    const expiredReservations: Square[] = [];
+    const RESERVATION_TIMEOUT = 120000; // 2 minutes
+    const now = new Date().getTime();
+    
+    for (const square of squares) {
+      if (square.status === "reserved" && square.reservedAt) {
+        const reservedTime = new Date(square.reservedAt).getTime();
+        if (now - reservedTime > RESERVATION_TIMEOUT) {
+          // Release expired reservation
+          const updated = {
+            ...square,
+            participantId: null,
+            status: "available" as const,
+            reservedAt: null,
+          };
+          this.squares.set(square.id, updated);
+          expiredReservations.push(updated);
+        }
+      }
+    }
+    
+    return expiredReservations;
   }
 
   async resetSystem(): Promise<void> {

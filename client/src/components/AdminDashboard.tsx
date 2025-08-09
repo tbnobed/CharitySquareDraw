@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings, RefreshCw } from "lucide-react";
+import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings, RefreshCw, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { type GameStats, type Participant, type Square } from "@shared/schema";
 import { GameBoard } from "./GameBoard";
@@ -21,6 +21,7 @@ interface AdminDashboardProps {
   onUpdatePrice: (price: number) => void;
   onResetSystem: () => void;
   onManualWinner: (squareNumber: number) => void;
+  onCleanupReservations: () => void;
   isLoading?: boolean;
 }
 
@@ -35,6 +36,7 @@ export function AdminDashboard({
   onUpdatePrice,
   onResetSystem,
   onManualWinner,
+  onCleanupReservations,
   isLoading 
 }: AdminDashboardProps) {
   const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`;
@@ -230,6 +232,16 @@ export function AdminDashboard({
               >
                 <Download className="mr-2 h-4 w-4" />
                 Export Data
+              </Button>
+              <Button
+                onClick={onCleanupReservations}
+                disabled={isLoading}
+                variant="outline"
+                className="flex items-center justify-center text-orange-600 border-orange-300 hover:bg-orange-50"
+                data-testid="button-cleanup-reservations"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Release Stuck Reservations
               </Button>
             </div>
           </div>

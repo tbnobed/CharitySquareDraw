@@ -176,6 +176,26 @@ export default function AdminPage() {
     },
   });
 
+  // Cleanup reservations mutation
+  const cleanupReservationsMutation = useMutation({
+    mutationFn: () => apiRequest('POST', '/api/cleanup-reservations'),
+    onSuccess: async (response) => {
+      const data = await response.json();
+      toast({
+        title: "Cleanup Complete",
+        description: data.message,
+      });
+      refetchGame();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to cleanup reservations. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // Manual winner mutation
   const manualWinnerMutation = useMutation({
     mutationFn: (squareNumber: number) => apiRequest('POST', '/api/manual-winner', { squareNumber }),
@@ -314,6 +334,7 @@ export default function AdminPage() {
           onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
           onResetSystem={() => resetSystemMutation.mutate()}
           onManualWinner={(squareNumber) => manualWinnerMutation.mutate(squareNumber)}
+          onCleanupReservations={() => cleanupReservationsMutation.mutate()}
           isLoading={isLoading}
         />
       </div>

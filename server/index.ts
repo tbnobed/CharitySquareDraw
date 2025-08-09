@@ -38,6 +38,22 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
+  
+  // Auto-cleanup expired reservations on server start
+  setTimeout(async () => {
+    try {
+      const { storage } = await import("./storage");
+      const currentRound = await storage.getCurrentGameRound();
+      if (currentRound) {
+        const cleaned = await storage.cleanupExpiredReservations(currentRound.id);
+        if (cleaned.length > 0) {
+          console.log(`🧹 Auto-cleanup: Released ${cleaned.length} expired reservations on startup`);
+        }
+      }
+    } catch (error) {
+      console.error('Auto-cleanup failed on startup:', error);
+    }
+  }, 1000); // Wait 1 second after startup
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

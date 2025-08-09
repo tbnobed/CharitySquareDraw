@@ -503,6 +503,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Cleanup expired reservations endpoint
+  app.post("/api/cleanup-reservations", async (req, res) => {
+    try {
+      const currentRound = await storage.getCurrentGameRound();
+      if (!currentRound) {
+        return res.status(404).json({ error: "No active game round found" });
+      }
+
+      const cleanedSquares = await storage.cleanupExpiredReservations(currentRound.id);
+      
+      res.json({ 
+        success: true, 
+        message: `Cleaned up ${cleanedSquares.length} expired reservations`,
+        cleanedSquares: cleanedSquares.map(s => s.number)
+      });
+    } catch (error) {
+      console.error('Error cleaning up reservations:', error);
+      res.status(500).json({ error: "Failed to cleanup reservations" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   // WebSocket server temporarily disabled to fix connection loops

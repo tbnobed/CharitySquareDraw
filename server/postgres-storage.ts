@@ -462,6 +462,50 @@ export class PostgresStorage implements IStorage {
     return this.getSquare(number, gameRoundId);
   }
 
+  async cleanupExpiredReservations(gameRoundId: string): Promise<Square[]> {
+    try {
+      const RESERVATION_TIMEOUT = 120000; // 2 minutes
+      const cutoffTime = new Date(Date.now() - RESERVATION_TIMEOUT);
+      
+      // Find expired reservations
+      const expiredSquares = await db
+        .select()
+        .from(squares)
+        .where(
+          and(
+            eq(squares.gameRoundId, gameRoundId),
+            eq(squares.status, 'reserved'),
+            sql`${squares.reservedAt} < ${cutoffTime}`
+          )
+        );
+
+      // Release expired reservations
+      if (expiredSquares.length > 0) {
+        await db
+          .update(squares)
+          .set({
+            status: 'available',
+            participantId: null,
+            reservedAt: null,
+          })
+          .where(
+            and(
+              eq(squares.gameRoundId, gameRoundId),
+              eq(squares.status, 'reserved'),
+              sql`${squares.reservedAt} < ${cutoffTime}`
+            )
+          );
+
+        console.log(`Cleaned up ${expiredSquares.length} expired reservations`);
+      }
+
+      return expiredSquares;
+    } catch (error) {
+      console.error('Error cleaning up expired reservations:', error);
+      return [];
+    }
+  }
+
   async resetSystem(): Promise<void> {
     try {
       // Delete all data in reverse order to respect foreign key constraints
