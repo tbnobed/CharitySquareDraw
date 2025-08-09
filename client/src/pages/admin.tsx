@@ -185,9 +185,13 @@ export default function AdminPage() {
         title: "Cleanup Complete",
         description: data.message,
       });
+      // Force refresh all data after cleanup
       refetchGame();
+      refetchStats();
+      refetchParticipants();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Cleanup error:', error);
       toast({
         title: "Error",
         description: "Failed to cleanup reservations. Please try again.",

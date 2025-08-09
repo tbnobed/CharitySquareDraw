@@ -224,6 +224,7 @@ export class PostgresStorage implements IStorage {
           .set({
             status: 'reserved',
             participantId,
+            reservedAt: new Date(),
             updatedAt: new Date()
           })
           .where(
