@@ -7,6 +7,7 @@ export const gameRounds = pgTable("game_rounds", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   roundNumber: integer("round_number").notNull(),
   status: text("status").notNull().default("active"), // "active", "completed"
+  pricePerSquare: integer("price_per_square").notNull().default(10), // price in cents
   startedAt: timestamp("started_at").notNull().defaultNow(),
   completedAt: timestamp("completed_at"),
   winnerSquare: integer("winner_square"),

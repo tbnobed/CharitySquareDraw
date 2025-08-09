@@ -1,18 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download } from "lucide-react";
+import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings } from "lucide-react";
 import { type GameStats, type Participant, type Square } from "@shared/schema";
 import { GameBoard } from "./GameBoard";
+import { useState } from "react";
 
 interface AdminDashboardProps {
   stats: GameStats;
   participants: Participant[];
   squares: Square[];
+  gameRound: any;
   onDrawWinner: () => void;
   onNewRound: () => void;
   onExportData: () => void;
+  onUpdatePrice: (price: number) => void;
   isLoading?: boolean;
 }
 
@@ -20,12 +25,16 @@ export function AdminDashboard({
   stats, 
   participants, 
   squares, 
+  gameRound,
   onDrawWinner, 
   onNewRound, 
   onExportData,
+  onUpdatePrice,
   isLoading 
 }: AdminDashboardProps) {
   const formatCurrency = (amount: number) => `$${amount.toLocaleString()}`;
+  const [priceInput, setPriceInput] = useState((gameRound?.pricePerSquare || 1000) / 100);
+
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, '');
     const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -33,6 +42,13 @@ export function AdminDashboard({
       return `(${match[1]}) ${match[2]}-${match[3]}`;
     }
     return phone;
+  };
+
+  const handlePriceUpdate = () => {
+    const priceInCents = Math.round(priceInput * 100);
+    if (priceInCents > 0) {
+      onUpdatePrice(priceInCents);
+    }
   };
 
   return (
@@ -108,11 +124,38 @@ export function AdminDashboard({
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Current Game Round</h2>
-              <p className="text-gray-600">
-                Round #{stats.currentRound} - {stats.squaresSold} squares sold
-              </p>
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Current Game Round</h2>
+                <p className="text-gray-600">
+                  Round #{stats.currentRound} - {stats.squaresSold} squares sold
+                </p>
+              </div>
+              
+              {/* Price Setting */}
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Settings className="h-4 w-4 text-gray-500" />
+                  <Label htmlFor="price-input" className="text-sm font-medium">
+                    Price per Square:
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm">$</span>
+                  <Input
+                    id="price-input"
+                    type="number"
+                    value={priceInput}
+                    onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
+                    onBlur={handlePriceUpdate}
+                    onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
+                    className="w-20 text-sm"
+                    min="0.01"
+                    step="0.01"
+                    data-testid="input-price"
+                  />
+                </div>
+              </div>
             </div>
             
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">

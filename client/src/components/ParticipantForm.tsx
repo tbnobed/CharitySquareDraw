@@ -10,12 +10,13 @@ import { CreditCard, X } from "lucide-react";
 
 interface ParticipantFormProps {
   selectedSquares: number[];
+  pricePerSquare: number;
   onRemoveSquare: (square: number) => void;
   onSubmit: (data: ParticipantForm) => void;
   isLoading?: boolean;
 }
 
-export function ParticipantFormComponent({ selectedSquares, onRemoveSquare, onSubmit, isLoading }: ParticipantFormProps) {
+export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRemoveSquare, onSubmit, isLoading }: ParticipantFormProps) {
   const form = useForm<ParticipantForm>({
     resolver: zodResolver(participantFormSchema),
     defaultValues: {
@@ -35,7 +36,7 @@ export function ParticipantFormComponent({ selectedSquares, onRemoveSquare, onSu
     onSubmit({ ...data, squares: selectedSquares });
   };
 
-  const totalAmount = selectedSquares.length * 20;
+  const totalAmount = selectedSquares.length * (pricePerSquare / 100); // Convert from cents to dollars
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">

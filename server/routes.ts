@@ -120,7 +120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         phone: validatedData.phone,
         gameRoundId: currentRound.id,
         squares: validatedData.squares,
-        totalAmount: validatedData.squares.length * 20, // $20 per square
+        totalAmount: validatedData.squares.length * currentRound.pricePerSquare, // Use dynamic price
         paymentStatus: "pending",
       });
 
@@ -210,6 +210,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const newRound = await storage.createGameRound({
         roundNumber,
         status: "active",
+        pricePerSquare: currentRound?.pricePerSquare || 1000, // Keep same price or default $10.00
         totalRevenue: 0,
       });
 
@@ -254,6 +255,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to draw winner" });
+    }
+  });
+
+  // Update price per square
+  app.post("/api/update-price", async (req, res) => {
+    try {
+      const { pricePerSquare } = req.body;
+      
+      if (typeof pricePerSquare !== 'number' || pricePerSquare <= 0) {
+        return res.status(400).json({ error: "Price per square must be a positive number" });
+      }
+
+      const currentRound = await storage.getCurrentGameRound();
+      if (!currentRound) {
+        return res.status(404).json({ error: "No active game round" });
+      }
+
+      const updatedRound = await storage.updatePricePerSquare(currentRound.id, pricePerSquare);
+      res.json({ success: true, gameRound: updatedRound });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update price" });
     }
   });
 

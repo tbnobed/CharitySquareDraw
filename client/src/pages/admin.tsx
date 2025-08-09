@@ -114,6 +114,25 @@ export default function AdminPage() {
     },
   });
 
+  // Update price mutation
+  const updatePriceMutation = useMutation({
+    mutationFn: (pricePerSquare: number) => apiRequest('POST', '/api/update-price', { pricePerSquare }),
+    onSuccess: () => {
+      toast({
+        title: "Price Updated",
+        description: "Square price has been updated successfully!",
+      });
+      refetchGame();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update price. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // New round mutation
   const newRoundMutation = useMutation({
     mutationFn: () => apiRequest('POST', '/api/new-round'),
@@ -187,7 +206,7 @@ export default function AdminPage() {
     }
   };
 
-  const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending;
+  const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending || updatePriceMutation.isPending;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -245,9 +264,11 @@ export default function AdminPage() {
           stats={stats}
           participants={participants}
           squares={squares}
+          gameRound={gameData?.gameRound}
           onDrawWinner={() => drawWinnerMutation.mutate()}
           onNewRound={() => newRoundMutation.mutate()}
           onExportData={handleExportData}
+          onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
           isLoading={isLoading}
         />
       </div>

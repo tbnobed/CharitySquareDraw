@@ -53,7 +53,7 @@ export default function SellerPage() {
 
   // Update selections state
   useEffect(() => {
-    if (selectionsData && 'selections' in selectionsData && Array.isArray(selectionsData.selections)) {
+    if (selectionsData && typeof selectionsData === 'object' && 'selections' in selectionsData && Array.isArray(selectionsData.selections)) {
       // My selections
       const mySelections = selectionsData.selections
         .filter((sel: any) => sel.selectedBy === sessionId)
@@ -322,7 +322,7 @@ export default function SellerPage() {
                     Round #{stats.currentRound} Active
                   </p>
                   <p className="text-sm text-blue-700">
-                    {stats.availableCount} squares available · $20 each
+                    {stats.availableCount} squares available · ${((gameData?.gameRound?.pricePerSquare || 1000) / 100).toFixed(2)} each
                   </p>
                 </div>
               </div>
@@ -362,6 +362,7 @@ export default function SellerPage() {
           <div className="lg:col-span-1 order-1 lg:order-2">
             <ParticipantFormComponent
               selectedSquares={selectedSquares}
+              pricePerSquare={gameData?.gameRound?.pricePerSquare || 1000}
               onRemoveSquare={handleRemoveSquare}
               onSubmit={handleFormSubmit}
               isLoading={reserveMutation.isPending}

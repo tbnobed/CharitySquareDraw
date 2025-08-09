@@ -6,6 +6,7 @@ export interface IStorage {
   getCurrentGameRound(): Promise<GameRound | undefined>;
   createGameRound(gameRound: InsertGameRound): Promise<GameRound>;
   updateGameRound(id: string, updates: Partial<GameRound>): Promise<GameRound | undefined>;
+  updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined>;
   completeGameRound(id: string, winnerSquare: number): Promise<GameRound | undefined>;
 
   // Participants
@@ -42,6 +43,7 @@ export class MemStorage implements IStorage {
     const firstRound = await this.createGameRound({
       roundNumber: 1,
       status: "active",
+      pricePerSquare: 1000, // $10.00
       totalRevenue: 0,
     });
     await this.initializeSquares(firstRound.id);
@@ -60,6 +62,7 @@ export class MemStorage implements IStorage {
       id,
       roundNumber: insertGameRound.roundNumber,
       status: insertGameRound.status || "active",
+      pricePerSquare: insertGameRound.pricePerSquare || 1000, // default $10.00
       totalRevenue: insertGameRound.totalRevenue || 0,
       startedAt: new Date(),
       completedAt: null,
@@ -75,6 +78,15 @@ export class MemStorage implements IStorage {
     
     const updated = { ...gameRound, ...updates };
     this.gameRounds.set(id, updated);
+    return updated;
+  }
+
+  async updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined> {
+    const gameRound = this.gameRounds.get(gameRoundId);
+    if (!gameRound) return undefined;
+    
+    const updated = { ...gameRound, pricePerSquare };
+    this.gameRounds.set(gameRoundId, updated);
     return updated;
   }
 
