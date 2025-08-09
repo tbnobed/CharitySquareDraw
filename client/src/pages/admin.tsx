@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { type GameStats, type Participant, type Square, type BoardUpdate } from "@shared/schema";
 import { Heart, Store, Wifi, WifiOff } from "lucide-react";
+import logoImage from "@/assets/logo.png";
 
 export default function AdminPage() {
   const { toast } = useToast();
@@ -215,7 +216,7 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
-              <Heart className="text-blue-500 h-8 w-8" />
+              <img src={logoImage} alt="Chicken Poop Bingo Logo" className="h-8 w-8" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Chicken Poop Bingo</h1>
                 <p className="text-sm text-gray-500">Admin Dashboard</p>
