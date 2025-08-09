@@ -47,7 +47,10 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-10 gap-2" data-testid="game-board">
+      <div 
+        className={`grid grid-cols-10 ${readonly ? 'gap-1' : 'gap-2'}`} 
+        data-testid="game-board"
+      >
         {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
           const status = getSquareStatus(number);
           const isDisabled = status === 'sold' || status === 'reserved';
@@ -58,8 +61,13 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               data-testid={`square-${number}`}
               onClick={() => handleSquareClick(number)}
               disabled={isDisabled || readonly}
-              className={`aspect-square flex items-center justify-center font-semibold rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
-              style={{ minHeight: '44px' }}
+              className={`aspect-square flex items-center justify-center ${
+                readonly ? 'font-medium text-xs' : 'font-semibold text-sm'
+              } rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
+              style={{ 
+                minHeight: readonly ? '32px' : '44px',
+                minWidth: readonly ? '32px' : '44px'
+              }}
             >
               {number}
             </Button>
