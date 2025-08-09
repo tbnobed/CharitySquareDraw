@@ -156,6 +156,8 @@ export default function SellerPage() {
       const data = await response.json();
       setReservedParticipant(data.participant);
       setShowPaymentModal(true);
+      setSelectedSquares([]); // Clear local selections
+      refetchGame(); // Refresh to show reserved squares
       toast({
         title: "Squares Reserved",
         description: "Squares have been reserved. Please complete payment.",
@@ -220,10 +222,28 @@ export default function SellerPage() {
   };
 
   const handleRemoveSquare = (squareNumber: number) => {
-    setSelectedSquares(prev => prev.filter(sq => sq !== squareNumber));
+    // Remove from server selections
+    apiRequest('POST', '/api/selections', {
+      squares: [squareNumber],
+      action: 'deselect',
+      sessionId
+    }).then(() => {
+      refetchSelections(); // Refresh selections from server
+    }).catch(error => {
+      console.error('Failed to remove selection on server:', error);
+    });
   };
 
   const handleFormSubmit = (data: ParticipantFormData) => {
+    // Clear temporary selections when reserving
+    apiRequest('POST', '/api/selections', {
+      squares: selectedSquares,
+      action: 'clear',
+      sessionId
+    }).catch(error => {
+      console.error('Failed to clear selections:', error);
+    });
+    
     reserveMutation.mutate(data);
   };
 
