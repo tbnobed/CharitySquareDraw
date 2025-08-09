@@ -184,65 +184,92 @@ export function AdminDashboard({
               </div>
             </div>
             
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
-              <Button
-                onClick={onDrawWinner}
-                disabled={isLoading || stats.squaresSold === 0}
-                className="bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
-                data-testid="button-draw-winner"
-              >
-                <Trophy className="mr-2 h-4 w-4" />
-                Auto Draw
-              </Button>
-              <Button
-                onClick={() => setShowManualWinnerDialog(true)}
-                disabled={isLoading || stats.squaresSold === 0}
-                className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center"
-                data-testid="button-manual-winner"
-              >
-                <Trophy className="mr-2 h-4 w-4" />
-                Manual Winner
-              </Button>
-              <Button
-                onClick={onNewRound}
-                disabled={isLoading}
-                variant="outline"
-                className="flex items-center justify-center"
-                data-testid="button-new-round"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                New Round
-              </Button>
-              <Button
-                onClick={() => setShowResetDialog(true)}
-                disabled={isLoading}
-                variant="outline"
-                className="flex items-center justify-center text-red-600 border-red-300 hover:bg-red-50"
-                data-testid="button-reset-system"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Reset to Round #1
-              </Button>
-              <Button
-                onClick={onExportData}
-                disabled={isLoading}
-                variant="outline"
-                className="flex items-center justify-center"
-                data-testid="button-export"
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Export Data
-              </Button>
-              <Button
-                onClick={onCleanupReservations}
-                disabled={isLoading}
-                variant="outline"
-                className="flex items-center justify-center text-orange-600 border-orange-300 hover:bg-orange-50"
-                data-testid="button-cleanup-reservations"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Release Stuck Reservations
-              </Button>
+            {/* Admin Controls - Organized by Function */}
+            <div className="space-y-4">
+              {/* Winner Selection Group */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
+                  Winner Selection:
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={onDrawWinner}
+                    disabled={isLoading || stats.squaresSold === 0}
+                    className="bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
+                    data-testid="button-draw-winner"
+                  >
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Auto Draw
+                  </Button>
+                  <Button
+                    onClick={() => setShowManualWinnerDialog(true)}
+                    disabled={isLoading || stats.squaresSold === 0}
+                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center"
+                    data-testid="button-manual-winner"
+                  >
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Manual Winner
+                  </Button>
+                </div>
+              </div>
+
+              {/* Game Management Group */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
+                  Game Management:
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={onNewRound}
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center justify-center"
+                    data-testid="button-new-round"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    New Round
+                  </Button>
+                  <Button
+                    onClick={onCleanupReservations}
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center justify-center text-orange-600 border-orange-300 hover:bg-orange-50"
+                    data-testid="button-cleanup-reservations"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Release Stuck Reservations
+                  </Button>
+                </div>
+              </div>
+
+              {/* Data & System Group */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
+                  Data & System:
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={onExportData}
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center justify-center"
+                    data-testid="button-export"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Data
+                  </Button>
+                  <Button
+                    onClick={() => setShowResetDialog(true)}
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center justify-center text-red-600 border-red-300 hover:bg-red-50"
+                    data-testid="button-reset-system"
+                  >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Reset to Round #1
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
