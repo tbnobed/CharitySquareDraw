@@ -42,12 +42,23 @@ export default function SellerPage() {
   const squares: Square[] = (gameData as any)?.squares || [];
 
   // WebSocket for real-time updates
-  const { isConnected } = useWebSocket((data: BoardUpdate) => {
+  const { isConnected, sendMessage } = useWebSocket((data: BoardUpdate) => {
     console.log('Seller received WebSocket update:', data);
     
     switch (data.type) {
+      case 'CONNECTION_ESTABLISHED':
+        console.log('WebSocket connection confirmed:', data.data.message);
+        break;
+        
+      case 'SQUARE_SELECTION':
+        // Handle real-time square selection preview from other users
+        const { square, action: selectionAction } = data.data;
+        console.log('Received square selection from another user:', square, selectionAction);
+        // We could add visual indicators here for squares being selected by others
+        break;
+        
       case 'SQUARE_UPDATE':
-        const { squares: updatedSquares, status, action } = data.data;
+        const { squares: updatedSquares, status, action: updateAction } = data.data;
         
         // If squares were reserved/sold by others, remove them from our selection
         if (action === 'reserve' || action === 'confirm') {
@@ -58,13 +69,13 @@ export default function SellerPage() {
         refetchStats();
         
         // Show toast notification for real-time updates
-        if (action === 'reserve') {
+        if (updateAction === 'reserve') {
           toast({
             title: "Squares Reserved",
             description: `Squares ${updatedSquares.join(", ")} were just reserved by another seller.`,
             variant: "default",
           });
-        } else if (action === 'confirm') {
+        } else if (updateAction === 'confirm') {
           toast({
             title: "Squares Sold",
             description: `Squares ${updatedSquares.join(", ")} were just sold!`,
@@ -149,11 +160,25 @@ export default function SellerPage() {
 
   const handleSquareSelect = (squareNumber: number) => {
     setSelectedSquares(prev => {
-      if (prev.includes(squareNumber)) {
-        return prev.filter(sq => sq !== squareNumber);
-      } else {
-        return [...prev, squareNumber];
+      const newSelection = prev.includes(squareNumber) 
+        ? prev.filter(sq => sq !== squareNumber)
+        : [...prev, squareNumber];
+      
+      // Broadcast square selection to other users for real-time preview
+      if (isConnected && sendMessage) {
+        const message = {
+          type: 'SQUARE_SELECTION',
+          data: {
+            square: squareNumber,
+            action: prev.includes(squareNumber) ? 'deselect' : 'select',
+            timestamp: Date.now()
+          }
+        };
+        console.log('Broadcasting square selection:', message);
+        sendMessage(message);
       }
+      
+      return newSelection;
     });
   };
 

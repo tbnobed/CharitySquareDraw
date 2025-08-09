@@ -268,15 +268,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
 
   wss.on('connection', (ws) => {
+    console.log('WebSocket client connected, total clients:', clients.size + 1);
     clients.add(ws);
+    
+    // Send welcome message to confirm connection
+    ws.send(JSON.stringify({
+      type: 'CONNECTION_ESTABLISHED',
+      data: { message: 'WebSocket connected successfully' }
+    }));
     
     ws.on('close', () => {
       clients.delete(ws);
+      console.log('WebSocket client disconnected, remaining clients:', clients.size);
     });
 
     ws.on('error', (error) => {
       console.error('WebSocket error:', error);
       clients.delete(ws);
+    });
+    
+    // Handle incoming messages from clients
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        console.log('WebSocket message received:', data);
+        
+        // Broadcast to all other clients
+        clients.forEach(client => {
+          if (client !== ws && client.readyState === WebSocket.OPEN) {
+            client.send(message.toString());
+          }
+        });
+      } catch (error) {
+        console.error('Failed to process WebSocket message:', error);
+      }
     });
   });
 

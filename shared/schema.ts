@@ -78,6 +78,6 @@ export interface GameStats {
 }
 
 export interface BoardUpdate {
-  type: 'SQUARE_UPDATE' | 'PARTICIPANT_ADDED' | 'GAME_RESET' | 'STATS_UPDATE';
+  type: 'SQUARE_UPDATE' | 'PARTICIPANT_ADDED' | 'GAME_RESET' | 'STATS_UPDATE' | 'CONNECTION_ESTABLISHED' | 'SQUARE_SELECTION';
   data: any;
 }
