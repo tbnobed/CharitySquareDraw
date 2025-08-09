@@ -48,7 +48,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   return (
     <div className="space-y-6">
       <div 
-        className={`grid grid-cols-10 ${readonly ? 'gap-2' : 'gap-2'}`} 
+        className={`grid grid-cols-10 ${readonly ? 'gap-3' : 'gap-2'}`} 
         data-testid="game-board"
       >
         {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
