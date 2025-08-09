@@ -480,8 +480,12 @@ export class PostgresStorage implements IStorage {
           )
         );
 
-      // Release expired reservations
+      // Release expired reservations and clean up participants
       if (expiredSquares.length > 0) {
+        // Get unique participant IDs from expired squares
+        const participantIds = Array.from(new Set(expiredSquares.map((s: Square) => s.participantId).filter(Boolean)));
+        
+        // Release the squares
         await db
           .update(squares)
           .set({
@@ -497,7 +501,25 @@ export class PostgresStorage implements IStorage {
             )
           );
 
-        console.log(`Cleaned up ${expiredSquares.length} expired reservations`);
+        // Delete participants who only had expired reservations
+        for (const participantId of participantIds) {
+          if (participantId) {
+            // Check if this participant has any remaining squares
+            const remainingSquares = await db
+              .select()
+              .from(squares)
+              .where(eq(squares.participantId, participantId));
+            
+            // If no remaining squares, delete the participant
+            if (remainingSquares.length === 0) {
+              await db
+                .delete(participants)
+                .where(eq(participants.id, participantId));
+            }
+          }
+        }
+
+        console.log(`Cleaned up ${expiredSquares.length} expired reservations and ${participantIds.length} participants`);
       }
 
       return expiredSquares;
