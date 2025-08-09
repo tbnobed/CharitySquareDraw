@@ -33,7 +33,7 @@ export function PaymentModal({
   };
 
   const handleGenerateZelleQR = async () => {
-    const qr = await generateZelleQR(amount, "nonprofit@email.com", `Square Game - ${squares.join(", ")}`);
+    const qr = await generateZelleQR(amount, `Square Game - ${squares.join(", ")}`);
     setZelleQR(qr);
   };
 

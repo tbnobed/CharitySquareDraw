@@ -55,7 +55,8 @@ Preferred communication style: Simple, everyday language.
 - **Data Serialization**: JSON-based API with Zod validation
 
 ### Payment Integration Architecture
-- **QR Code Generation**: Dynamic QR code generation for Venmo and Zelle payments
+- **QR Code Generation**: Dynamic QR code generation for Venmo and Zelle payments using real account information
+- **Environment Configuration**: Configurable Venmo username and Zelle email via environment variables
 - **Payment Tracking**: Payment status management with pending/paid states
 - **Multi-payment Support**: Flexible payment method integration
 
