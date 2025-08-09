@@ -2,6 +2,7 @@ import express from "express";
 import { registerRoutes } from "./routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createServer } from "http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 
 // Start server
 (async () => {
+  // Register routes (returns HTTP server)
   const server = await registerRoutes(app);
 
   // Error handling middleware

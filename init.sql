@@ -36,8 +36,13 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO app_user;
 -- Create tables (these will be created by Drizzle migrations in the app, but we can prepare the schema)
 -- The actual table creation will be handled by the application's migration system
 
--- Log successful initialization
-INSERT INTO pg_stat_statements_info (dealloc) VALUES (0) ON CONFLICT DO NOTHING;
+-- Log successful initialization (optional pg_stat_statements optimization)
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'pg_stat_statements_info') THEN
+        INSERT INTO pg_stat_statements_info (dealloc) VALUES (0) ON CONFLICT DO NOTHING;
+    END IF;
+END $$;
 
 -- Create a basic health check table
 CREATE TABLE IF NOT EXISTS health_check (
