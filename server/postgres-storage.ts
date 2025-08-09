@@ -514,13 +514,13 @@ export class PostgresStorage implements IStorage {
             const remainingSquares = await db
               .select()
               .from(squares)
-              .where(eq(squares.participantId, participantId));
+              .where(sql`${squares.participantId} = ${participantId}`);
             
             // If no remaining squares, delete the participant
             if (remainingSquares.length === 0) {
               await db
                 .delete(participants)
-                .where(eq(participants.id, participantId));
+                .where(sql`${participants.id} = ${participantId}`);
             }
           }
         }
