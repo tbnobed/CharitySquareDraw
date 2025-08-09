@@ -117,6 +117,24 @@ export function PaymentModal({
                 </div>
               )}
             </div>
+
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                    <span className="text-gray-600 font-bold text-sm">$</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900">Cash</span>
+                    <p className="text-xs text-gray-500">In-person payment</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-900">${(amount / 100).toFixed(2)}</p>
+                  <p className="text-xs text-gray-500">Ready to collect</p>
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Payment Confirmation */}
