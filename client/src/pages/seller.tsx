@@ -51,9 +51,16 @@ export default function SellerPage() {
     refetchInterval: 1000, // Poll every 1 second for selections
   });
 
-  // Update other users' selections
+  // Update selections state
   useEffect(() => {
     if (selectionsData?.selections) {
+      // My selections
+      const mySelections = selectionsData.selections
+        .filter((sel: any) => sel.selectedBy === sessionId)
+        .map((sel: any) => sel.square);
+      setSelectedSquares(mySelections);
+      
+      // Others' selections
       const otherUserSelections = selectionsData.selections
         .filter((sel: any) => sel.selectedBy !== sessionId)
         .map((sel: any) => sel.square);
@@ -189,21 +196,26 @@ export default function SellerPage() {
 
   const handleSquareSelect = (squareNumber: number) => {
     setSelectedSquares(prev => {
-      const newSelection = prev.includes(squareNumber) 
-        ? prev.filter(sq => sq !== squareNumber)
-        : [...prev, squareNumber];
+      const isCurrentlySelected = prev.includes(squareNumber);
+      const action = isCurrentlySelected ? 'deselect' : 'select';
       
-      // Update temporary selections on server
-      const action = prev.includes(squareNumber) ? 'deselect' : 'select';
+      // Update temporary selections on server first
       apiRequest('POST', '/api/selections', {
         squares: [squareNumber],
         action,
         sessionId
+      }).then((response) => {
+        // Only update local state if server accepted the selection
+        if (response.success) {
+          // Refetch selections to get updated state
+          refetchSelections();
+        }
       }).catch(error => {
         console.error('Failed to update selection on server:', error);
       });
       
-      return newSelection;
+      // Return current state - actual update happens via refetch
+      return prev;
     });
   };
 

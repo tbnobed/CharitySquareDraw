@@ -28,7 +28,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
       case 'selected':
         return 'bg-yellow-500 text-white hover:bg-yellow-600';
       case 'other-selected':
-        return 'bg-orange-400 text-white cursor-pointer hover:bg-orange-500 border-2 border-orange-600';
+        return 'bg-orange-400 text-white cursor-not-allowed border-2 border-orange-600';
       case 'available':
       default:
         return 'bg-green-500 text-white hover:bg-green-600 active:scale-95';
@@ -39,8 +39,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
     if (readonly) return;
     
     const status = getSquareStatus(squareNumber);
-    if (status === 'sold' || status === 'reserved') return;
-    // Allow clicking on squares selected by others to take them
+    if (status === 'sold' || status === 'reserved' || status === 'other-selected') return;
+    // Block clicks on squares selected by other users
     
     onSquareSelect?.(squareNumber);
   };

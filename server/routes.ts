@@ -288,14 +288,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (action === 'select') {
         squares.forEach((square: number) => {
-          temporarySelections.set(square, {
-            selectedBy: sessionId || 'anonymous',
-            timestamp: Date.now()
-          });
+          // Only allow selection if square is not already selected by someone else
+          if (!temporarySelections.has(square)) {
+            temporarySelections.set(square, {
+              selectedBy: sessionId || 'anonymous',
+              timestamp: Date.now()
+            });
+          }
         });
       } else if (action === 'deselect') {
         squares.forEach((square: number) => {
-          temporarySelections.delete(square);
+          // Only allow deselection if this session selected the square
+          const selection = temporarySelections.get(square);
+          if (selection && selection.selectedBy === sessionId) {
+            temporarySelections.delete(square);
+          }
         });
       } else if (action === 'clear') {
         // Clear all selections for this session
