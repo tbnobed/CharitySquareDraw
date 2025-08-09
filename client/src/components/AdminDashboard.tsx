@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings } from "lucide-react";
+import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings, RefreshCw } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { type GameStats, type Participant, type Square } from "@shared/schema";
 import { GameBoard } from "./GameBoard";
 import { useState } from "react";
@@ -18,6 +19,8 @@ interface AdminDashboardProps {
   onNewRound: () => void;
   onExportData: () => void;
   onUpdatePrice: (price: number) => void;
+  onResetSystem: () => void;
+  onManualWinner: (squareNumber: number) => void;
   isLoading?: boolean;
 }
 
@@ -30,10 +33,17 @@ export function AdminDashboard({
   onNewRound, 
   onExportData,
   onUpdatePrice,
+  onResetSystem,
+  onManualWinner,
   isLoading 
 }: AdminDashboardProps) {
   const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`;
   const [priceInput, setPriceInput] = useState((gameRound?.pricePerSquare || 1000) / 100);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [showManualWinnerDialog, setShowManualWinnerDialog] = useState(false);
+  const [manualWinnerSquare, setManualWinnerSquare] = useState("");
+  
+  const soldSquares = squares.filter(square => square.status === "sold");
 
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, '');
@@ -48,6 +58,20 @@ export function AdminDashboard({
     const priceInCents = Math.round(priceInput * 100);
     if (priceInCents > 0) {
       onUpdatePrice(priceInCents);
+    }
+  };
+
+  const handleResetSystem = () => {
+    onResetSystem();
+    setShowResetDialog(false);
+  };
+
+  const handleManualWinner = () => {
+    const squareNumber = parseInt(manualWinnerSquare);
+    if (squareNumber >= 1 && squareNumber <= 65) {
+      onManualWinner(squareNumber);
+      setShowManualWinnerDialog(false);
+      setManualWinnerSquare("");
     }
   };
 
@@ -166,7 +190,16 @@ export function AdminDashboard({
                 data-testid="button-draw-winner"
               >
                 <Trophy className="mr-2 h-4 w-4" />
-                Draw Winner
+                Auto Draw
+              </Button>
+              <Button
+                onClick={() => setShowManualWinnerDialog(true)}
+                disabled={isLoading || stats.squaresSold === 0}
+                className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center"
+                data-testid="button-manual-winner"
+              >
+                <Trophy className="mr-2 h-4 w-4" />
+                Manual Winner
               </Button>
               <Button
                 onClick={onNewRound}
@@ -177,6 +210,16 @@ export function AdminDashboard({
               >
                 <RotateCcw className="mr-2 h-4 w-4" />
                 New Round
+              </Button>
+              <Button
+                onClick={() => setShowResetDialog(true)}
+                disabled={isLoading}
+                variant="outline"
+                className="flex items-center justify-center text-red-600 border-red-300 hover:bg-red-50"
+                data-testid="button-reset-system"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Reset to Round #1
               </Button>
               <Button
                 onClick={onExportData}
@@ -280,6 +323,88 @@ export function AdminDashboard({
           </Card>
         </div>
       </div>
+
+      {/* Reset System Dialog */}
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Reset System to Round #1</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-gray-600">
+              This will completely reset the system back to Round #1 and clear all data including:
+            </p>
+            <ul className="mt-2 ml-4 list-disc text-gray-600">
+              <li>All game rounds and participants</li>
+              <li>All square reservations and sales</li>
+              <li>Revenue tracking</li>
+            </ul>
+            <p className="mt-3 text-red-600 font-medium">
+              This action cannot be undone!
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowResetDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleResetSystem}
+              data-testid="button-confirm-reset"
+            >
+              Reset System
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manual Winner Dialog */}
+      <Dialog open={showManualWinnerDialog} onOpenChange={setShowManualWinnerDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enter Manual Winner</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <p className="text-gray-600">
+              Enter the square number that the chicken selected as the winner.
+            </p>
+            <div>
+              <Label htmlFor="winner-square">Square Number (1-65)</Label>
+              <Input
+                id="winner-square"
+                type="number"
+                min="1"
+                max="65"
+                value={manualWinnerSquare}
+                onChange={(e) => setManualWinnerSquare(e.target.value)}
+                placeholder="Enter square number"
+                className="mt-1"
+                data-testid="input-manual-winner"
+              />
+            </div>
+            {soldSquares.length > 0 && (
+              <div className="text-sm text-gray-600">
+                <p className="font-medium">Sold squares available:</p>
+                <p className="mt-1">
+                  {soldSquares.map(s => s.number).sort((a, b) => a - b).join(", ")}
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowManualWinnerDialog(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleManualWinner}
+              disabled={!manualWinnerSquare || parseInt(manualWinnerSquare) < 1 || parseInt(manualWinnerSquare) > 65}
+              data-testid="button-confirm-manual-winner"
+            >
+              Set Winner
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

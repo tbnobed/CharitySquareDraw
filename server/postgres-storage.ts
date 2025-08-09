@@ -457,4 +457,22 @@ export class PostgresStorage implements IStorage {
       return [];
     }
   }
+
+  async getSquareByNumber(number: number, gameRoundId: string): Promise<Square | undefined> {
+    return this.getSquare(number, gameRoundId);
+  }
+
+  async resetSystem(): Promise<void> {
+    try {
+      // Delete all data in reverse order to respect foreign key constraints
+      await db.delete(squares);
+      await db.delete(participants);
+      await db.delete(gameRounds);
+      
+      console.log('System reset complete - all data cleared');
+    } catch (error) {
+      console.error('Error resetting system:', error);
+      throw error;
+    }
+  }
 }

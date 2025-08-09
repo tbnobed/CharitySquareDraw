@@ -425,6 +425,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reset system back to Round #1
+  app.post("/api/reset-system", async (req, res) => {
+    try {
+      // Reset the entire system back to Round #1
+      await storage.resetSystem();
+      
+      // Create a new Round #1
+      const newRound = await storage.createGameRound({
+        roundNumber: 1,
+        status: "active",
+        pricePerSquare: 1000, // Default $10.00
+        totalRevenue: 0,
+      });
+
+      await storage.initializeSquares(newRound.id);
+
+      broadcast({
+        type: 'GAME_RESET',
+        data: { roundNumber: 1 }
+      });
+
+      res.json({ 
+        success: true, 
+        gameRound: newRound,
+        message: "System reset to Round #1" 
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to reset system" });
+    }
+  });
+
+  // Set manual winner (for when chicken selects winner)
+  app.post("/api/manual-winner", async (req, res) => {
+    try {
+      const { squareNumber } = req.body;
+      
+      if (!squareNumber || squareNumber < 1 || squareNumber > 65) {
+        return res.status(400).json({ error: "Invalid square number. Must be between 1-65." });
+      }
+
+      const currentRound = await storage.getCurrentGameRound();
+      if (!currentRound) {
+        return res.status(404).json({ error: "No active game round" });
+      }
+
+      // Check if square is sold
+      const square = await storage.getSquareByNumber(squareNumber, currentRound.id);
+      if (!square || square.status !== "sold") {
+        return res.status(400).json({ error: "Square must be sold to be selected as winner" });
+      }
+
+      // Mark game round as completed with winner
+      await storage.updateGameRound(currentRound.id, {
+        status: "completed",
+        winnerSquare: squareNumber,
+        completedAt: new Date()
+      });
+
+      broadcast({
+        type: 'GAME_RESET',
+        data: { 
+          winnerSquare: squareNumber,
+          gameRoundId: currentRound.id,
+          totalPot: currentRound.totalRevenue
+        }
+      });
+
+      res.json({ 
+        success: true, 
+        winnerSquare: squareNumber,
+        totalPot: currentRound.totalRevenue,
+        message: `Square #${squareNumber} selected as winner!` 
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to set manual winner" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   // WebSocket server temporarily disabled to fix connection loops

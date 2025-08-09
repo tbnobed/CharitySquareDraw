@@ -19,6 +19,7 @@ export interface IStorage {
   // Squares
   getSquaresByGameRound(gameRoundId: string): Promise<Square[]>;
   getSquare(number: number, gameRoundId: string): Promise<Square | undefined>;
+  getSquareByNumber(number: number, gameRoundId: string): Promise<Square | undefined>;
   reserveSquares(squares: number[], gameRoundId: string, participantId: string): Promise<Square[]>;
   markSquaresSold(participantId: string): Promise<Square[]>;
   releaseSquares(squares: number[], gameRoundId: string): Promise<Square[]>;
@@ -26,6 +27,9 @@ export interface IStorage {
 
   // Statistics
   getGameStats(): Promise<GameStats>;
+  
+  // System
+  resetSystem(): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -273,6 +277,20 @@ export class MemStorage implements IStorage {
       availableCount: 65 - totalSold,
       currentRound: currentRound.roundNumber,
     };
+  }
+
+  async getSquareByNumber(number: number, gameRoundId: string): Promise<Square | undefined> {
+    return this.getSquare(number, gameRoundId);
+  }
+
+  async resetSystem(): Promise<void> {
+    // Clear all data
+    this.gameRounds.clear();
+    this.participants.clear();
+    this.squares.clear();
+    
+    // Reinitialize with Round #1
+    await this.initializeFirstRound();
   }
 }
 

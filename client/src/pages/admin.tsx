@@ -155,6 +155,48 @@ export default function AdminPage() {
     },
   });
 
+  // Reset system mutation
+  const resetSystemMutation = useMutation({
+    mutationFn: () => apiRequest('POST', '/api/reset-system'),
+    onSuccess: () => {
+      toast({
+        title: "System Reset Complete",
+        description: "System has been reset back to Round #1!",
+      });
+      refetchGame();
+      refetchStats();
+      refetchParticipants();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to reset system. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Manual winner mutation
+  const manualWinnerMutation = useMutation({
+    mutationFn: (squareNumber: number) => apiRequest('POST', '/api/manual-winner', { squareNumber }),
+    onSuccess: async (response) => {
+      const data = await response.json();
+      toast({
+        title: "Winner Set!",
+        description: `Square #${data.winnerSquare} has been set as the winner!`,
+      });
+      refetchGame();
+      refetchStats();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to set winner. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // Export data as CSV
   const handleExportData = async () => {
     try {
@@ -207,7 +249,7 @@ export default function AdminPage() {
     }
   };
 
-  const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending || updatePriceMutation.isPending;
+  const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending || updatePriceMutation.isPending || resetSystemMutation.isPending || manualWinnerMutation.isPending;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -270,6 +312,8 @@ export default function AdminPage() {
           onNewRound={() => newRoundMutation.mutate()}
           onExportData={handleExportData}
           onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
+          onResetSystem={() => resetSystemMutation.mutate()}
+          onManualWinner={(squareNumber) => manualWinnerMutation.mutate(squareNumber)}
           isLoading={isLoading}
         />
       </div>
