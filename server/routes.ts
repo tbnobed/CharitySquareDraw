@@ -103,10 +103,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Reserve squares
       await storage.reserveSquares(validatedData.squares, currentRound.id, participant.id);
 
-      // Broadcast update
+      // Broadcast update to all clients
       broadcast({
         type: 'SQUARE_UPDATE',
-        data: { squares: validatedData.squares, status: 'reserved' }
+        data: { 
+          squares: validatedData.squares, 
+          status: 'reserved',
+          participantId: participant.id,
+          action: 'reserve'
+        }
       });
 
       res.json({ participant });
@@ -140,15 +145,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Broadcast update
+      // Broadcast updates to all clients
       broadcast({
         type: 'SQUARE_UPDATE',
-        data: { squares: participant.squares, status: 'sold' }
+        data: { 
+          squares: participant.squares, 
+          status: 'sold',
+          participantId: participant.id,
+          action: 'confirm'
+        }
       });
 
       broadcast({
         type: 'PARTICIPANT_ADDED',
         data: participant
+      });
+
+      broadcast({
+        type: 'STATS_UPDATE',
+        data: { totalRevenue: (currentRound?.totalRevenue || 0) + participant.totalAmount }
       });
 
       res.json({ participant, squares });

@@ -11,7 +11,8 @@ import { useWebSocket } from "@/hooks/useWebSocket";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { type GameStats, type Square, type ParticipantForm as ParticipantFormData, type BoardUpdate, type Participant } from "@shared/schema";
-import { Heart, Store, Check, Info } from "lucide-react";
+import { Heart, Store, Check, Info, Wifi, WifiOff } from "lucide-react";
+import React from "react";
 
 export default function SellerPage() {
   const [selectedSquares, setSelectedSquares] = useState<number[]>([]);
@@ -19,6 +20,7 @@ export default function SellerPage() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { toast } = useToast();
+  const [wsConnectionStatus, setWsConnectionStatus] = useState<string>('connecting');
 
   // Fetch game stats
   const { data: stats = { 
@@ -40,19 +42,46 @@ export default function SellerPage() {
   const squares: Square[] = (gameData as any)?.squares || [];
 
   // WebSocket for real-time updates
-  useWebSocket((data: BoardUpdate) => {
+  const { isConnected } = useWebSocket((data: BoardUpdate) => {
+    console.log('Seller received WebSocket update:', data);
+    
     switch (data.type) {
       case 'SQUARE_UPDATE':
-        // Update selected squares if any were taken by others
-        const takenSquares = data.data.squares || [];
-        setSelectedSquares(prev => prev.filter(sq => !takenSquares.includes(sq)));
+        const { squares: updatedSquares, status, action } = data.data;
+        
+        // If squares were reserved/sold by others, remove them from our selection
+        if (action === 'reserve' || action === 'confirm') {
+          setSelectedSquares(prev => prev.filter(sq => !updatedSquares.includes(sq)));
+        }
+        
         refetchGame();
         refetchStats();
+        
+        // Show toast notification for real-time updates
+        if (action === 'reserve') {
+          toast({
+            title: "Squares Reserved",
+            description: `Squares ${updatedSquares.join(", ")} were just reserved by another seller.`,
+            variant: "default",
+          });
+        } else if (action === 'confirm') {
+          toast({
+            title: "Squares Sold",
+            description: `Squares ${updatedSquares.join(", ")} were just sold!`,
+            variant: "default",
+          });
+        }
         break;
+        
       case 'PARTICIPANT_ADDED':
         refetchGame();
         refetchStats();
         break;
+        
+      case 'STATS_UPDATE':
+        refetchStats();
+        break;
+        
       case 'GAME_RESET':
         setSelectedSquares([]);
         setReservedParticipant(null);
@@ -67,6 +96,11 @@ export default function SellerPage() {
         break;
     }
   });
+
+  // Update connection status
+  React.useEffect(() => {
+    setWsConnectionStatus(isConnected ? 'connected' : 'disconnected');
+  }, [isConnected]);
 
   // Reserve squares mutation
   const reserveMutation = useMutation({
@@ -157,6 +191,21 @@ export default function SellerPage() {
             </div>
             
             <div className="flex items-center space-x-4">
+              {/* Connection Status */}
+              <div className="flex items-center space-x-2">
+                {isConnected ? (
+                  <div className="flex items-center text-green-600" title="Real-time updates active">
+                    <Wifi className="h-4 w-4" />
+                    <span className="text-xs ml-1">Live</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-red-500" title="Connection lost">
+                    <WifiOff className="h-4 w-4" />
+                    <span className="text-xs ml-1">Offline</span>
+                  </div>
+                )}
+              </div>
+              
               <div className="bg-gray-100 rounded-lg p-1 flex">
                 <Link href="/admin">
                   <Button

@@ -7,7 +7,7 @@ import { useWebSocket } from "@/hooks/useWebSocket";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { type GameStats, type Participant, type Square, type BoardUpdate } from "@shared/schema";
-import { Heart, Store } from "lucide-react";
+import { Heart, Store, Wifi, WifiOff } from "lucide-react";
 
 export default function AdminPage() {
   const { toast } = useToast();
@@ -37,14 +37,40 @@ export default function AdminPage() {
   const squares: Square[] = (gameData as any)?.squares || [];
 
   // WebSocket for real-time updates
-  useWebSocket((data: BoardUpdate) => {
+  const { isConnected } = useWebSocket((data: BoardUpdate) => {
+    console.log('Admin received WebSocket update:', data);
+    
     switch (data.type) {
       case 'SQUARE_UPDATE':
+        refetchGame();
+        refetchParticipants();
+        refetchStats();
+        
+        // Show real-time notifications in admin view
+        const { squares: updatedSquares, action } = data.data;
+        if (action === 'reserve') {
+          toast({
+            title: "Squares Reserved",
+            description: `Squares ${updatedSquares.join(", ")} were reserved.`,
+          });
+        } else if (action === 'confirm') {
+          toast({
+            title: "Payment Confirmed",
+            description: `Squares ${updatedSquares.join(", ")} were sold!`,
+          });
+        }
+        break;
+        
       case 'PARTICIPANT_ADDED':
         refetchGame();
         refetchParticipants();
         refetchStats();
         break;
+        
+      case 'STATS_UPDATE':
+        refetchStats();
+        break;
+        
       case 'GAME_RESET':
         refetchGame();
         refetchParticipants();
@@ -53,9 +79,6 @@ export default function AdminPage() {
           title: "New Round Started",
           description: `Round #${data.data.roundNumber} has begun!`,
         });
-        break;
-      case 'STATS_UPDATE':
-        refetchStats();
         break;
     }
   });
@@ -148,6 +171,21 @@ export default function AdminPage() {
             </div>
             
             <div className="flex items-center space-x-4">
+              {/* Connection Status */}
+              <div className="flex items-center space-x-2">
+                {isConnected ? (
+                  <div className="flex items-center text-green-600" title="Real-time updates active">
+                    <Wifi className="h-4 w-4" />
+                    <span className="text-xs ml-1">Live</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-red-500" title="Connection lost">
+                    <WifiOff className="h-4 w-4" />
+                    <span className="text-xs ml-1">Offline</span>
+                  </div>
+                )}
+              </div>
+              
               <div className="bg-gray-100 rounded-lg p-1 flex">
                 <Button
                   variant="default"
