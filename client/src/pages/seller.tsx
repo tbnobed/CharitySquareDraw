@@ -53,7 +53,7 @@ export default function SellerPage() {
 
   // Update selections state
   useEffect(() => {
-    if (selectionsData?.selections) {
+    if (selectionsData && 'selections' in selectionsData && Array.isArray(selectionsData.selections)) {
       // My selections
       const mySelections = selectionsData.selections
         .filter((sel: any) => sel.selectedBy === sessionId)
@@ -206,9 +206,10 @@ export default function SellerPage() {
         squares: [squareNumber],
         action,
         sessionId
-      }).then((response) => {
+      }).then(async (response) => {
         // Only update local state if server accepted the selection
-        if (response.success) {
+        const data = await response.json();
+        if (data.success) {
           // Refetch selections to get updated state
           refetchSelections();
         }
