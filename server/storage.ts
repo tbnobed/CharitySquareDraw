@@ -11,6 +11,7 @@ export interface IStorage {
 
   // Participants
   getParticipants(gameRoundId: string): Promise<Participant[]>;
+  getParticipant(id: string): Promise<Participant | undefined>;
   createParticipant(participant: InsertParticipant): Promise<Participant>;
   updateParticipantPaymentStatus(id: string, status: string): Promise<Participant | undefined>;
 
@@ -108,6 +109,10 @@ export class MemStorage implements IStorage {
     return Array.from(this.participants.values()).filter(
       participant => participant.gameRoundId === gameRoundId
     );
+  }
+
+  async getParticipant(id: string): Promise<Participant | undefined> {
+    return this.participants.get(id);
   }
 
   async createParticipant(insertParticipant: InsertParticipant): Promise<Participant> {

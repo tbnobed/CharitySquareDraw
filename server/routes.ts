@@ -87,6 +87,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get individual participant by ID
+  app.get("/api/participant/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const participant = await storage.getParticipant(id);
+      
+      if (!participant) {
+        return res.status(404).json({ error: "Participant not found" });
+      }
+
+      res.json(participant);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get participant" });
+    }
+  });
+
   // Reserve squares and create participant
   app.post("/api/reserve", async (req, res) => {
     try {

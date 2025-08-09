@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { GameBoard } from "@/components/GameBoard";
 import { ParticipantFormComponent } from "@/components/ParticipantForm";
 import { PaymentModal } from "@/components/PaymentModal";
+import { QRReceiptModal } from "@/components/QRReceiptModal";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -18,7 +19,7 @@ export default function SellerPage() {
   const [selectedSquares, setSelectedSquares] = useState<number[]>([]);
   const [reservedParticipant, setReservedParticipant] = useState<Participant | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showQRReceiptModal, setShowQRReceiptModal] = useState(false);
   const { toast } = useToast();
   const [wsConnectionStatus, setWsConnectionStatus] = useState<string>('connecting');
 
@@ -35,7 +36,7 @@ export default function SellerPage() {
   });
 
   // Fetch game data
-  const { data: gameData, refetch: refetchGame } = useQuery({
+  const { data: gameData, refetch: refetchGame } = useQuery<{gameRound: any, squares: any[]}>({
     queryKey: ['/api/game'],
   });
 
@@ -133,7 +134,7 @@ export default function SellerPage() {
         setSelectedSquares([]);
         setReservedParticipant(null);
         setShowPaymentModal(false);
-        setShowSuccessModal(false);
+        setShowQRReceiptModal(false);
         refetchGame();
         refetchStats();
         toast({
@@ -178,7 +179,7 @@ export default function SellerPage() {
     mutationFn: (participantId: string) => apiRequest('POST', `/api/confirm-payment/${participantId}`),
     onSuccess: () => {
       setShowPaymentModal(false);
-      setShowSuccessModal(true);
+      setShowQRReceiptModal(true);
       setSelectedSquares([]);
       refetchGame();
       refetchStats();
@@ -254,9 +255,10 @@ export default function SellerPage() {
     }
   };
 
-  const handleSuccessClose = () => {
-    setShowSuccessModal(false);
+  const handleQRReceiptClose = () => {
+    setShowQRReceiptModal(false);
     setReservedParticipant(null);
+    setSelectedSquares([]);
   };
 
   return (
@@ -384,46 +386,17 @@ export default function SellerPage() {
         />
       )}
 
-      {/* Success Modal */}
-      <Dialog open={showSuccessModal} onOpenChange={handleSuccessClose}>
-        <DialogContent className="max-w-md" data-testid="success-modal">
-          <DialogHeader>
-            <DialogTitle className="text-center">Purchase Complete!</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-6 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <Check className="text-green-500 h-8 w-8" />
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Purchase Complete!</h3>
-              <p className="text-gray-600 mb-6">Your squares have been reserved and payment confirmed.</p>
-              
-              {reservedParticipant && (
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <p className="text-sm text-gray-600 mb-1">Confirmation Details</p>
-                  <p className="font-medium text-gray-900">{reservedParticipant.name}</p>
-                  <p className="text-sm text-gray-600">
-                    Squares: {reservedParticipant.squares.map(s => `#${s}`).join(", ")}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Amount: ${reservedParticipant.totalAmount}
-                  </p>
-                </div>
-              )}
-            </div>
-            
-            <Button
-              onClick={handleSuccessClose}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
-              data-testid="button-continue"
-            >
-              Continue Selling
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* QR Receipt Modal */}
+      {reservedParticipant && (
+        <QRReceiptModal
+          isOpen={showQRReceiptModal}
+          onClose={handleQRReceiptClose}
+          participantId={reservedParticipant.id}
+          participantName={reservedParticipant.name}
+          squares={reservedParticipant.squares}
+          totalAmount={reservedParticipant.totalAmount}
+        />
+      )}
     </div>
   );
 }
