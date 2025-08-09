@@ -256,6 +256,17 @@ export default function SellerPage() {
     }
   };
 
+  const handlePaymentCancel = () => {
+    // When payment is cancelled, we need to clean up the reservation
+    setShowPaymentModal(false);
+    setReservedParticipant(null);
+    setSelectedSquares([]);
+    
+    // Refresh data to clear any reserved squares that weren't paid for
+    refetchGame();
+    refetchSelections();
+  };
+
   const handleQRReceiptClose = () => {
     setShowQRReceiptModal(false);
     setReservedParticipant(null);
@@ -378,7 +389,7 @@ export default function SellerPage() {
       {reservedParticipant && (
         <PaymentModal
           isOpen={showPaymentModal}
-          onClose={() => setShowPaymentModal(false)}
+          onClose={handlePaymentCancel}
           amount={reservedParticipant.totalAmount}
           squares={reservedParticipant.squares}
           participantName={reservedParticipant.name}
