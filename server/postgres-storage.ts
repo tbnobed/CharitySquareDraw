@@ -171,6 +171,16 @@ export class PostgresStorage implements IStorage {
     }
   }
 
+  async deleteParticipant(id: string): Promise<void> {
+    try {
+      await db
+        .delete(participants)
+        .where(eq(participants.id, id));
+    } catch (error) {
+      console.error('Error deleting participant:', error);
+    }
+  }
+
   async getSquaresByGameRound(gameRoundId: string): Promise<Square[]> {
     try {
       return await db
@@ -254,6 +264,40 @@ export class PostgresStorage implements IStorage {
         .where(eq(squares.participantId, participantId));
     } catch (error) {
       console.error('Error marking squares as sold:', error);
+      return [];
+    }
+  }
+
+  async releaseSquares(squareNumbers: number[], gameRoundId: string): Promise<Square[]> {
+    try {
+      const updatedSquares: Square[] = [];
+
+      for (const number of squareNumbers) {
+        await db
+          .update(squares)
+          .set({
+            status: 'available',
+            participantId: null,
+            reservedAt: null,
+            soldAt: null,
+            updatedAt: new Date()
+          })
+          .where(
+            and(
+              eq(squares.number, number),
+              eq(squares.gameRoundId, gameRoundId)
+            )
+          );
+
+        const square = await this.getSquare(number, gameRoundId);
+        if (square) {
+          updatedSquares.push(square);
+        }
+      }
+
+      return updatedSquares;
+    } catch (error) {
+      console.error('Error releasing squares:', error);
       return [];
     }
   }

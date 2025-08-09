@@ -256,13 +256,32 @@ export default function SellerPage() {
     }
   };
 
-  const handlePaymentCancel = () => {
-    // When payment is cancelled, we need to clean up the reservation
+  const handlePaymentCancel = async () => {
+    if (reservedParticipant) {
+      try {
+        // Cancel the reservation on the server
+        await apiRequest('POST', `/api/cancel-reservation/${reservedParticipant.id}`);
+        
+        toast({
+          title: "Reservation Cancelled",
+          description: "The squares have been released and are now available.",
+        });
+      } catch (error) {
+        console.error('Failed to cancel reservation:', error);
+        toast({
+          title: "Cancellation Failed",
+          description: "There was an issue cancelling the reservation. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
+    
+    // Clean up local state
     setShowPaymentModal(false);
     setReservedParticipant(null);
     setSelectedSquares([]);
     
-    // Refresh data to clear any reserved squares that weren't paid for
+    // Refresh data to show updated square status
     refetchGame();
     refetchSelections();
   };

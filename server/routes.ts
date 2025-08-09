@@ -215,6 +215,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Cancel reservation
+  app.post("/api/cancel-reservation/:participantId", async (req, res) => {
+    try {
+      const { participantId } = req.params;
+      
+      // Get participant to access their squares
+      const participant = await storage.getParticipant(participantId);
+      if (!participant) {
+        return res.status(404).json({ error: "Participant not found" });
+      }
+
+      // Only allow cancelling if payment is still pending
+      if (participant.paymentStatus !== "pending") {
+        return res.status(400).json({ error: "Cannot cancel paid reservation" });
+      }
+
+      // Release the squares back to available
+      await storage.releaseSquares(participant.squares, participant.gameRoundId);
+      
+      // Delete the participant record since reservation was cancelled
+      await storage.deleteParticipant(participantId);
+
+      // Broadcast updates to all clients
+      broadcast({
+        type: 'SQUARE_UPDATE',
+        data: { 
+          squares: participant.squares, 
+          status: 'available',
+          participantId: null,
+          action: 'cancel'
+        }
+      });
+
+      res.json({ success: true, releasedSquares: participant.squares });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to cancel reservation" });
+    }
+  });
+
   // Start new game round
   app.post("/api/new-round", async (req, res) => {
     try {

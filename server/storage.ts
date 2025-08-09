@@ -14,12 +14,14 @@ export interface IStorage {
   getParticipant(id: string): Promise<Participant | undefined>;
   createParticipant(participant: InsertParticipant): Promise<Participant>;
   updateParticipantPaymentStatus(id: string, status: string): Promise<Participant | undefined>;
+  deleteParticipant(id: string): Promise<void>;
 
   // Squares
   getSquaresByGameRound(gameRoundId: string): Promise<Square[]>;
   getSquare(number: number, gameRoundId: string): Promise<Square | undefined>;
   reserveSquares(squares: number[], gameRoundId: string, participantId: string): Promise<Square[]>;
   markSquaresSold(participantId: string): Promise<Square[]>;
+  releaseSquares(squares: number[], gameRoundId: string): Promise<Square[]>;
   initializeSquares(gameRoundId: string): Promise<Square[]>;
 
   // Statistics
@@ -144,6 +146,10 @@ export class MemStorage implements IStorage {
     return updated;
   }
 
+  async deleteParticipant(id: string): Promise<void> {
+    this.participants.delete(id);
+  }
+
   async getSquaresByGameRound(gameRoundId: string): Promise<Square[]> {
     return Array.from(this.squares.values()).filter(
       square => square.gameRoundId === gameRoundId
@@ -186,6 +192,27 @@ export class MemStorage implements IStorage {
           ...square,
           status: "sold" as const,
           soldAt: new Date(),
+        };
+        this.squares.set(square.id, updated);
+        updatedSquares.push(updated);
+      }
+    }
+    
+    return updatedSquares;
+  }
+
+  async releaseSquares(squareNumbers: number[], gameRoundId: string): Promise<Square[]> {
+    const updatedSquares: Square[] = [];
+    
+    for (const number of squareNumbers) {
+      const square = await this.getSquare(number, gameRoundId);
+      if (square && (square.status === "reserved" || square.status === "sold")) {
+        const updated = {
+          ...square,
+          participantId: null,
+          status: "available" as const,
+          reservedAt: null,
+          soldAt: null,
         };
         this.squares.set(square.id, updated);
         updatedSquares.push(updated);
