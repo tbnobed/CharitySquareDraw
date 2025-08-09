@@ -1,4 +1,4 @@
-import { eq, desc, and, sql } from 'drizzle-orm';
+import { eq, desc, and, sql, or, isNull } from 'drizzle-orm';
 import { db, gameRounds, participants, squares } from './db';
 import { 
   type GameRound, 
@@ -468,7 +468,7 @@ export class PostgresStorage implements IStorage {
       const RESERVATION_TIMEOUT = 120000; // 2 minutes
       const cutoffTime = new Date(Date.now() - RESERVATION_TIMEOUT);
       
-      // Find expired reservations
+      // Find expired reservations (including those without timestamps)
       const expiredSquares = await db
         .select()
         .from(squares)
@@ -476,7 +476,10 @@ export class PostgresStorage implements IStorage {
           and(
             eq(squares.gameRoundId, gameRoundId),
             eq(squares.status, 'reserved'),
-            sql`${squares.reservedAt} < ${cutoffTime}`
+            or(
+              sql`${squares.reservedAt} < ${cutoffTime}`,
+              isNull(squares.reservedAt)
+            )
           )
         );
 
@@ -497,7 +500,10 @@ export class PostgresStorage implements IStorage {
             and(
               eq(squares.gameRoundId, gameRoundId),
               eq(squares.status, 'reserved'),
-              sql`${squares.reservedAt} < ${cutoffTime}`
+              or(
+                sql`${squares.reservedAt} < ${cutoffTime}`,
+                isNull(squares.reservedAt)
+              )
             )
           );
 
