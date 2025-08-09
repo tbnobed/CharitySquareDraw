@@ -48,7 +48,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   return (
     <div className="space-y-6">
       <div 
-        className={`grid grid-cols-10 ${readonly ? 'gap-3' : 'gap-2'} ${readonly ? 'min-w-fit' : ''}`} 
+        className={`grid grid-cols-10 ${readonly ? 'gap-1' : 'gap-2'}`} 
         data-testid="game-board"
       >
         {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
@@ -63,7 +63,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               disabled={isDisabled || readonly}
               className={`aspect-square flex items-center justify-center ${
                 readonly ? 'font-medium text-xs' : 'font-semibold text-sm'
-              } ${readonly ? 'rounded-md' : 'rounded-lg'} transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
+              } rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 minHeight: readonly ? '32px' : '44px',
                 minWidth: readonly ? '32px' : '44px'
