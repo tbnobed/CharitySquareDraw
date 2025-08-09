@@ -53,7 +53,7 @@ export function PaymentModal({
           <div className="text-center">
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <p className="text-sm text-gray-600 mb-2">Total Amount Due</p>
-              <p className="text-3xl font-bold text-gray-900" data-testid="payment-amount">${amount}</p>
+              <p className="text-3xl font-bold text-gray-900" data-testid="payment-amount">${(amount / 100).toFixed(2)}</p>
               <p className="text-sm text-gray-600">
                 For {participantName} - Squares: {squares.map(s => `#${s}`).join(", ")}
               </p>

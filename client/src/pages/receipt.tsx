@@ -54,8 +54,8 @@ export default function ReceiptPage() {
     );
   }
 
-  const pricePerSquare = ((gameData as any)?.gameRound?.pricePerSquare || 1000) / 100;
-  const totalAmount = participant.squares.length * pricePerSquare;
+  const pricePerSquare = ((gameData as any)?.gameRound?.pricePerSquare || 1000);
+  const totalAmount = participant.squares.length * (pricePerSquare / 100);
   const currentDate = new Date();
 
   const handleDownload = () => {

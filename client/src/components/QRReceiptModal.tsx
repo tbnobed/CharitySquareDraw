@@ -63,7 +63,7 @@ export function QRReceiptModal({
       try {
         await navigator.share({
           title: "Square Game Receipt",
-          text: `Your receipt for squares ${squares.join(", ")} - Total: $${totalAmount.toFixed(2)}`,
+          text: `Your receipt for squares ${squares.join(", ")} - Total: $${(totalAmount / 100).toFixed(2)}`,
           url: receiptUrl,
         });
       } catch (error) {
@@ -110,7 +110,7 @@ export function QRReceiptModal({
                 <div className="flex justify-between text-sm pt-2 border-t">
                   <span className="text-gray-600">Total:</span>
                   <span className="font-bold text-green-600" data-testid="qr-total">
-                    ${totalAmount.toFixed(2)}
+                    ${(totalAmount / 100).toFixed(2)}
                   </span>
                 </div>
               </div>
