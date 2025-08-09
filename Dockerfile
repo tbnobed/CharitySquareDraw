@@ -22,8 +22,9 @@ WORKDIR /app
 # Copy source code
 COPY . .
 
-# Build the Vite frontend
+# Build the Vite frontend and bundle server with esbuild
 RUN npm run build
+RUN npx esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server-bundle.js
 
 # Production image
 FROM node:20-alpine AS runner
@@ -46,8 +47,8 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy client assets to serve statically
 COPY --from=builder /app/client/src/assets ./client/src/assets
 
-# Make production server executable
-RUN chmod +x server/production.js
+# Make bundled server executable
+RUN chmod +x dist/server-bundle.js
 
 # Set ownership
 RUN chown -R chicken-poop-bingo:nodejs /app
@@ -60,5 +61,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/game', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Start the application using our production server
-CMD ["node", "server/production.js"]
+# Start the application using bundled server
+CMD ["node", "dist/server-bundle.js"]

@@ -1,0 +1,166 @@
+chicken-poop-bingo-app   docker-entrypoint.sh node  ...   Restarting
+chicken-poop-bingo-db    docker-entrypoint.sh postgres    Up (healthy)   0.0.0.0:5432->5432/tcp,:::5432->5432/tcp
+obtv-admin@obtv-lnxtemplate:~/CharitySquareDraw$ docker-compose logs -f app
+Attaching to chicken-poop-bingo-app
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
+chicken-poop-bingo-app | node:internal/modules/esm/resolve:283
+chicken-poop-bingo-app |     throw new ERR_MODULE_NOT_FOUND(
+chicken-poop-bingo-app |           ^
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/server/routes.js' imported from /app/server/production.js
+chicken-poop-bingo-app |     at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+chicken-poop-bingo-app |     at moduleResolve (node:internal/modules/esm/resolve:952:10)
+chicken-poop-bingo-app |     at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+chicken-poop-bingo-app |     at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+chicken-poop-bingo-app |     at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+chicken-poop-bingo-app |     at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+chicken-poop-bingo-app |     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+chicken-poop-bingo-app |     at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+chicken-poop-bingo-app |   code: 'ERR_MODULE_NOT_FOUND',
+chicken-poop-bingo-app |   url: 'file:///app/server/routes.js'
+chicken-poop-bingo-app | }
+chicken-poop-bingo-app |
+chicken-poop-bingo-app | Node.js v20.19.4
