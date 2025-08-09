@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { participantFormSchema, type ParticipantForm } from "@shared/schema";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -24,6 +25,11 @@ export function ParticipantFormComponent({ selectedSquares, onRemoveSquare, onSu
       squares: selectedSquares,
     },
   });
+
+  // Update form when selectedSquares changes
+  useEffect(() => {
+    form.setValue('squares', selectedSquares);
+  }, [selectedSquares, form]);
 
   const handleSubmit = (data: ParticipantForm) => {
     onSubmit({ ...data, squares: selectedSquares });

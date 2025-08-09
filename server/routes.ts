@@ -260,11 +260,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get temporary selections
   app.get("/api/selections", async (req, res) => {
     try {
-      // Clean up old selections (older than 30 seconds)
+      // Clean up old selections (older than 2 minutes)
       const now = Date.now();
       const entries = Array.from(temporarySelections.entries());
       for (const [square, selection] of entries) {
-        if (now - selection.timestamp > 30000) {
+        if (now - selection.timestamp > 120000) {
           temporarySelections.delete(square);
         }
       }
