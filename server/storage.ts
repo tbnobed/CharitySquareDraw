@@ -44,7 +44,7 @@ export class MemStorage implements IStorage {
     const firstRound = await this.createGameRound({
       roundNumber: 1,
       status: "active",
-      pricePerSquare: 1000, // $10.00
+      pricePerSquare: 1000, // $10.00 (stored in cents)
       totalRevenue: 0,
     });
     await this.initializeSquares(firstRound.id);
@@ -63,7 +63,7 @@ export class MemStorage implements IStorage {
       id,
       roundNumber: insertGameRound.roundNumber,
       status: insertGameRound.status || "active",
-      pricePerSquare: insertGameRound.pricePerSquare || 1000, // default $10.00
+      pricePerSquare: insertGameRound.pricePerSquare || 1000, // default $10.00 (stored in cents)
       totalRevenue: insertGameRound.totalRevenue || 0,
       startedAt: new Date(),
       completedAt: null,
