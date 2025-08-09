@@ -44,9 +44,6 @@ COPY --from=builder /app/shared ./shared
 COPY --from=builder /app/package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 
-# Copy client assets to serve statically
-COPY --from=builder /app/client/src/assets ./client/src/assets
-
 # Make bundled server executable
 RUN chmod +x dist/server-bundle.js
 
