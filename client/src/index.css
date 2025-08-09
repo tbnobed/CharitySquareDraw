@@ -105,5 +105,23 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('./assets/chicken-poop-bingo-logo.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 35% auto;
+    background-attachment: fixed;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: -1;
   }
 }
