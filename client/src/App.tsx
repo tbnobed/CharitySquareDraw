@@ -27,22 +27,10 @@ function Router() {
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
-  // Check if user has already seen splash screen in this session
-  useEffect(() => {
-    const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
-    // For testing: add ?splash=true to URL to force splash screen
-    const urlParams = new URLSearchParams(window.location.search);
-    const forcesplash = urlParams.get('splash') === 'true';
-    
-    if (forcesplash) {
-      sessionStorage.removeItem('hasSeenSplash');
-    } else if (hasSeenSplash) {
-      setShowSplash(false);
-    }
-  }, []);
+  // Always show splash screen on page load/refresh
+  // No need to check sessionStorage - splash shows every time
 
   const handleSplashComplete = () => {
-    sessionStorage.setItem('hasSeenSplash', 'true');
     setShowSplash(false);
   };
 
