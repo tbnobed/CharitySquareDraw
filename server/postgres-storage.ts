@@ -465,30 +465,27 @@ export class PostgresStorage implements IStorage {
 
   async cleanupExpiredReservations(gameRoundId: string): Promise<Square[]> {
     try {
-      const RESERVATION_TIMEOUT = 120000; // 2 minutes
-      const cutoffTime = new Date(Date.now() - RESERVATION_TIMEOUT);
+      console.log('Manual cleanup called - releasing ALL reserved squares immediately');
       
-      // Find expired reservations (including those without timestamps)
+      // Find ALL reserved squares (immediate cleanup)
       const expiredSquares = await db
         .select()
         .from(squares)
         .where(
           and(
             eq(squares.gameRoundId, gameRoundId),
-            eq(squares.status, 'reserved'),
-            or(
-              sql`${squares.reservedAt} < ${cutoffTime}`,
-              isNull(squares.reservedAt)
-            )
+            eq(squares.status, 'reserved')
           )
         );
+      
+      console.log('Found reserved squares to clean:', expiredSquares.length, expiredSquares.map(s => ({ number: s.number, participantId: s.participantId })));
 
       // Release expired reservations and clean up participants
       if (expiredSquares.length > 0) {
         // Get unique participant IDs from expired squares
         const participantIds = Array.from(new Set(expiredSquares.map((s: Square) => s.participantId).filter(Boolean)));
         
-        // Release the squares
+        // Release ALL reserved squares immediately
         await db
           .update(squares)
           .set({
@@ -499,13 +496,11 @@ export class PostgresStorage implements IStorage {
           .where(
             and(
               eq(squares.gameRoundId, gameRoundId),
-              eq(squares.status, 'reserved'),
-              or(
-                sql`${squares.reservedAt} < ${cutoffTime}`,
-                isNull(squares.reservedAt)
-              )
+              eq(squares.status, 'reserved')
             )
           );
+        
+        console.log(`Released ${expiredSquares.length} reserved squares`);
 
         // Delete participants who only had expired reservations
         for (const participantId of participantIds) {
@@ -525,7 +520,9 @@ export class PostgresStorage implements IStorage {
           }
         }
 
-        console.log(`Cleaned up ${expiredSquares.length} expired reservations and ${participantIds.length} participants`);
+        console.log(`Successfully cleaned up ${expiredSquares.length} reserved squares and ${participantIds.length} participants`);
+      } else {
+        console.log('No reserved squares found to clean up');
       }
 
       return expiredSquares;

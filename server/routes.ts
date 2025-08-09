@@ -513,6 +513,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const cleanedSquares = await storage.cleanupExpiredReservations(currentRound.id);
       
+      // Broadcast updates to all clients if squares were cleaned
+      if (cleanedSquares.length > 0) {
+        broadcast({
+          type: 'SQUARE_UPDATE',
+          data: { 
+            squares: cleanedSquares.map(s => s.number), 
+            status: 'available',
+            participantId: null,
+            action: 'cleanup'
+          }
+        });
+      }
+      
       res.json({ 
         success: true, 
         message: `Cleaned up ${cleanedSquares.length} expired reservations`,
