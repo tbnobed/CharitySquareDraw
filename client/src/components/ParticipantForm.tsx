@@ -95,6 +95,12 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
                     type="tel"
                     placeholder="(555) 123-4567"
                     {...field}
+                    onInput={(e) => {
+                      // Only allow digits, spaces, parentheses, and dashes
+                      const value = e.currentTarget.value.replace(/[^0-9\s()-]/g, '');
+                      e.currentTarget.value = value;
+                      field.onChange(value);
+                    }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </FormControl>
