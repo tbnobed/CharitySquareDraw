@@ -31,13 +31,15 @@ Preferred communication style: Simple, everyday language.
 - **Database**: PostgreSQL with Drizzle ORM for type-safe database operations
 - **Database Provider**: Neon Database (@neondatabase/serverless) for serverless PostgreSQL
 - **Schema Management**: Drizzle Kit for migrations and schema management
-- **Fallback Storage**: In-memory storage implementation for development/testing
+- **Persistent Storage**: Complete PostgreSQL implementation with marketing data persistence
+- **Fallback Storage**: In-memory storage implementation for development/testing environments
 
 ### Database Schema Design
-- **Game Rounds**: Manages multiple fundraising rounds with status tracking
-- **Participants**: Stores participant information, contact details, and payment status
-- **Squares**: Individual square entities with availability status and ownership tracking
+- **Game Rounds**: Manages multiple fundraising rounds with status tracking, winner recording, and completion timestamps
+- **Participants**: Stores participant information, contact details, payment status, and game round association for marketing purposes
+- **Squares**: Individual square entities with availability status, ownership tracking, and reservation timestamps
 - **Relationships**: Foreign key relationships between game rounds, participants, and squares
+- **Marketing Features**: Complete historical data retention for participant tracking, winner records, and fundraising analytics
 
 ### Authentication and Authorization
 - **Session Management**: Express sessions with PostgreSQL session store (connect-pg-simple)
@@ -46,6 +48,8 @@ Preferred communication style: Simple, everyday language.
 
 ### API Architecture
 - **RESTful Endpoints**: Standard REST API for CRUD operations
+- **Marketing Endpoints**: Specialized endpoints for participant data export, winner tracking, and historical analysis
+- **Admin Management**: Game round completion, new round creation, and comprehensive winner management
 - **Real-time Updates**: WebSocket endpoints for live board updates
 - **Error Handling**: Centralized error handling with proper HTTP status codes
 - **Data Serialization**: JSON-based API with Zod validation

@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertParticipantSchema, participantFormSchema, type BoardUpdate } from "@shared/schema";
 import { z } from "zod";
+import { registerMarketingRoutes } from "./routes-marketing";
 
 const clients = new Set<WebSocket>();
 
@@ -41,6 +42,8 @@ function broadcast(message: BoardUpdate) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register marketing and historical data routes
+  registerMarketingRoutes(app);
   // Get current game stats
   app.get("/api/stats", async (req, res) => {
     try {

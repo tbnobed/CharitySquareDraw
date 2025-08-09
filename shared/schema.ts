@@ -12,6 +12,8 @@ export const gameRounds = pgTable("game_rounds", {
   completedAt: timestamp("completed_at"),
   winnerSquare: integer("winner_square"),
   totalRevenue: integer("total_revenue").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const participants = pgTable("participants", {
@@ -24,6 +26,7 @@ export const participants = pgTable("participants", {
   totalAmount: integer("total_amount").notNull(),
   paymentStatus: text("payment_status").notNull().default("pending"), // "pending", "paid"
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const squares = pgTable("squares", {
@@ -34,23 +37,30 @@ export const squares = pgTable("squares", {
   status: text("status").notNull().default("available"), // "available", "reserved", "sold"
   reservedAt: timestamp("reserved_at"),
   soldAt: timestamp("sold_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const insertGameRoundSchema = createInsertSchema(gameRounds).omit({
   id: true,
   startedAt: true,
   completedAt: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export const insertParticipantSchema = createInsertSchema(participants).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export const insertSquareSchema = createInsertSchema(squares).omit({
   id: true,
   reservedAt: true,
   soldAt: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 export const participantFormSchema = z.object({

@@ -68,6 +68,8 @@ export class MemStorage implements IStorage {
       startedAt: new Date(),
       completedAt: null,
       winnerSquare: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     this.gameRounds.set(id, gameRound);
     return gameRound;
@@ -127,6 +129,7 @@ export class MemStorage implements IStorage {
       totalAmount: insertParticipant.totalAmount,
       paymentStatus: insertParticipant.paymentStatus || "pending",
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
     this.participants.set(id, participant);
     return participant;
@@ -205,6 +208,8 @@ export class MemStorage implements IStorage {
         status: "available",
         reservedAt: null,
         soldAt: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       this.squares.set(id, square);
       squares.push(square);
@@ -244,4 +249,9 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { PostgresStorage } from './postgres-storage';
+
+// Use PostgreSQL storage if DATABASE_URL is available, otherwise fall back to in-memory
+export const storage = process.env.DATABASE_URL 
+  ? new PostgresStorage() 
+  : new MemStorage();
