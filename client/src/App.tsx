@@ -26,11 +26,13 @@ function Router() {
 function App() {
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
-      <BackgroundLogo />
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <Toaster />
+            <Router />
+          </div>
+          <BackgroundLogo />
         </TooltipProvider>
       </QueryClientProvider>
     </div>
