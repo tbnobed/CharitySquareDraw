@@ -9,6 +9,12 @@ export function useWebSocket(onMessage?: (data: BoardUpdate) => void) {
   const reconnectDelay = 1000;
 
   const connect = useCallback(() => {
+    // Prevent multiple connections
+    if (ws.current && ws.current.readyState === WebSocket.CONNECTING) {
+      console.log('WebSocket connection already in progress');
+      return;
+    }
+    
     try {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       const wsUrl = `${protocol}//${window.location.host}/ws`;
@@ -26,13 +32,16 @@ export function useWebSocket(onMessage?: (data: BoardUpdate) => void) {
         console.log('WebSocket connection closed:', event.code, event.reason);
         setIsConnected(false);
         
-        // Auto-reconnect if not a manual close
-        if (event.code !== 1000 && reconnectAttempts < maxReconnectAttempts) {
+        // Only auto-reconnect for unexpected closures and if we haven't exceeded max attempts
+        if (event.code !== 1000 && event.code !== 1001 && reconnectAttempts < maxReconnectAttempts) {
+          const newAttempts = reconnectAttempts + 1;
           setTimeout(() => {
-            console.log(`Reconnecting WebSocket (attempt ${reconnectAttempts + 1})`);
-            setReconnectAttempts(prev => prev + 1);
+            console.log(`Reconnecting WebSocket (attempt ${newAttempts})`);
+            setReconnectAttempts(newAttempts);
             connect();
-          }, reconnectDelay * Math.pow(2, reconnectAttempts)); // Exponential backoff
+          }, reconnectDelay * Math.pow(2, reconnectAttempts));
+        } else if (reconnectAttempts >= maxReconnectAttempts) {
+          console.log('Max reconnection attempts reached, giving up');
         }
       };
 
@@ -53,10 +62,14 @@ export function useWebSocket(onMessage?: (data: BoardUpdate) => void) {
     } catch (error) {
       console.error('Failed to create WebSocket connection:', error);
     }
-  }, [onMessage, reconnectAttempts]);
+  }, [reconnectAttempts]);
 
   useEffect(() => {
-    connect();
+    // Temporarily disable WebSocket to prevent connection loops
+    // connect();
+
+    // For now, just set as disconnected
+    setIsConnected(false);
 
     return () => {
       if (ws.current) {
@@ -64,7 +77,7 @@ export function useWebSocket(onMessage?: (data: BoardUpdate) => void) {
         ws.current = null;
       }
     };
-  }, [connect]);
+  }, [onMessage]);
 
   const sendMessage = (message: any) => {
     if (ws.current?.readyState === WebSocket.OPEN) {

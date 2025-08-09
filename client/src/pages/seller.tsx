@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,16 @@ export default function SellerPage() {
 
   const squares: Square[] = (gameData as any)?.squares || [];
 
-  // WebSocket for real-time updates
+  // Polling for real-time updates (temporary replacement for WebSocket)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetchGame();
+    }, 2000); // Poll every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [refetchGame]);
+
+  // WebSocket for real-time updates (currently disabled)
   const { isConnected, sendMessage } = useWebSocket((data: BoardUpdate) => {
     console.log('Seller received WebSocket update:', data);
     
@@ -164,19 +173,19 @@ export default function SellerPage() {
         ? prev.filter(sq => sq !== squareNumber)
         : [...prev, squareNumber];
       
-      // Broadcast square selection to other users for real-time preview
-      if (isConnected && sendMessage) {
-        const message = {
-          type: 'SQUARE_SELECTION',
-          data: {
-            square: squareNumber,
-            action: prev.includes(squareNumber) ? 'deselect' : 'select',
-            timestamp: Date.now()
-          }
-        };
-        console.log('Broadcasting square selection:', message);
-        sendMessage(message);
-      }
+      // WebSocket disabled temporarily - using polling instead
+      // if (isConnected && sendMessage) {
+      //   const message = {
+      //     type: 'SQUARE_SELECTION',
+      //     data: {
+      //       square: squareNumber,
+      //       action: prev.includes(squareNumber) ? 'deselect' : 'select',
+      //       timestamp: Date.now()
+      //     }
+      //   };
+      //   console.log('Broadcasting square selection:', message);
+      //   sendMessage(message);
+      // }
       
       return newSelection;
     });

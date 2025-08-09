@@ -9,11 +9,32 @@ const clients = new Set<WebSocket>();
 
 function broadcast(message: BoardUpdate) {
   const data = JSON.stringify(message);
+  console.log(`Broadcasting message to ${clients.size} clients:`, message);
+  
+  // Clean up closed connections first
+  const closedClients: WebSocket[] = [];
   clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
+    if (client.readyState === WebSocket.CLOSED) {
+      closedClients.push(client);
     }
   });
+  closedClients.forEach(client => clients.delete(client));
+  
+  // Send to active connections
+  let sentCount = 0;
+  clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      try {
+        client.send(data);
+        sentCount++;
+      } catch (error) {
+        console.error('Failed to send WebSocket message:', error);
+        clients.delete(client);
+      }
+    }
+  });
+  
+  console.log(`Message sent to ${sentCount} active clients`);
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -264,46 +285,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
 
-  // WebSocket server
-  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
-
-  wss.on('connection', (ws) => {
-    console.log('WebSocket client connected, total clients:', clients.size + 1);
-    clients.add(ws);
-    
-    // Send welcome message to confirm connection
-    ws.send(JSON.stringify({
-      type: 'CONNECTION_ESTABLISHED',
-      data: { message: 'WebSocket connected successfully' }
-    }));
-    
-    ws.on('close', () => {
-      clients.delete(ws);
-      console.log('WebSocket client disconnected, remaining clients:', clients.size);
-    });
-
-    ws.on('error', (error) => {
-      console.error('WebSocket error:', error);
-      clients.delete(ws);
-    });
-    
-    // Handle incoming messages from clients
-    ws.on('message', (message) => {
-      try {
-        const data = JSON.parse(message.toString());
-        console.log('WebSocket message received:', data);
-        
-        // Broadcast to all other clients
-        clients.forEach(client => {
-          if (client !== ws && client.readyState === WebSocket.OPEN) {
-            client.send(message.toString());
-          }
-        });
-      } catch (error) {
-        console.error('Failed to process WebSocket message:', error);
-      }
-    });
-  });
+  // WebSocket server temporarily disabled to fix connection loops
+  // const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+  console.log('WebSocket server disabled - using polling for real-time updates');
 
   return httpServer;
 }

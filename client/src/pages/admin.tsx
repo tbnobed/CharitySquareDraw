@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,17 @@ export default function AdminPage() {
 
   const squares: Square[] = (gameData as any)?.squares || [];
 
-  // WebSocket for real-time updates
+  // Polling for real-time updates (temporary replacement for WebSocket)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetchGame();
+      refetchStats();
+    }, 3000); // Poll every 3 seconds for admin
+
+    return () => clearInterval(interval);
+  }, [refetchGame, refetchStats]);
+
+  // WebSocket for real-time updates (currently disabled)
   const { isConnected } = useWebSocket((data: BoardUpdate) => {
     console.log('Admin received WebSocket update:', data);
     
