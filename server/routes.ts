@@ -355,27 +355,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get winner information for current or last completed round
+  // Get winner information - only show for current active round if it has a winner
   app.get("/api/winner", async (req, res) => {
     try {
-      // Get the most recent round with a winner (either active with winner or completed)
-      const rounds = await db
-        .select()
-        .from(gameRounds)
-        .where(sql`${gameRounds.winnerSquare} IS NOT NULL`)
-        .orderBy(desc(gameRounds.completedAt), desc(gameRounds.createdAt))
-        .limit(1);
+      // Get the current active round
+      const currentRound = await storage.getCurrentGameRound();
       
-      const gameRound = rounds[0];
-      
-      if (!gameRound || !gameRound.winnerSquare) {
+      // Only show winner if current round has a winner
+      if (!currentRound || !currentRound.winnerSquare) {
         return res.json({ winner: null });
       }
       
       // Find the participant who has the winning square
-      const gameParticipants = await storage.getParticipants(gameRound.id);
+      const gameParticipants = await storage.getParticipants(currentRound.id);
       const winnerParticipant = gameParticipants.find(p => 
-        p.squares.includes(gameRound.winnerSquare!)
+        p.squares.includes(currentRound.winnerSquare!)
       );
       
       if (!winnerParticipant) {
@@ -385,10 +379,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         winner: {
           name: winnerParticipant.name,
-          square: gameRound.winnerSquare,
-          totalPot: gameRound.totalRevenue,
-          roundNumber: gameRound.roundNumber,
-          completedAt: gameRound.completedAt
+          square: currentRound.winnerSquare,
+          totalPot: currentRound.totalRevenue,
+          roundNumber: currentRound.roundNumber,
+          completedAt: currentRound.completedAt
         }
       });
     } catch (error) {
