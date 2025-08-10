@@ -352,8 +352,14 @@ export class PostgresStorage implements IStorage {
       const reservedSquares = squaresList.filter(s => s.status === "reserved");
       const totalSold = soldSquares.length + reservedSquares.length;
 
+      // Get total revenue from ALL rounds (cumulative)
+      const allRoundsResult = await db
+        .select({ totalRevenue: sql<number>`SUM(${gameRounds.totalRevenue})` })
+        .from(gameRounds);
+      const totalRevenue = allRoundsResult[0]?.totalRevenue || 0;
+
       return {
-        totalRevenue: currentRound.totalRevenue,
+        totalRevenue,
         participantCount: participantsList.length,
         squaresSold: totalSold,
         percentFilled: Math.round((totalSold / 65) * 100),
