@@ -110,33 +110,41 @@
 
 /* Modal centering fix for mobile devices */
 @layer components {
-  /* Use flexbox for proper modal centering */
-  [data-radix-dialog-overlay] {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-3;
-    /* Use full viewport height to account for mobile browsers */
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for better mobile support */
+  /* Force proper modal centering with high specificity */
+  [data-radix-dialog-overlay][data-state="open"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 50 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
   }
   
-  /* Reset modal positioning to work with flexbox */
-  [data-radix-dialog-content] {
-    /* Remove all absolute positioning */
+  /* Force modal content positioning */
+  [data-radix-dialog-content][data-state="open"] {
     position: relative !important;
     left: auto !important;
     top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
     transform: none !important;
+    margin: auto !important;
     
-    /* Ensure modal doesn't go off-screen on mobile */
-    max-height: 90vh;
-    width: 100%;
+    /* Responsive sizing */
+    max-height: 90vh !important;
+    overflow-y: auto !important;
     
-    /* Add responsive positioning for very small screens */
     @media (max-height: 600px) {
-      max-height: 85vh;
+      max-height: 85vh !important;
     }
     
     @media (max-height: 500px) {
-      max-height: 80vh;
+      max-height: 80vh !important;
     }
   }
 }
