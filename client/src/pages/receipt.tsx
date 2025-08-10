@@ -31,7 +31,8 @@ export default function ReceiptPage() {
 
   // Get the winner for this specific round
   const { data: winnerData } = useQuery<{winner: {name: string; square: number; totalPot: number; roundNumber: number; completedAt: string} | null}>({
-    queryKey: ['/api/winner', participant?.gameRoundId],
+    queryKey: ['/api/winner', participant?.gameRoundId, participant?.id], // Add participant ID to make cache unique
+    queryFn: () => fetch(`/api/winner/${participant?.gameRoundId}`).then(res => res.json()),
     enabled: !!participant?.gameRoundId,
   });
 
