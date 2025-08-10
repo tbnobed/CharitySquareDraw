@@ -14,9 +14,11 @@ interface ParticipantFormProps {
   onRemoveSquare: (square: number) => void;
   onSubmit: (data: ParticipantForm) => void;
   isLoading?: boolean;
+  shouldReset?: boolean;
+  onResetComplete?: () => void;
 }
 
-export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRemoveSquare, onSubmit, isLoading }: ParticipantFormProps) {
+export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRemoveSquare, onSubmit, isLoading, shouldReset, onResetComplete }: ParticipantFormProps) {
   const form = useForm<ParticipantForm>({
     resolver: zodResolver(participantFormSchema),
     defaultValues: {
@@ -31,6 +33,19 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
   useEffect(() => {
     form.setValue('squares', selectedSquares);
   }, [selectedSquares, form]);
+
+  // Reset form when shouldReset prop is true
+  useEffect(() => {
+    if (shouldReset) {
+      form.reset({
+        name: "",
+        email: "",
+        phone: "",
+        squares: [],
+      });
+      onResetComplete?.();
+    }
+  }, [shouldReset, form, onResetComplete]);
 
   const handleSubmit = (data: ParticipantForm) => {
     onSubmit({ ...data, squares: selectedSquares });

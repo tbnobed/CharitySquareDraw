@@ -22,6 +22,7 @@ export default function SellerPage() {
   const [reservedParticipant, setReservedParticipant] = useState<Participant | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showQRReceiptModal, setShowQRReceiptModal] = useState(false);
+  const [shouldResetForm, setShouldResetForm] = useState(false);
   const { toast } = useToast();
   const [wsConnectionStatus, setWsConnectionStatus] = useState<string>('connecting');
 
@@ -183,6 +184,7 @@ export default function SellerPage() {
       setShowPaymentModal(false);
       setShowQRReceiptModal(true);
       setSelectedSquares([]);
+      setShouldResetForm(true); // Trigger form reset
       refetchGame();
       refetchStats();
       toast({
@@ -291,6 +293,10 @@ export default function SellerPage() {
     setShowQRReceiptModal(false);
     setReservedParticipant(null);
     setSelectedSquares([]);
+  };
+
+  const handleFormResetComplete = () => {
+    setShouldResetForm(false);
   };
 
   return (
@@ -403,6 +409,8 @@ export default function SellerPage() {
               onRemoveSquare={handleRemoveSquare}
               onSubmit={handleFormSubmit}
               isLoading={reserveMutation.isPending}
+              shouldReset={shouldResetForm}
+              onResetComplete={handleFormResetComplete}
             />
           </div>
         </div>
