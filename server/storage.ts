@@ -1,4 +1,4 @@
-import { type GameRound, type Participant, type Square, type InsertGameRound, type InsertParticipant, type InsertSquare, type GameStats } from "@shared/schema";
+import { type GameRound, type Participant, type Square, type InsertGameRound, type InsertParticipant, type InsertSquare, type GameStats, type RoundWinner } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -28,6 +28,9 @@ export interface IStorage {
 
   // Statistics
   getGameStats(): Promise<GameStats>;
+  
+  // Winners
+  getWinners(): Promise<RoundWinner[]>;
   
   // System
   resetSystem(): Promise<void>;
@@ -313,6 +316,26 @@ export class MemStorage implements IStorage {
     }
     
     return expiredReservations;
+  }
+
+  async getWinners(): Promise<RoundWinner[]> {
+    const completedRounds = Array.from(this.gameRounds.values()).filter(
+      round => round.status === 'completed' && round.winnerSquare
+    );
+    
+    const winners = [];
+    for (const round of completedRounds) {
+      if (round.winnerSquare) {
+        // Find the participant who owns the winning square
+        const participants = Array.from(this.participants.values()).filter(
+          p => p.gameRoundId === round.id && p.squares.includes(round.winnerSquare!)
+        );
+        const winner = participants[0];
+        winners.push({ ...round, winner });
+      }
+    }
+    
+    return winners.sort((a, b) => b.roundNumber - a.roundNumber); // Most recent first
   }
 
   async resetSystem(): Promise<void> {

@@ -467,6 +467,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all round winners
+  app.get("/api/winners", async (req, res) => {
+    try {
+      const winners = await storage.getWinners();
+      res.json({ winners });
+    } catch (error) {
+      console.error('Error getting all winners:', error);
+      res.status(500).json({ error: "Failed to get winners information" });
+    }
+  });
+
   // Get temporary selections
   app.get("/api/selections", async (req, res) => {
     try {
