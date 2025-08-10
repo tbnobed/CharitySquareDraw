@@ -102,7 +102,7 @@ export default function AdminPage() {
       const data = await response.json();
       toast({
         title: "Winner Drawn!",
-        description: `Square #${data.winnerSquare} wins $${(data.totalPot / 2).toFixed(2)}!`,
+        description: `Square #${data.winnerSquare} wins $${(data.totalPot / 100).toFixed(2)}!`,
       });
       refetchGame();
       refetchStats();
