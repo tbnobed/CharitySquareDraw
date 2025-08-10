@@ -52,6 +52,21 @@ export class PostgresStorage implements IStorage {
     }
   }
 
+  async getGameRound(id: string): Promise<GameRound | undefined> {
+    try {
+      const rounds = await db
+        .select()
+        .from(gameRounds)
+        .where(eq(gameRounds.id, id))
+        .limit(1);
+      
+      return rounds[0];
+    } catch (error) {
+      console.error('Error getting game round by ID:', error);
+      return undefined;
+    }
+  }
+
   async createGameRound(gameRound: InsertGameRound): Promise<GameRound> {
     const id = randomUUID();
     const newGameRound: GameRound = {
@@ -516,7 +531,7 @@ export class PostgresStorage implements IStorage {
             const remainingSquares = await db
               .select()
               .from(squares)
-              .where(sql`${squares.participantId} = ${participantId}`);
+              .where(eq(squares.participantId, participantId));
             
             // If no remaining squares, delete the participant
             if (remainingSquares.length === 0) {

@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 export interface IStorage {
   // Game Rounds
   getCurrentGameRound(): Promise<GameRound | undefined>;
+  getGameRound(id: string): Promise<GameRound | undefined>;
   createGameRound(gameRound: InsertGameRound): Promise<GameRound>;
   updateGameRound(id: string, updates: Partial<GameRound>): Promise<GameRound | undefined>;
   updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined>;
@@ -62,6 +63,10 @@ export class MemStorage implements IStorage {
       round => round.status === "active"
     );
     return activeRounds[0];
+  }
+
+  async getGameRound(id: string): Promise<GameRound | undefined> {
+    return this.gameRounds.get(id);
   }
 
   async createGameRound(insertGameRound: InsertGameRound): Promise<GameRound> {

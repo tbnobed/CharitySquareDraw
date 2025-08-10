@@ -25,8 +25,11 @@ export default function ReceiptPage() {
     enabled: !!participantId,
   });
 
-  const { data: gameData } = useQuery({
-    queryKey: ['/api/game'],
+  // Get the specific game round for this participant
+  const { data: participantGameRound } = useQuery({
+    queryKey: ['/api/game-round', participant?.gameRoundId],
+    queryFn: () => fetch(`/api/game-round/${participant?.gameRoundId}`).then(res => res.json()),
+    enabled: !!participant?.gameRoundId,
   });
 
   // Get the winner for this specific round
@@ -61,7 +64,7 @@ export default function ReceiptPage() {
     );
   }
 
-  const pricePerSquare = ((gameData as any)?.gameRound?.pricePerSquare || 1000);
+  const pricePerSquare = (participantGameRound?.gameRound?.pricePerSquare || 1000);
   const totalAmount = participant.squares.length * (pricePerSquare / 100);
   const currentDate = new Date();
 
@@ -127,7 +130,7 @@ export default function ReceiptPage() {
                 <div>
                   <p className="text-gray-600">Game Round</p>
                   <p className="font-medium text-gray-900">
-                    #{(gameData as any)?.gameRound?.roundNumber || 1}
+                    #{participantGameRound?.gameRound?.roundNumber || 1}
                   </p>
                 </div>
                 <div>

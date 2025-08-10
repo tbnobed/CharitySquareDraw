@@ -77,6 +77,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get specific game round by ID
+  app.get("/api/game-round/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const gameRound = await storage.getGameRound(id);
+      if (!gameRound) {
+        return res.status(404).json({ error: "Game round not found" });
+      }
+      res.json({ gameRound });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get game round" });
+    }
+  });
+
   // Get participants for admin view
   app.get("/api/participants", async (req, res) => {
     try {
