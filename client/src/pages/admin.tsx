@@ -278,47 +278,46 @@ export default function AdminPage() {
   const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending || updatePriceMutation.isPending || resetSystemMutation.isPending || manualWinnerMutation.isPending;
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <img src={logoImage} alt="Chicken Poop Bingo Logo" className="h-24 w-24" />
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Mobile-Optimized Header */}
+      <header className="bg-white shadow-sm border-b border-gray-200 flex-shrink-0 sticky top-0 z-50">
+        <div className="px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-12 sm:h-14 lg:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
+              <img src={logoImage} alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Chicken Poop Bingo</h1>
-                <p className="text-sm text-gray-500">Admin Dashboard</p>
+                <h1 className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900">Chicken Poop Bingo</h1>
+                <p className="text-xs sm:text-sm text-gray-500 hidden sm:block">Admin Dashboard</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              {/* Connection Status - using polling for updates */}
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center text-green-600" title="Real-time updates via polling">
-                  <Wifi className="h-4 w-4" />
-                  <span className="text-xs ml-1">Live</span>
-                </div>
+            <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
+              {/* Mobile Connection Status */}
+              <div className="flex items-center text-green-600">
+                <Wifi className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs ml-1 hidden sm:inline">Live</span>
               </div>
               
+              {/* Mobile Navigation */}
               <div className="bg-gray-100 rounded-lg p-1 flex">
                 <Button
                   variant="default"
                   size="sm"
-                  className="bg-blue-500 text-white"
+                  className="bg-blue-500 text-white text-xs sm:text-sm px-2 sm:px-3"
                   data-testid="admin-view-active"
                 >
-                  <Heart className="mr-2 h-4 w-4" />
-                  Admin
+                  <Heart className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Admin</span>
                 </Button>
                 <Link href="/seller">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-700 hover:text-gray-900"
+                    className="text-gray-700 hover:text-gray-900 text-xs sm:text-sm px-2 sm:px-3"
                     data-testid="link-seller"
                   >
-                    <Store className="mr-2 h-4 w-4" />
-                    Seller
+                    <Store className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                    <span className="hidden sm:inline">Seller</span>
                   </Button>
                 </Link>
               </div>
@@ -327,11 +326,11 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {/* Main Content - Scrollable */}
+      {/* Main Content - Mobile-First Layout */}
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* Winner Display */}
-          <WinnerDisplay className="mb-6" />
+        <div className="px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6 max-w-7xl mx-auto">
+          {/* Winner Display - Compact for Mobile */}
+          <WinnerDisplay className="mb-3 sm:mb-4 lg:mb-6" />
           
           <AdminDashboard
             stats={stats}

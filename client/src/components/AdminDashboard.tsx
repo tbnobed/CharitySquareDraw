@@ -87,18 +87,18 @@ export function AdminDashboard({
   };
 
   return (
-    <div className="space-y-8">
-      {/* Dashboard Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+      {/* Dashboard Stats - Mobile Optimized */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="bg-green-50 p-3 rounded-lg">
-                <DollarSign className="text-green-600 h-6 w-6" />
+              <div className="bg-green-50 p-2 sm:p-3 rounded-lg">
+                <DollarSign className="text-green-600 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900" data-testid="stat-revenue">
+              <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Total Revenue</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate" data-testid="stat-revenue">
                   {formatCurrency(stats.totalRevenue)}
                 </p>
               </div>
@@ -107,14 +107,14 @@ export function AdminDashboard({
         </Card>
         
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <Users className="text-blue-600 h-6 w-6" />
+              <div className="bg-blue-50 p-2 sm:p-3 rounded-lg">
+                <Users className="text-blue-600 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Participants</p>
-                <p className="text-2xl font-bold text-gray-900" data-testid="stat-participants">
+              <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Participants</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900" data-testid="stat-participants">
                   {stats.participantCount}
                 </p>
               </div>
@@ -123,14 +123,14 @@ export function AdminDashboard({
         </Card>
         
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="bg-red-50 p-3 rounded-lg">
-                <Grid3x3 className="text-red-600 h-6 w-6" />
+              <div className="bg-red-50 p-2 sm:p-3 rounded-lg">
+                <Grid3x3 className="text-red-600 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Squares Sold</p>
-                <p className="text-2xl font-bold text-gray-900" data-testid="stat-squares">
+              <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Squares Sold</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900" data-testid="stat-squares">
                   {stats.squaresSold}/65
                 </p>
               </div>
@@ -139,14 +139,14 @@ export function AdminDashboard({
         </Card>
         
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-4 lg:p-6">
             <div className="flex items-center">
-              <div className="bg-yellow-50 p-3 rounded-lg">
-                <Percent className="text-yellow-600 h-6 w-6" />
+              <div className="bg-yellow-50 p-2 sm:p-3 rounded-lg">
+                <Percent className="text-yellow-600 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Board Filled</p>
-                <p className="text-2xl font-bold text-gray-900" data-testid="stat-percent">
+              <div className="ml-2 sm:ml-3 lg:ml-4 min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">Board Filled</p>
+                <p className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900" data-testid="stat-percent">
                   {stats.percentFilled}%
                 </p>
               </div>
@@ -155,17 +155,19 @@ export function AdminDashboard({
         </Card>
       </div>
 
-      {/* Game Round Info */}
+      {/* Game Round Info - Mobile Optimized */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex justify-between items-center">
+        <CardContent className="p-3 sm:p-4 lg:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Round #{stats.currentRound}</h3>
-              <p className="text-gray-600">{stats.squaresSold} squares sold</p>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">Round #{stats.currentRound}</h3>
+              <p className="text-sm sm:text-base text-gray-600">{stats.squaresSold} squares sold</p>
             </div>
-            <div className="flex items-center space-x-3">
-              <Settings className="h-4 w-4 text-gray-500" />
-              <Label htmlFor="price-input" className="text-sm font-medium">Price per Square:</Label>
+            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <Settings className="h-4 w-4 text-gray-500" />
+                <Label htmlFor="price-input" className="text-sm font-medium whitespace-nowrap">Price per Square:</Label>
+              </div>
               <div className="flex items-center space-x-1">
                 <span className="text-sm">$</span>
                 <Input
@@ -186,17 +188,17 @@ export function AdminDashboard({
         </CardContent>
       </Card>
 
-      {/* Admin Controls */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Admin Controls - Mobile Optimized */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
         {/* Winner Selection */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="p-3 sm:p-4 lg:p-6">
+            <CardTitle className="text-sm sm:text-base flex items-center gap-2">
               <Trophy className="w-4 h-4" />
               Winner Selection
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 space-y-2 sm:space-y-3">
             <Button
               onClick={onDrawWinner}
               disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
@@ -220,13 +222,13 @@ export function AdminDashboard({
 
         {/* Game Management */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="p-3 sm:p-4 lg:p-6">
+            <CardTitle className="text-sm sm:text-base flex items-center gap-2">
               <RotateCcw className="w-4 h-4" />
               Game Management
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 space-y-2 sm:space-y-3">
             <Button
               onClick={onNewRound}
               disabled={isLoading}
@@ -252,13 +254,13 @@ export function AdminDashboard({
 
         {/* Data & System */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="p-3 sm:p-4 lg:p-6">
+            <CardTitle className="text-sm sm:text-base flex items-center gap-2">
               <Download className="w-4 h-4" />
               Data & System
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 space-y-2 sm:space-y-3">
             <Button
               onClick={onExportData}
               disabled={isLoading}
@@ -283,14 +285,15 @@ export function AdminDashboard({
         </Card>
       </div>
 
-      <div className="grid lg:grid-cols-5 gap-8">
-        {/* Game Board Preview */}
-        <div className="lg:col-span-2">
+      {/* Mobile-First Bottom Section */}
+      <div className="grid lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
+        {/* Game Board Preview - Full Width on Mobile */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
           <Card>
-            <CardHeader>
-              <CardTitle>Game Board Status</CardTitle>
+            <CardHeader className="p-3 sm:p-4 lg:p-6">
+              <CardTitle className="text-sm sm:text-base lg:text-lg">Game Board Status</CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-4 lg:p-6">
               <div className="w-full">
                 <GameBoard squares={squares} selectedSquares={[]} readonly />
               </div>
@@ -298,64 +301,66 @@ export function AdminDashboard({
           </Card>
         </div>
 
-        {/* Recent Participants */}
-        <div className="lg:col-span-3">
+        {/* Recent Participants - Mobile Optimized Table */}
+        <div className="lg:col-span-3 order-1 lg:order-2">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
-                Recent Participants
-                <span className="text-sm font-normal text-gray-600">
+            <CardHeader className="p-3 sm:p-4 lg:p-6">
+              <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0">
+                <span className="text-sm sm:text-base lg:text-lg">Recent Participants</span>
+                <span className="text-xs sm:text-sm font-normal text-gray-600">
                   {participants.length} total
                 </span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="h-[480px] overflow-y-auto">
+              <div className="h-[300px] sm:h-[400px] lg:h-[480px] overflow-y-auto">
                 <Table>
                   <TableHeader className="sticky top-0 bg-white z-10">
                     <TableRow>
-                      <TableHead className="px-6 py-3">Name</TableHead>
-                      <TableHead className="px-6 py-3">Contact</TableHead>
-                      <TableHead className="px-6 py-3">Squares</TableHead>
-                      <TableHead className="px-6 py-3">Amount</TableHead>
-                      <TableHead className="px-6 py-3">Status</TableHead>
+                      <TableHead className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm">Name</TableHead>
+                      <TableHead className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm hidden sm:table-cell">Contact</TableHead>
+                      <TableHead className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm">Squares</TableHead>
+                      <TableHead className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm">Amount</TableHead>
+                      <TableHead className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-xs sm:text-sm">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {participants.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center text-gray-500 px-6 py-8">
+                        <TableCell colSpan={5} className="text-center text-gray-500 px-2 sm:px-4 lg:px-6 py-4 sm:py-8 text-xs sm:text-sm">
                           No participants yet
                         </TableCell>
                       </TableRow>
                     ) : (
                       participants.map((participant) => (
                         <TableRow key={participant.id} data-testid={`participant-row-${participant.id}`}>
-                          <TableCell className="px-6 py-3">
-                            <div className="font-medium text-gray-900">{participant.name}</div>
+                          <TableCell className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
+                            <div className="font-medium text-gray-900 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-none">{participant.name}</div>
+                            {/* Show contact on mobile as subtitle */}
+                            <div className="sm:hidden text-xs text-gray-500 truncate">{participant.email}</div>
                           </TableCell>
-                          <TableCell className="px-6 py-3">
-                            <div className="text-sm text-gray-600">{participant.email}</div>
-                            <div className="text-sm text-gray-500">{formatPhone(participant.phone)}</div>
+                          <TableCell className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 hidden sm:table-cell">
+                            <div className="text-xs sm:text-sm text-gray-600 truncate">{participant.email}</div>
+                            <div className="text-xs sm:text-sm text-gray-500">{formatPhone(participant.phone)}</div>
                           </TableCell>
-                          <TableCell className="px-6 py-3">
-                            <div className="text-sm text-gray-900">
+                          <TableCell className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
+                            <div className="text-xs sm:text-sm text-gray-900 truncate max-w-[60px] sm:max-w-none">
                               {participant.squares.map(s => `#${s}`).join(", ")}
                             </div>
                           </TableCell>
-                          <TableCell className="px-6 py-3">
-                            <div className="font-medium text-gray-900">
+                          <TableCell className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
+                            <div className="font-medium text-gray-900 text-xs sm:text-sm">
                               {formatCurrency(participant.totalAmount)}
                             </div>
                           </TableCell>
-                          <TableCell className="px-6 py-3">
+                          <TableCell className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
                             <Badge
                               variant={participant.paymentStatus === "paid" ? "default" : "secondary"}
-                              className={
+                              className={`text-xs ${
                                 participant.paymentStatus === "paid"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-yellow-100 text-yellow-800"
-                              }
+                              }`}
                             >
                               {participant.paymentStatus === "paid" ? "Paid" : "Pending"}
                             </Badge>
