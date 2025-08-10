@@ -25,10 +25,12 @@ function Router() {
 }
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
-
-  // Always show splash screen on page load/refresh
-  // No need to check sessionStorage - splash shows every time
+  const [showSplash, setShowSplash] = useState(() => {
+    // Don't show splash screen for receipt pages or direct links
+    const isReceiptPage = window.location.pathname === '/receipt';
+    const hasDirectParams = window.location.search.includes('id=');
+    return !(isReceiptPage || hasDirectParams);
+  });
 
   const handleSplashComplete = () => {
     setShowSplash(false);
