@@ -301,46 +301,46 @@ export function AdminDashboard({
                 </span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
+            <CardContent className="p-0">
+              <div className="h-80 overflow-y-auto">
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="sticky top-0 bg-white z-10">
                     <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Contact</TableHead>
-                      <TableHead>Squares</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead className="px-6 py-3">Name</TableHead>
+                      <TableHead className="px-6 py-3">Contact</TableHead>
+                      <TableHead className="px-6 py-3">Squares</TableHead>
+                      <TableHead className="px-6 py-3">Amount</TableHead>
+                      <TableHead className="px-6 py-3">Status</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {participants.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center text-gray-500">
+                        <TableCell colSpan={5} className="text-center text-gray-500 px-6 py-8">
                           No participants yet
                         </TableCell>
                       </TableRow>
                     ) : (
-                      participants.slice(0, 10).map((participant) => (
+                      participants.map((participant) => (
                         <TableRow key={participant.id} data-testid={`participant-row-${participant.id}`}>
-                          <TableCell>
+                          <TableCell className="px-6 py-3">
                             <div className="font-medium text-gray-900">{participant.name}</div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="px-6 py-3">
                             <div className="text-sm text-gray-600">{participant.email}</div>
                             <div className="text-sm text-gray-500">{formatPhone(participant.phone)}</div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="px-6 py-3">
                             <div className="text-sm text-gray-900">
                               {participant.squares.map(s => `#${s}`).join(", ")}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="px-6 py-3">
                             <div className="font-medium text-gray-900">
                               {formatCurrency(participant.totalAmount)}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="px-6 py-3">
                             <Badge
                               variant={participant.paymentStatus === "paid" ? "default" : "secondary"}
                               className={
