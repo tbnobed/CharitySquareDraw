@@ -362,7 +362,7 @@ export default function SellerPage() {
                 <Info className="text-blue-500 mr-3 h-5 w-5" />
                 <div>
                   <p className="font-medium text-blue-900">
-                    Round #{stats.currentRound} Active
+                    Round #{stats.currentRound} {gameData?.gameRound?.status === 'completed' ? 'Completed' : 'Active'}
                   </p>
                   <p className="text-sm text-blue-700">
                     {stats.availableCount} squares available · ${((gameData?.gameRound?.pricePerSquare || 1000) / 100).toFixed(2)} each
