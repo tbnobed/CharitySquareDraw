@@ -301,47 +301,46 @@ export default function SellerPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile-Optimized Header */}
       <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <img src={logoImage} alt="Chicken Poop Bingo Logo" className="h-24 w-24" />
+        <div className="px-3 sm:px-4">
+          <div className="flex justify-between items-center h-12 sm:h-14">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <img src={logoImage} alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Chicken Poop Bingo</h1>
-                <p className="text-sm text-gray-500">Seller Interface</p>
+                <h1 className="text-sm sm:text-lg font-bold text-gray-900">Chicken Poop Bingo</h1>
+                <p className="text-xs text-gray-500 hidden sm:block">Seller Interface</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              {/* Connection Status - using polling for updates */}
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center text-green-600" title="Real-time updates via polling">
-                  <Wifi className="h-4 w-4" />
-                  <span className="text-xs ml-1">Live</span>
-                </div>
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Mobile Connection Status */}
+              <div className="flex items-center text-green-600">
+                <Wifi className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="text-xs ml-1 hidden sm:inline">Live</span>
               </div>
               
+              {/* Mobile Navigation */}
               <div className="bg-gray-100 rounded-lg p-1 flex">
                 <Link href="/admin">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-700 hover:text-gray-900"
+                    className="text-gray-700 hover:text-gray-900 text-xs sm:text-sm px-2 sm:px-3"
                     data-testid="link-admin"
                   >
-                    <Heart className="mr-2 h-4 w-4" />
-                    Admin
+                    <Heart className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                    <span className="hidden sm:inline">Admin</span>
                   </Button>
                 </Link>
                 <Button
                   variant="default"
                   size="sm"
-                  className="bg-blue-500 text-white"
+                  className="bg-blue-500 text-white text-xs sm:text-sm px-2 sm:px-3"
                   data-testid="seller-view-active"
                 >
-                  <Store className="mr-2 h-4 w-4" />
-                  Seller
+                  <Store className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Seller</span>
                 </Button>
               </div>
             </div>
@@ -349,64 +348,40 @@ export default function SellerPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Winner Display */}
-        <WinnerDisplay className="mb-6" />
+      {/* Main Content - Mobile-First Layout */}
+      <div className="px-3 sm:px-4 py-3 sm:py-4 max-w-6xl mx-auto">
+        {/* Winner Display - Compact for Mobile */}
+        <WinnerDisplay className="mb-3 sm:mb-4" />
         
-        {/* Current Status Banner */}
-        <Card className="bg-blue-50 border-blue-200 mb-6">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
+        {/* Mobile-Optimized Status Banner */}
+        <Card className="bg-blue-50 border-blue-200 mb-3 sm:mb-4">
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
               <div className="flex items-center">
-                <Info className="text-blue-500 mr-3 h-5 w-5" />
+                <Info className="text-blue-500 mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 <div>
-                  <p className="font-medium text-blue-900">
+                  <p className="font-medium text-blue-900 text-sm sm:text-base">
                     Round #{stats.currentRound} {gameData?.gameRound?.status === 'completed' ? 'Completed' : 'Active'}
                   </p>
-                  <p className="text-sm text-blue-700">
-                    {stats.availableCount} squares available · ${((gameData?.gameRound?.pricePerSquare || 1000) / 100).toFixed(2)} each
+                  <p className="text-xs sm:text-sm text-blue-700">
+                    {stats.availableCount} squares · ${((gameData?.gameRound?.pricePerSquare || 1000) / 100).toFixed(2)} each
                   </p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-blue-900" data-testid="total-pot">
+              <div className="text-left sm:text-right">
+                <p className="text-lg sm:text-xl font-bold text-blue-900" data-testid="total-pot">
                   ${((gameData?.gameRound?.totalRevenue || 0) / 100).toLocaleString()}
                 </p>
-                <p className="text-sm text-blue-600">Total Pot</p>
+                <p className="text-xs sm:text-sm text-blue-600">Total Pot</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Game Board */}
-          <div className="lg:col-span-2 order-2 lg:order-1">
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">Select Your Squares</h2>
-                  <div className="text-sm text-gray-600">
-                    {gameData?.gameRound?.status === 'completed' 
-                      ? 'Round completed - game disabled until new round starts'
-                      : 'Tap available squares to select'
-                    }
-                  </div>
-                </div>
-                
-                <GameBoard
-                  squares={squares}
-                  selectedSquares={selectedSquares}
-                  otherSelections={otherSelections}
-                  onSquareSelect={handleSquareSelect}
-                  readonly={gameData?.gameRound?.status === 'completed'}
-                />
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Purchase Form */}
-          <div className="lg:col-span-1 order-1 lg:order-2">
+        {/* Mobile-First: Form First, Then Board */}
+        <div className="space-y-4 lg:grid lg:grid-cols-5 lg:gap-6 lg:space-y-0">
+          {/* Mobile: Purchase Form First */}
+          <div className="lg:col-span-2 lg:order-2">
             <ParticipantFormComponent
               selectedSquares={selectedSquares}
               pricePerSquare={gameData?.gameRound?.pricePerSquare || 1000}
@@ -417,6 +392,36 @@ export default function SellerPage() {
               onResetComplete={handleFormResetComplete}
               disabled={gameData?.gameRound?.status === 'completed'}
             />
+          </div>
+
+          {/* Game Board - Mobile Optimized */}
+          <div className="lg:col-span-3 lg:order-1">
+            <Card>
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 space-y-1 sm:space-y-0">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900">Select Squares</h2>
+                  <div className="text-xs sm:text-sm text-gray-600">
+                    {gameData?.gameRound?.status === 'completed' 
+                      ? 'Round completed'
+                      : 'Tap to select'
+                    }
+                  </div>
+                </div>
+                
+                {/* Mobile-Optimized Game Board */}
+                <div className="w-full overflow-x-auto">
+                  <div className="min-w-[320px] max-w-[500px] mx-auto">
+                    <GameBoard
+                      squares={squares}
+                      selectedSquares={selectedSquares}
+                      otherSelections={otherSelections}
+                      onSquareSelect={handleSquareSelect}
+                      readonly={gameData?.gameRound?.status === 'completed'}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
