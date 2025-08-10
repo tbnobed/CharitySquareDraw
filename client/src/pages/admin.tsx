@@ -277,9 +277,9 @@ export default function AdminPage() {
   const isLoading = drawWinnerMutation.isPending || newRoundMutation.isPending || updatePriceMutation.isPending || resetSystemMutation.isPending || manualWinnerMutation.isPending;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
@@ -326,25 +326,27 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Winner Display */}
-        <WinnerDisplay className="mb-6" />
-        
-        <AdminDashboard
-          stats={stats}
-          participants={participants}
-          squares={squares}
-          gameRound={(gameData as any)?.gameRound}
-          onDrawWinner={() => drawWinnerMutation.mutate()}
-          onNewRound={() => newRoundMutation.mutate()}
-          onExportData={handleExportData}
-          onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
-          onResetSystem={() => resetSystemMutation.mutate()}
-          onManualWinner={(squareNumber) => manualWinnerMutation.mutate(squareNumber)}
-          onCleanupReservations={() => cleanupReservationsMutation.mutate()}
-          isLoading={isLoading}
-        />
+      {/* Main Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Winner Display */}
+          <WinnerDisplay className="mb-6" />
+          
+          <AdminDashboard
+            stats={stats}
+            participants={participants}
+            squares={squares}
+            gameRound={(gameData as any)?.gameRound}
+            onDrawWinner={() => drawWinnerMutation.mutate()}
+            onNewRound={() => newRoundMutation.mutate()}
+            onExportData={handleExportData}
+            onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
+            onResetSystem={() => resetSystemMutation.mutate()}
+            onManualWinner={(squareNumber) => manualWinnerMutation.mutate(squareNumber)}
+            onCleanupReservations={() => cleanupReservationsMutation.mutate()}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
     </div>
   );
