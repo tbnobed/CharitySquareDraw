@@ -110,41 +110,33 @@
 
 /* Modal centering fix for mobile devices */
 @layer components {
-  /* Better mobile modal centering */
+  /* Use flexbox for proper modal centering */
+  [data-radix-dialog-overlay] {
+    @apply fixed inset-0 z-50 flex items-center justify-center p-3;
+    /* Use full viewport height to account for mobile browsers */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for better mobile support */
+  }
+  
+  /* Reset modal positioning to work with flexbox */
   [data-radix-dialog-content] {
-    /* Fix both horizontal and vertical centering */
-    left: 50% !important;
-    top: 50vh !important;
-    transform: translateX(-50%) translateY(-50%) !important;
+    /* Remove all absolute positioning */
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
     
     /* Ensure modal doesn't go off-screen on mobile */
     max-height: 90vh;
+    width: 100%;
     
     /* Add responsive positioning for very small screens */
     @media (max-height: 600px) {
-      top: 45vh !important;
       max-height: 85vh;
     }
     
     @media (max-height: 500px) {
-      top: 50% !important;
       max-height: 80vh;
     }
-    
-    /* Fix mobile horizontal centering issues */
-    @media (max-width: 640px) {
-      left: 50% !important;
-      right: auto !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
-  }
-  
-  /* Ensure overlay properly covers viewport */
-  [data-radix-dialog-overlay] {
-    @apply fixed inset-0 z-50;
-    /* Use full viewport height to account for mobile browsers */
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for better mobile support */
   }
 }
