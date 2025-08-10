@@ -365,6 +365,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get winner for a specific round (for receipts)
+  app.get("/api/winner/:roundId", async (req, res) => {
+    try {
+      const { roundId } = req.params;
+      
+      // Get the specific round
+      const round = await db
+        .select()
+        .from(gameRounds)
+        .where(eq(gameRounds.id, roundId))
+        .limit(1);
+      
+      const gameRound = round[0];
+      
+      if (!gameRound || !gameRound.winnerSquare || gameRound.status !== 'completed') {
+        return res.json({ winner: null });
+      }
+      
+      // Find the participant who has the winning square
+      const gameParticipants = await storage.getParticipants(gameRound.id);
+      const winnerParticipant = gameParticipants.find(p => 
+        p.squares.includes(gameRound.winnerSquare!)
+      );
+      
+      if (!winnerParticipant) {
+        return res.json({ winner: null });
+      }
+      
+      res.json({
+        winner: {
+          name: winnerParticipant.name,
+          square: gameRound.winnerSquare,
+          totalPot: gameRound.totalRevenue,
+          roundNumber: gameRound.roundNumber,
+          completedAt: gameRound.completedAt
+        }
+      });
+    } catch (error) {
+      console.error('Error getting round winner:', error);
+      res.status(500).json({ error: "Failed to get round winner information" });
+    }
+  });
+
   // Get winner information - show winner from most recently completed round only if no active round exists
   app.get("/api/winner", async (req, res) => {
     try {

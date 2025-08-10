@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Download, Home, QrCode } from "lucide-react";
+import { CheckCircle, Download, Home, QrCode, Trophy } from "lucide-react";
 import { format } from "date-fns";
 import { type Participant } from "@shared/schema";
 
@@ -27,6 +27,12 @@ export default function ReceiptPage() {
 
   const { data: gameData } = useQuery({
     queryKey: ['/api/game'],
+  });
+
+  // Get the winner for this specific round
+  const { data: winnerData } = useQuery<{winner: {name: string; square: number; totalPot: number; roundNumber: number; completedAt: string} | null}>({
+    queryKey: ['/api/winner', participant?.gameRoundId],
+    enabled: !!participant?.gameRoundId,
   });
 
   if (isLoading) {
@@ -73,6 +79,31 @@ export default function ReceiptPage() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Purchase Receipt</h1>
           <p className="text-gray-600">Thank you for your purchase!</p>
         </div>
+
+        {/* Winner Display (if winner exists for this round) */}
+        {winnerData?.winner && (
+          <Card className="mb-6 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200 dark:border-yellow-700">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Trophy className="w-6 h-6 text-yellow-600" />
+                <h3 className="text-xl font-bold text-yellow-800 dark:text-yellow-200">
+                  Round {winnerData.winner.roundNumber} Winner!
+                </h3>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  🎉 {winnerData.winner.name} won square #{winnerData.winner.square}
+                </p>
+                <p className="text-green-600 dark:text-green-400 font-bold text-lg">
+                  Total Pot: ${(winnerData.winner.totalPot / 100).toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  {winnerData.winner.completedAt && format(new Date(winnerData.winner.completedAt), 'MMM dd, yyyy • h:mm a')}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Receipt Card */}
         <Card className="mb-6">
