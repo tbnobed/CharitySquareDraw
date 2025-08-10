@@ -371,7 +371,7 @@ export default function SellerPage() {
               </div>
               <div className="text-right">
                 <p className="text-lg font-bold text-blue-900" data-testid="total-pot">
-                  ${((gameData?.gameRound?.pricePerSquare || 1000) * 65 / 100).toLocaleString()}
+                  ${((gameData?.gameRound?.totalRevenue || 0) / 100).toLocaleString()}
                 </p>
                 <p className="text-sm text-blue-600">Total Pot</p>
               </div>
