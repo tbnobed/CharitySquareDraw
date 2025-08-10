@@ -260,11 +260,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/new-round", async (req, res) => {
     try {
       const currentRound = await storage.getCurrentGameRound();
+      
+      // Get the highest round number to determine next round
+      const allRounds = await db
+        .select()
+        .from(gameRounds)
+        .orderBy(desc(gameRounds.roundNumber))
+        .limit(1);
+      
       let roundNumber = 1;
+      if (allRounds.length > 0) {
+        roundNumber = allRounds[0].roundNumber + 1;
+      }
       
       if (currentRound) {
         await storage.updateGameRound(currentRound.id, { status: "completed" });
-        roundNumber = currentRound.roundNumber + 1;
       }
 
       const newRound = await storage.createGameRound({
@@ -355,21 +365,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get winner information - only show for current active round if it has a winner
+  // Get winner information - show winner from most recently completed round
   app.get("/api/winner", async (req, res) => {
     try {
-      // Get the current active round
-      const currentRound = await storage.getCurrentGameRound();
+      // Get the most recent completed round with a winner
+      const rounds = await db
+        .select()
+        .from(gameRounds)
+        .where(sql`${gameRounds.status} = 'completed' AND ${gameRounds.winnerSquare} IS NOT NULL`)
+        .orderBy(desc(gameRounds.completedAt))
+        .limit(1);
       
-      // Only show winner if current round has a winner
-      if (!currentRound || !currentRound.winnerSquare) {
+      const completedRound = rounds[0];
+      
+      if (!completedRound || !completedRound.winnerSquare) {
         return res.json({ winner: null });
       }
       
       // Find the participant who has the winning square
-      const gameParticipants = await storage.getParticipants(currentRound.id);
+      const gameParticipants = await storage.getParticipants(completedRound.id);
       const winnerParticipant = gameParticipants.find(p => 
-        p.squares.includes(currentRound.winnerSquare!)
+        p.squares.includes(completedRound.winnerSquare!)
       );
       
       if (!winnerParticipant) {
@@ -379,10 +395,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         winner: {
           name: winnerParticipant.name,
-          square: currentRound.winnerSquare,
-          totalPot: currentRound.totalRevenue,
-          roundNumber: currentRound.roundNumber,
-          completedAt: currentRound.completedAt
+          square: completedRound.winnerSquare,
+          totalPot: completedRound.totalRevenue,
+          roundNumber: completedRound.roundNumber,
+          completedAt: completedRound.completedAt
         }
       });
     } catch (error) {
