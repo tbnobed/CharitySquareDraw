@@ -194,7 +194,7 @@ export function AdminDashboard({
                 <div className="flex flex-wrap gap-2">
                   <Button
                     onClick={onDrawWinner}
-                    disabled={isLoading || stats.squaresSold === 0}
+                    disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
                     className="bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
                     data-testid="button-draw-winner"
                   >
@@ -203,7 +203,7 @@ export function AdminDashboard({
                   </Button>
                   <Button
                     onClick={() => setShowManualWinnerDialog(true)}
-                    disabled={isLoading || stats.squaresSold === 0}
+                    disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
                     className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center"
                     data-testid="button-manual-winner"
                   >

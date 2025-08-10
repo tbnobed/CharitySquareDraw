@@ -306,6 +306,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "No active game round" });
       }
 
+      // Check if round is already completed
+      if (currentRound.status === 'completed') {
+        return res.status(400).json({ error: "Round is already completed. Start a new round to draw another winner." });
+      }
+
       const squares = await storage.getSquaresByGameRound(currentRound.id);
       const soldSquares = squares.filter(s => s.status === "sold");
       
