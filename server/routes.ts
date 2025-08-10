@@ -2,8 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertParticipantSchema, participantFormSchema, gameRounds, type BoardUpdate } from "@shared/schema";
-import { eq, desc } from "drizzle-orm";
+import { insertParticipantSchema, participantFormSchema, gameRounds, participants, type BoardUpdate } from "@shared/schema";
+import { eq, desc, sql } from "drizzle-orm";
 import { db } from "./db";
 import { z } from "zod";
 import { registerMarketingRoutes } from "./routes-marketing";
@@ -358,32 +358,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get winner information for current or last completed round
   app.get("/api/winner", async (req, res) => {
     try {
-      // First try to get current round (might be completed)
-      let gameRound = await storage.getCurrentGameRound();
+      // Get the most recent round with a winner (either active with winner or completed)
+      const rounds = await db
+        .select()
+        .from(gameRounds)
+        .where(sql`${gameRounds.winnerSquare} IS NOT NULL`)
+        .orderBy(desc(gameRounds.completedAt), desc(gameRounds.createdAt))
+        .limit(1);
       
-      // If no active round, get the most recent completed round
-      if (!gameRound) {
-        const completedRounds = await db
-          .select()
-          .from(gameRounds)
-          .where(eq(gameRounds.status, 'completed'))
-          .orderBy(desc(gameRounds.completedAt))
-          .limit(1);
-        
-        gameRound = completedRounds[0];
-      }
+      const gameRound = rounds[0];
       
       if (!gameRound || !gameRound.winnerSquare) {
         return res.json({ winner: null });
       }
       
-      // Get the winner square and participant info
-      const winnerSquare = await storage.getSquareByNumber(gameRound.winnerSquare, gameRound.id);
-      if (!winnerSquare?.participantId) {
-        return res.json({ winner: null });
-      }
+      // Find the participant who has the winning square
+      const gameParticipants = await storage.getParticipants(gameRound.id);
+      const winnerParticipant = gameParticipants.find(p => 
+        p.squares.includes(gameRound.winnerSquare!)
+      );
       
-      const winnerParticipant = await storage.getParticipant(winnerSquare.participantId);
       if (!winnerParticipant) {
         return res.json({ winner: null });
       }
