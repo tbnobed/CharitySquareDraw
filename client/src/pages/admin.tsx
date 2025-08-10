@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { AdminDashboard } from "@/components/AdminDashboard";
+import { WinnerDisplay } from "@/components/WinnerDisplay";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -327,6 +328,9 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Winner Display */}
+        <WinnerDisplay className="mb-6" />
+        
         <AdminDashboard
           stats={stats}
           participants={participants}

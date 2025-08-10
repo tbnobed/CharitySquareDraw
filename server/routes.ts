@@ -2,7 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertParticipantSchema, participantFormSchema, type BoardUpdate } from "@shared/schema";
+import { insertParticipantSchema, participantFormSchema, gameRounds, type BoardUpdate } from "@shared/schema";
+import { eq, desc } from "drizzle-orm";
+import { db } from "./db";
 import { z } from "zod";
 import { registerMarketingRoutes } from "./routes-marketing";
 
@@ -306,9 +308,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await storage.completeGameRound(currentRound.id, winnerSquare.number);
 
+      // Get winner participant details
+      const winnerParticipant = await storage.getParticipant(winner!);
+      
+      // Broadcast winner information
+      broadcast({
+        type: 'WINNER_DRAWN',
+        data: { 
+          winnerSquare: winnerSquare.number,
+          winnerId: winner,
+          winnerName: winnerParticipant?.name || 'Unknown',
+          totalPot: currentRound.totalRevenue,
+          roundNumber: currentRound.roundNumber
+        }
+      });
+      
       res.json({ 
         winnerSquare: winnerSquare.number,
         winnerId: winner,
+        winnerName: winnerParticipant?.name || 'Unknown',
         totalPot: currentRound.totalRevenue 
       });
     } catch (error) {
@@ -334,6 +352,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, gameRound: updatedRound });
     } catch (error) {
       res.status(500).json({ error: "Failed to update price" });
+    }
+  });
+
+  // Get winner information for current or last completed round
+  app.get("/api/winner", async (req, res) => {
+    try {
+      // First try to get current round (might be completed)
+      let gameRound = await storage.getCurrentGameRound();
+      
+      // If no active round, get the most recent completed round
+      if (!gameRound) {
+        const completedRounds = await db
+          .select()
+          .from(gameRounds)
+          .where(eq(gameRounds.status, 'completed'))
+          .orderBy(desc(gameRounds.completedAt))
+          .limit(1);
+        
+        gameRound = completedRounds[0];
+      }
+      
+      if (!gameRound || !gameRound.winnerSquare) {
+        return res.json({ winner: null });
+      }
+      
+      // Get the winner square and participant info
+      const winnerSquare = await storage.getSquareByNumber(gameRound.winnerSquare, gameRound.id);
+      if (!winnerSquare?.participantId) {
+        return res.json({ winner: null });
+      }
+      
+      const winnerParticipant = await storage.getParticipant(winnerSquare.participantId);
+      if (!winnerParticipant) {
+        return res.json({ winner: null });
+      }
+      
+      res.json({
+        winner: {
+          name: winnerParticipant.name,
+          square: gameRound.winnerSquare,
+          totalPot: gameRound.totalRevenue,
+          roundNumber: gameRound.roundNumber,
+          completedAt: gameRound.completedAt
+        }
+      });
+    } catch (error) {
+      console.error('Error getting winner:', error);
+      res.status(500).json({ error: "Failed to get winner information" });
     }
   });
 
@@ -483,18 +549,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         completedAt: new Date()
       });
 
+      // Get winner participant details
+      const winnerParticipant = await storage.getParticipant(square.participantId!);
+
       broadcast({
-        type: 'GAME_RESET',
+        type: 'WINNER_DRAWN',
         data: { 
           winnerSquare: squareNumber,
+          winnerId: square.participantId!,
+          winnerName: winnerParticipant?.name || 'Unknown',
           gameRoundId: currentRound.id,
-          totalPot: currentRound.totalRevenue
+          totalPot: currentRound.totalRevenue,
+          roundNumber: currentRound.roundNumber
         }
       });
 
       res.json({ 
         success: true, 
         winnerSquare: squareNumber,
+        winnerId: square.participantId!,
+        winnerName: winnerParticipant?.name || 'Unknown',
         totalPot: currentRound.totalRevenue,
         message: `Square #${squareNumber} selected as winner!` 
       });

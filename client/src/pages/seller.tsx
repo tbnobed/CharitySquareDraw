@@ -8,6 +8,7 @@ import { GameBoard } from "@/components/GameBoard";
 import { ParticipantFormComponent } from "@/components/ParticipantForm";
 import { PaymentModal } from "@/components/PaymentModal";
 import { QRReceiptModal } from "@/components/QRReceiptModal";
+import { WinnerDisplay } from "@/components/WinnerDisplay";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -344,6 +345,9 @@ export default function SellerPage() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Winner Display */}
+        <WinnerDisplay className="mb-6" />
+        
         {/* Current Status Banner */}
         <Card className="bg-blue-50 border-blue-200 mb-6">
           <CardContent className="p-4">
