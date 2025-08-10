@@ -43,10 +43,11 @@ export default function AdminPage() {
     const interval = setInterval(() => {
       refetchGame();
       refetchStats();
+      refetchParticipants(); // Add participants to polling
     }, 3000); // Poll every 3 seconds for admin
 
     return () => clearInterval(interval);
-  }, [refetchGame, refetchStats]);
+  }, [refetchGame, refetchStats, refetchParticipants]);
 
   // WebSocket for real-time updates (currently disabled)
   const { isConnected } = useWebSocket((data: BoardUpdate) => {
