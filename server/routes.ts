@@ -408,50 +408,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get winner information - show winner from most recently completed round only if no active round exists
+  // Get winner information - show winner from completed round until new active round starts
   app.get("/api/winner", async (req, res) => {
     try {
-      // Check if there's an active round
-      const activeRound = await storage.getCurrentGameRound();
+      // Get the current round (most recent)
+      const currentRound = await storage.getCurrentGameRound();
       
-      // If there's an active round, don't show any winner (new round has started)
-      if (activeRound) {
+      // If no round exists, return null
+      if (!currentRound) {
         return res.json({ winner: null });
       }
       
-      // Get the most recent completed round with a winner
-      const rounds = await db
-        .select()
-        .from(gameRounds)
-        .where(sql`${gameRounds.status} = 'completed' AND ${gameRounds.winnerSquare} IS NOT NULL`)
-        .orderBy(desc(gameRounds.completedAt))
-        .limit(1);
-      
-      const completedRound = rounds[0];
-      
-      if (!completedRound || !completedRound.winnerSquare) {
-        return res.json({ winner: null });
-      }
-      
-      // Find the participant who has the winning square
-      const gameParticipants = await storage.getParticipants(completedRound.id);
-      const winnerParticipant = gameParticipants.find(p => 
-        p.squares.includes(completedRound.winnerSquare!)
-      );
-      
-      if (!winnerParticipant) {
-        return res.json({ winner: null });
-      }
-      
-      res.json({
-        winner: {
-          name: winnerParticipant.name,
-          square: completedRound.winnerSquare,
-          totalPot: completedRound.totalRevenue,
-          roundNumber: completedRound.roundNumber,
-          completedAt: completedRound.completedAt
+      // If the current round is completed and has a winner, show the winner
+      if (currentRound.status === 'completed' && currentRound.winnerSquare) {
+        // Find the participant who has the winning square
+        const gameParticipants = await storage.getParticipants(currentRound.id);
+        const winnerParticipant = gameParticipants.find(p => 
+          p.squares.includes(currentRound.winnerSquare!)
+        );
+        
+        if (winnerParticipant) {
+          return res.json({
+            winner: {
+              name: winnerParticipant.name,
+              square: currentRound.winnerSquare,
+              totalPot: currentRound.totalRevenue,
+              roundNumber: currentRound.roundNumber,
+              completedAt: currentRound.completedAt
+            }
+          });
         }
-      });
+      }
+      
+      // If the current round is active (new round started), don't show winner
+      res.json({ winner: null });
     } catch (error) {
       console.error('Error getting winner:', error);
       res.status(500).json({ error: "Failed to get winner information" });

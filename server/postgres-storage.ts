@@ -19,9 +19,9 @@ export class PostgresStorage implements IStorage {
 
   private async initializeDatabase() {
     try {
-      // Check if we have an active game round, if not create one
-      const activeRound = await this.getCurrentGameRound();
-      if (!activeRound) {
+      // Only create a round if there are NO rounds at all (first time setup)
+      const allRounds = await db.select().from(gameRounds).limit(1);
+      if (allRounds.length === 0) {
         const firstRound = await this.createGameRound({
           roundNumber: 1,
           status: "active",
@@ -37,11 +37,12 @@ export class PostgresStorage implements IStorage {
 
   async getCurrentGameRound(): Promise<GameRound | undefined> {
     try {
+      // Return the most recent round (active or completed)
+      // This ensures we show completed rounds with winners until admin starts new round
       const rounds = await db
         .select()
         .from(gameRounds)
-        .where(eq(gameRounds.status, 'active'))
-        .orderBy(desc(gameRounds.createdAt))
+        .orderBy(desc(gameRounds.roundNumber), desc(gameRounds.createdAt))
         .limit(1);
       
       return rounds[0];
