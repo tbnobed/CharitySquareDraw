@@ -157,32 +157,30 @@ export function AdminDashboard({
 
       {/* Game Round Info */}
       <Card>
-        <CardHeader>
-          <CardTitle>Round #{stats.currentRound}</CardTitle>
-          <p className="text-gray-600">
-            {stats.squaresSold} squares sold
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-4">
-            <Settings className="h-4 w-4 text-gray-500" />
-            <Label htmlFor="price-input" className="text-sm font-medium">
-              Price per Square:
-            </Label>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm">$</span>
-              <Input
-                id="price-input"
-                type="number"
-                value={priceInput}
-                onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
-                onBlur={handlePriceUpdate}
-                onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
-                className="w-20 text-sm"
-                min="0.01"
-                step="0.01"
-                data-testid="input-price"
-              />
+        <CardContent className="p-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">Round #{stats.currentRound}</h3>
+              <p className="text-gray-600">{stats.squaresSold} squares sold</p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Settings className="h-4 w-4 text-gray-500" />
+              <Label htmlFor="price-input" className="text-sm font-medium">Price per Square:</Label>
+              <div className="flex items-center space-x-1">
+                <span className="text-sm">$</span>
+                <Input
+                  id="price-input"
+                  type="number"
+                  value={priceInput}
+                  onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
+                  onBlur={handlePriceUpdate}
+                  onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
+                  className="w-20 text-sm"
+                  min="0.01"
+                  step="0.01"
+                  data-testid="input-price"
+                />
+              </div>
             </div>
           </div>
         </CardContent>
