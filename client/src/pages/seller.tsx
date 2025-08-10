@@ -387,7 +387,10 @@ export default function SellerPage() {
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-bold text-gray-900">Select Your Squares</h2>
                   <div className="text-sm text-gray-600">
-                    Tap available squares to select
+                    {gameData?.gameRound?.status === 'completed' 
+                      ? 'Round completed - game disabled until new round starts'
+                      : 'Tap available squares to select'
+                    }
                   </div>
                 </div>
                 
@@ -396,6 +399,7 @@ export default function SellerPage() {
                   selectedSquares={selectedSquares}
                   otherSelections={otherSelections}
                   onSquareSelect={handleSquareSelect}
+                  readonly={gameData?.gameRound?.status === 'completed'}
                 />
               </CardContent>
             </Card>
@@ -411,6 +415,7 @@ export default function SellerPage() {
               isLoading={reserveMutation.isPending}
               shouldReset={shouldResetForm}
               onResetComplete={handleFormResetComplete}
+              disabled={gameData?.gameRound?.status === 'completed'}
             />
           </div>
         </div>

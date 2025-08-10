@@ -16,9 +16,10 @@ interface ParticipantFormProps {
   isLoading?: boolean;
   shouldReset?: boolean;
   onResetComplete?: () => void;
+  disabled?: boolean;
 }
 
-export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRemoveSquare, onSubmit, isLoading, shouldReset, onResetComplete }: ParticipantFormProps) {
+export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRemoveSquare, onSubmit, isLoading, shouldReset, onResetComplete, disabled }: ParticipantFormProps) {
   const form = useForm<ParticipantForm>({
     resolver: zodResolver(participantFormSchema),
     defaultValues: {
@@ -70,6 +71,7 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
                     data-testid="input-name"
                     placeholder="Enter full name"
                     {...field}
+                    disabled={disabled}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </FormControl>
@@ -90,6 +92,7 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
                     type="email"
                     placeholder="Enter email address"
                     {...field}
+                    disabled={disabled}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </FormControl>
@@ -110,6 +113,7 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
                     type="tel"
                     placeholder="(555) 123-4567"
                     {...field}
+                    disabled={disabled}
                     onInput={(e) => {
                       // Only allow digits, spaces, parentheses, and dashes
                       const value = e.currentTarget.value.replace(/[^0-9\s()-]/g, '');
@@ -145,6 +149,7 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
                       size="sm"
                       className="ml-2 h-4 w-4 p-0 text-yellow-600 hover:text-yellow-800"
                       onClick={() => onRemoveSquare(square)}
+                      disabled={disabled}
                       data-testid={`remove-square-${square}`}
                     >
                       <X className="h-3 w-3" />
@@ -164,7 +169,7 @@ export function ParticipantFormComponent({ selectedSquares, pricePerSquare, onRe
           
           <Button 
             type="submit"
-            disabled={selectedSquares.length === 0 || isLoading}
+            disabled={selectedSquares.length === 0 || isLoading || disabled}
             className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
             data-testid="button-reserve"
           >
