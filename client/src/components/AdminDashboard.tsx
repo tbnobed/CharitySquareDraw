@@ -302,7 +302,7 @@ export function AdminDashboard({
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="h-80 overflow-y-auto">
+              <div className="h-[424px] overflow-y-auto">
                 <Table>
                   <TableHeader className="sticky top-0 bg-white z-10">
                     <TableRow>
