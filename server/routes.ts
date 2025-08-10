@@ -365,9 +365,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get winner information - show winner from most recently completed round
+  // Get winner information - show winner from most recently completed round only if no active round exists
   app.get("/api/winner", async (req, res) => {
     try {
+      // Check if there's an active round
+      const activeRound = await storage.getCurrentGameRound();
+      
+      // If there's an active round, don't show any winner (new round has started)
+      if (activeRound) {
+        return res.json({ winner: null });
+      }
+      
       // Get the most recent completed round with a winner
       const rounds = await db
         .select()
