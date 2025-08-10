@@ -155,134 +155,135 @@ export function AdminDashboard({
         </Card>
       </div>
 
-      {/* Game Controls */}
+      {/* Game Round Info */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">Current Game Round</h2>
-                <p className="text-gray-600">
-                  Round #{stats.currentRound} - {stats.squaresSold} squares sold
-                </p>
-              </div>
-              
-              {/* Price Setting */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Settings className="h-4 w-4 text-gray-500" />
-                  <Label htmlFor="price-input" className="text-sm font-medium">
-                    Price per Square:
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm">$</span>
-                  <Input
-                    id="price-input"
-                    type="number"
-                    value={priceInput}
-                    onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
-                    onBlur={handlePriceUpdate}
-                    onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
-                    className="w-20 text-sm"
-                    min="0.01"
-                    step="0.01"
-                    data-testid="input-price"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            {/* Admin Controls - Organized by Function */}
-            <div className="space-y-4">
-              {/* Winner Selection Group */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
-                  Winner Selection:
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    onClick={onDrawWinner}
-                    disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
-                    className="bg-green-500 hover:bg-green-600 text-white flex items-center justify-center"
-                    data-testid="button-draw-winner"
-                  >
-                    <Trophy className="mr-2 h-4 w-4" />
-                    Auto Draw
-                  </Button>
-                  <Button
-                    onClick={() => setShowManualWinnerDialog(true)}
-                    disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
-                    className="bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center"
-                    data-testid="button-manual-winner"
-                  >
-                    <Trophy className="mr-2 h-4 w-4" />
-                    Manual Winner
-                  </Button>
-                </div>
-              </div>
-
-              {/* Game Management Group */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
-                  Game Management:
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    onClick={onNewRound}
-                    disabled={isLoading}
-                    variant="outline"
-                    className="flex items-center justify-center"
-                    data-testid="button-new-round"
-                  >
-                    <RotateCcw className="mr-2 h-4 w-4" />
-                    New Round
-                  </Button>
-                  <Button
-                    onClick={onCleanupReservations}
-                    disabled={isLoading}
-                    variant="outline"
-                    className="flex items-center justify-center text-orange-600 border-orange-300 hover:bg-orange-50"
-                    data-testid="button-cleanup-reservations"
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Release Stuck Reservations
-                  </Button>
-                </div>
-              </div>
-
-              {/* Data & System Group */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="text-sm font-medium text-gray-700 min-w-[120px] flex items-center">
-                  Data & System:
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    onClick={onExportData}
-                    disabled={isLoading}
-                    variant="outline"
-                    className="flex items-center justify-center"
-                    data-testid="button-export"
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    Export Data
-                  </Button>
-                  <Button
-                    onClick={() => setShowResetDialog(true)}
-                    disabled={isLoading}
-                    variant="outline"
-                    className="flex items-center justify-center text-red-600 border-red-300 hover:bg-red-50"
-                    data-testid="button-reset-system"
-                  >
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Reset to Round #1
-                  </Button>
-                </div>
-              </div>
+        <CardHeader>
+          <CardTitle>Round #{stats.currentRound}</CardTitle>
+          <p className="text-gray-600">
+            {stats.squaresSold} squares sold
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center space-x-4">
+            <Settings className="h-4 w-4 text-gray-500" />
+            <Label htmlFor="price-input" className="text-sm font-medium">
+              Price per Square:
+            </Label>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">$</span>
+              <Input
+                id="price-input"
+                type="number"
+                value={priceInput}
+                onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
+                onBlur={handlePriceUpdate}
+                onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
+                className="w-20 text-sm"
+                min="0.01"
+                step="0.01"
+                data-testid="input-price"
+              />
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Admin Controls */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Winner Selection */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Trophy className="w-4 h-4" />
+              Winner Selection
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              onClick={onDrawWinner}
+              disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
+              className="w-full bg-green-500 hover:bg-green-600 text-white"
+              data-testid="button-draw-winner"
+            >
+              <Trophy className="mr-2 h-4 w-4" />
+              Auto Draw Winner
+            </Button>
+            <Button
+              onClick={() => setShowManualWinnerDialog(true)}
+              disabled={isLoading || stats.squaresSold === 0 || gameRound?.status === 'completed'}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+              data-testid="button-manual-winner"
+            >
+              <Trophy className="mr-2 h-4 w-4" />
+              Manual Winner
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Game Management */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <RotateCcw className="w-4 h-4" />
+              Game Management
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              onClick={onNewRound}
+              disabled={isLoading}
+              variant="outline"
+              className="w-full"
+              data-testid="button-new-round"
+            >
+              <RotateCcw className="mr-2 h-4 w-4" />
+              New Round
+            </Button>
+            <Button
+              onClick={onCleanupReservations}
+              disabled={isLoading}
+              variant="outline"
+              className="w-full text-orange-600 border-orange-300 hover:bg-orange-50"
+              data-testid="button-cleanup-reservations"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Release Reservations
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Data & System */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Data & System
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              onClick={onExportData}
+              disabled={isLoading}
+              variant="outline"
+              className="w-full"
+              data-testid="button-export"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Export Data
+            </Button>
+            <Button
+              onClick={() => setShowResetDialog(true)}
+              disabled={isLoading}
+              variant="outline"
+              className="w-full text-red-600 border-red-300 hover:bg-red-50"
+              data-testid="button-reset-system"
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Reset System
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid lg:grid-cols-5 gap-8">
         {/* Game Board Preview */}
