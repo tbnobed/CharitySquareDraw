@@ -35,26 +35,26 @@ export function WinnerDisplay({ className }: WinnerDisplayProps) {
 
   return (
     <Card className={`bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border-yellow-200 dark:border-yellow-700 ${className}`} data-testid="winner-display">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-          <Trophy className="w-5 h-5" />
+      <CardHeader className="pb-2 pt-3">
+        <CardTitle className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200 text-base">
+          <Trophy className="w-4 h-4" />
           Round {winner.roundNumber} Winner!
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="pt-0 pb-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-lg font-semibold text-gray-900 dark:text-gray-100" data-testid="winner-name">
+            <p className="text-base font-semibold text-gray-900 dark:text-gray-100" data-testid="winner-name">
               {winner.name}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400" data-testid="winner-square">
+            <p className="text-xs text-gray-600 dark:text-gray-400" data-testid="winner-square">
               Square #{winner.square}
             </p>
           </div>
           <div className="text-right">
             <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
               <DollarSign className="w-4 h-4" />
-              <span className="text-lg font-bold" data-testid="winner-pot">
+              <span className="text-base font-bold" data-testid="winner-pot">
                 ${formattedPot}
               </span>
             </div>
