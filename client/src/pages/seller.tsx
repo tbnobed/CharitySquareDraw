@@ -409,8 +409,8 @@ export default function SellerPage() {
                 </div>
                 
                 {/* Mobile-Optimized Game Board */}
-                <div className="w-full overflow-x-auto">
-                  <div className="min-w-[320px] max-w-[500px] mx-auto">
+                <div className="w-full">
+                  <div className="max-w-[min(100vw-24px,520px)] mx-auto">
                     <GameBoard
                       squares={squares}
                       selectedSquares={selectedSquares}

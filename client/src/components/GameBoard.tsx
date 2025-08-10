@@ -46,9 +46,13 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div 
-        className={`grid grid-cols-10 ${readonly ? 'gap-3' : 'gap-2'}`} 
+        className={`grid grid-cols-10 ${
+          readonly 
+            ? 'gap-1 sm:gap-2 lg:gap-3' 
+            : 'gap-1 sm:gap-2'
+        }`} 
         data-testid="game-board"
       >
         {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
@@ -62,12 +66,20 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               onClick={() => handleSquareClick(number)}
               disabled={isDisabled || readonly}
               className={`aspect-square flex items-center justify-center ${
-                readonly ? 'font-medium text-xs' : 'font-semibold text-sm'
-              } rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
+                readonly 
+                  ? 'font-medium text-xs sm:text-sm' 
+                  : 'font-semibold text-xs sm:text-sm'
+              } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                minHeight: readonly ? '36px' : '44px',
-                minWidth: readonly ? '36px' : '44px',
-                fontSize: readonly ? '13px' : '14px'
+                minHeight: readonly 
+                  ? 'clamp(28px, 8vw, 40px)' 
+                  : 'clamp(32px, 9vw, 48px)',
+                minWidth: readonly 
+                  ? 'clamp(28px, 8vw, 40px)' 
+                  : 'clamp(32px, 9vw, 48px)',
+                fontSize: readonly 
+                  ? 'clamp(10px, 2.5vw, 14px)' 
+                  : 'clamp(11px, 2.8vw, 16px)'
               }}
             >
               {number}
@@ -76,24 +88,24 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         })}
       </div>
       
-      <div className="border-t border-gray-200 pt-4">
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-green-500 rounded"></div>
+      <div className="border-t border-gray-200 pt-3 sm:pt-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-xs sm:text-sm">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded"></div>
             <span className="text-gray-600">Available</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-red-500 rounded"></div>
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded"></div>
             <span className="text-gray-600">Sold</span>
           </div>
           {!readonly && (
             <>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-yellow-500 rounded"></div>
                 <span className="text-gray-600">Selected</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-gray-400 rounded"></div>
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-400 rounded"></div>
                 <span className="text-gray-600">Reserved</span>
               </div>
             </>
