@@ -94,15 +94,15 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   width: readonly 
-                    ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                    ? 'calc((95vw - 10 * 0.125rem) / 11)' 
                     : 'calc((100% - 10 * 0.125rem) / 11)',
                   height: readonly 
-                    ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                    ? 'calc((95vw - 10 * 0.125rem) / 11)' 
                     : 'calc((100% - 10 * 0.125rem) / 11)',
                   minHeight: '20px',
                   minWidth: '20px',
-                  maxHeight: readonly ? '44px' : '52px',
-                  maxWidth: readonly ? '44px' : '52px',
+                  maxHeight: readonly ? '80px' : '52px',
+                  maxWidth: readonly ? '80px' : '52px',
                   fontSize: readonly 
                     ? 'clamp(7px, 1.8vw, 15px)' 
                     : 'clamp(8px, 2vw, 17px)',
@@ -134,15 +134,15 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 width: readonly 
-                  ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                  ? 'calc((95vw - 10 * 0.125rem) / 11)' 
                   : 'calc((100% - 10 * 0.125rem) / 11)',
                 height: readonly 
-                  ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                  ? 'calc((95vw - 10 * 0.125rem) / 11)' 
                   : 'calc((100% - 10 * 0.125rem) / 11)',
                 minHeight: '20px',
                 minWidth: '20px',
-                maxHeight: readonly ? '44px' : '52px',
-                maxWidth: readonly ? '44px' : '52px',
+                maxHeight: readonly ? '80px' : '52px',
+                maxWidth: readonly ? '80px' : '52px',
                 fontSize: readonly 
                   ? 'clamp(7px, 1.8vw, 15px)' 
                   : 'clamp(8px, 2vw, 17px)'
