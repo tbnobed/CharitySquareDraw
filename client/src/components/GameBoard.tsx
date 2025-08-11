@@ -69,15 +69,17 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   const gridLayout = layoutMode === 'sequential' ? sequentialLayout : realWorldLayout;
 
   return (
-    <div className="space-y-4 sm:space-y-6 w-full">
-      <div 
-        className={`grid grid-cols-11 w-full ${
-          readonly 
-            ? 'gap-2 sm:gap-3 lg:gap-4' 
-            : 'gap-2 sm:gap-3'
-        }`} 
-        data-testid="game-board"
-      >
+    <div className="space-y-3 sm:space-y-4 lg:space-y-6 w-full">
+      {/* Mobile container with aspect ratio optimization */}
+      <div className="w-full max-w-[100vw] overflow-hidden">
+        <div 
+          className={`grid grid-cols-11 w-full ${
+            readonly 
+              ? 'gap-1 xs:gap-2 sm:gap-3 lg:gap-4' 
+              : 'gap-1 xs:gap-2 sm:gap-3'
+          }`} 
+          data-testid="game-board"
+        >
           {gridLayout.flat().map((cell, index) => {
           if (cell === "BONUS") {
             return (
@@ -90,14 +92,14 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   minHeight: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? 'clamp(24px, 7vw, 44px)' 
+                    : 'clamp(28px, 8vw, 52px)',
                   minWidth: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? 'clamp(24px, 7vw, 44px)' 
+                    : 'clamp(28px, 8vw, 52px)',
                   fontSize: readonly 
-                    ? 'clamp(8px, 2.5vw, 12px)' 
-                    : 'clamp(9px, 2.8vw, 14px)'
+                    ? 'clamp(10px, 2.5vw, 14px)' 
+                    : 'clamp(12px, 3vw, 16px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -123,20 +125,21 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 minHeight: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? 'clamp(24px, 7vw, 44px)' 
+                  : 'clamp(28px, 8vw, 52px)',
                 minWidth: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? 'clamp(24px, 7vw, 44px)' 
+                  : 'clamp(28px, 8vw, 52px)',
                 fontSize: readonly 
-                  ? 'clamp(11px, 3vw, 15px)' 
-                  : 'clamp(12px, 3.2vw, 17px)'
+                  ? 'clamp(10px, 2.5vw, 15px)' 
+                  : 'clamp(11px, 3vw, 17px)'
               }}
             >
               {number}
             </Button>
           );
         })}
+        </div>
       </div>
       
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
