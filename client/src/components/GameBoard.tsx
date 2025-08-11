@@ -7,9 +7,10 @@ interface GameBoardProps {
   otherSelections?: number[];
   onSquareSelect?: (squareNumber: number) => void;
   readonly?: boolean;
+  layoutMode?: 'real-world' | 'sequential';
 }
 
-export function GameBoard({ squares, selectedSquares, otherSelections = [], onSquareSelect, readonly = false }: GameBoardProps) {
+export function GameBoard({ squares, selectedSquares, otherSelections = [], onSquareSelect, readonly = false, layoutMode = 'real-world' }: GameBoardProps) {
   const getSquareStatus = (squareNumber: number) => {
     const square = squares.find(s => s.number === squareNumber);
     if (!square) return 'available';
@@ -46,7 +47,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   };
 
   // Define the exact grid layout from the image
-  const gridLayout = [
+  const realWorldLayout = [
     [59, 15, 26, 3, 25, 6, 17, 53, 30, 5, 62],
     [55, 33, 44, 16, 39, 13, 36, 48, 45, 20, 57],
     [61, 46, 9, 51, 58, "BONUS", 64, 19, 12, 10, 60],
@@ -54,6 +55,18 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
     [4, 32, 43, 38, 21, 37, 23, 49, 7, 41, 63],
     [65, 8, 1, 11, 52, 47, 18, 29, 22, 14, 56]
   ];
+
+  // Define sequential layout (1-65 in order with BONUS in center)
+  const sequentialLayout = [
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+    [23, 24, 25, 26, 27, "BONUS", 28, 29, 30, 31, 32],
+    [33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
+    [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54],
+    [55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65]
+  ];
+
+  const gridLayout = layoutMode === 'sequential' ? sequentialLayout : realWorldLayout;
 
   return (
     <div className="space-y-4 sm:space-y-6 w-full">

@@ -23,6 +23,7 @@ export default function SellerPage() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showQRReceiptModal, setShowQRReceiptModal] = useState(false);
   const [shouldResetForm, setShouldResetForm] = useState(false);
+  const [layoutMode, setLayoutMode] = useState<'real-world' | 'sequential'>('real-world');
   const { toast } = useToast();
   const [wsConnectionStatus, setWsConnectionStatus] = useState<string>('connecting');
 
@@ -398,13 +399,24 @@ export default function SellerPage() {
           <div className="lg:col-span-3 lg:order-1">
             <Card>
               <CardContent className="p-3 sm:p-4">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 space-y-1 sm:space-y-0">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 space-y-2 sm:space-y-0">
                   <h2 className="text-lg sm:text-xl font-bold text-gray-900">Select Squares</h2>
-                  <div className="text-xs sm:text-sm text-gray-600">
-                    {gameData?.gameRound?.status === 'completed' 
-                      ? 'Round completed'
-                      : 'Tap to select'
-                    }
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setLayoutMode(prev => prev === 'real-world' ? 'sequential' : 'real-world')}
+                      className="text-xs sm:text-sm"
+                      data-testid="toggle-layout-button"
+                    >
+                      {layoutMode === 'real-world' ? 'Show Sequential' : 'Show Real Layout'}
+                    </Button>
+                    <div className="text-xs sm:text-sm text-gray-600">
+                      {gameData?.gameRound?.status === 'completed' 
+                        ? 'Round completed'
+                        : 'Tap to select'
+                      }
+                    </div>
                   </div>
                 </div>
                 
@@ -416,6 +428,7 @@ export default function SellerPage() {
                     otherSelections={otherSelections}
                     onSquareSelect={handleSquareSelect}
                     readonly={gameData?.gameRound?.status === 'completed'}
+                    layoutMode={layoutMode}
                   />
                 </div>
               </CardContent>
