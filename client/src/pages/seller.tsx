@@ -349,7 +349,7 @@ export default function SellerPage() {
       </header>
 
       {/* Main Content - Mobile-First Layout */}
-      <div className="px-3 sm:px-4 py-3 sm:py-4 max-w-6xl mx-auto">
+      <div className="px-3 sm:px-4 py-3 sm:py-4 w-full">
         {/* Winner Display - Compact for Mobile */}
         <WinnerDisplay className="mb-3 sm:mb-4" />
         
@@ -410,15 +410,13 @@ export default function SellerPage() {
                 
                 {/* Mobile-Optimized Game Board */}
                 <div className="w-full">
-                  <div className="max-w-[min(100vw-24px,520px)] mx-auto">
-                    <GameBoard
-                      squares={squares}
-                      selectedSquares={selectedSquares}
-                      otherSelections={otherSelections}
-                      onSquareSelect={handleSquareSelect}
-                      readonly={gameData?.gameRound?.status === 'completed'}
-                    />
-                  </div>
+                  <GameBoard
+                    squares={squares}
+                    selectedSquares={selectedSquares}
+                    otherSelections={otherSelections}
+                    onSquareSelect={handleSquareSelect}
+                    readonly={gameData?.gameRound?.status === 'completed'}
+                  />
                 </div>
               </CardContent>
             </Card>
