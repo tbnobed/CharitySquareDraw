@@ -73,9 +73,12 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
       <div 
         className={`grid grid-cols-11 w-full max-w-full overflow-hidden ${
           readonly 
-            ? 'gap-1 sm:gap-2 md:gap-3 lg:gap-4' 
-            : 'gap-1 sm:gap-2 md:gap-3'
+            ? 'gap-0.5 sm:gap-1 md:gap-2 lg:gap-3' 
+            : 'gap-0.5 sm:gap-1 md:gap-2'
         }`} 
+        style={{
+          containerType: 'inline-size'
+        }}
         data-testid="game-board"
       >
           {gridLayout.flat().map((cell, index) => {
@@ -89,15 +92,19 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     : 'font-semibold text-xs sm:text-sm'
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
-                  minHeight: readonly 
-                    ? 'clamp(24px, 6vw, 44px)' 
-                    : 'clamp(28px, 7vw, 52px)',
-                  minWidth: readonly 
-                    ? 'clamp(24px, 6vw, 44px)' 
-                    : 'clamp(28px, 7vw, 52px)',
+                  width: readonly 
+                    ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                    : 'calc((100% - 10 * 0.125rem) / 11)',
+                  height: readonly 
+                    ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                    : 'calc((100% - 10 * 0.125rem) / 11)',
+                  minHeight: '20px',
+                  minWidth: '20px',
+                  maxHeight: readonly ? '44px' : '52px',
+                  maxWidth: readonly ? '44px' : '52px',
                   fontSize: readonly 
-                    ? 'clamp(7px, 1.8vw, 12px)' 
-                    : 'clamp(8px, 2vw, 14px)'
+                    ? 'clamp(6px, 1.5vw, 12px)' 
+                    : 'clamp(7px, 1.8vw, 14px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -122,15 +129,19 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   : 'font-semibold text-xs sm:text-sm'
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                minHeight: readonly 
-                  ? 'clamp(24px, 6vw, 44px)' 
-                  : 'clamp(28px, 7vw, 52px)',
-                minWidth: readonly 
-                  ? 'clamp(24px, 6vw, 44px)' 
-                  : 'clamp(28px, 7vw, 52px)',
+                width: readonly 
+                  ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                  : 'calc((100% - 10 * 0.125rem) / 11)',
+                height: readonly 
+                  ? 'calc((100% - 10 * 0.125rem) / 11)' 
+                  : 'calc((100% - 10 * 0.125rem) / 11)',
+                minHeight: '20px',
+                minWidth: '20px',
+                maxHeight: readonly ? '44px' : '52px',
+                maxWidth: readonly ? '44px' : '52px',
                 fontSize: readonly 
-                  ? 'clamp(8px, 2.2vw, 15px)' 
-                  : 'clamp(10px, 2.5vw, 17px)'
+                  ? 'clamp(7px, 1.8vw, 15px)' 
+                  : 'clamp(8px, 2vw, 17px)'
               }}
             >
               {number}
