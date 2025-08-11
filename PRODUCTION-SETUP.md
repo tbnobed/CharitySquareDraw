@@ -23,6 +23,9 @@ VITE_STRIPE_PUBLIC_KEY=pk_test_your_stripe_public_key_here
 # Application Configuration
 NODE_ENV=production
 PORT=5000
+
+# Admin Security Configuration
+ADMIN_PASSWORD=your_secure_admin_password_here
 ```
 
 ### Step 2: Rebuild Docker Image
@@ -66,3 +69,28 @@ VITE_ZELLE_EMAIL=your_real_zelle_email@domain.com
 ```
 
 Then rebuild the Docker image to embed your real payment information.
+
+## Admin Password Security
+
+The application now includes password protection for sensitive admin functions (Export Data and Reset System). This security feature requires configuration:
+
+### Setting Up Admin Password
+
+1. **Add to your .env file:**
+   ```bash
+   ADMIN_PASSWORD=your_secure_admin_password_here
+   ```
+
+2. **Choose a strong password** - This password protects access to:
+   - Data export functionality
+   - System reset operations
+   - Other sensitive admin functions
+
+3. **Docker Configuration** - The password is automatically passed to the Docker container through docker-compose.yml
+
+### Important Security Notes
+
+- **Change the default password** before production deployment
+- **Use a strong, unique password** that's different from your database password
+- **Keep the password secure** - only share with authorized administrators
+- **The password is required** every time sensitive functions are accessed (no persistent login)

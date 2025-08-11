@@ -48,6 +48,8 @@ services:
       VITE_VENMO_USERNAME: ${VITE_VENMO_USERNAME}
       VITE_ZELLE_EMAIL: ${VITE_ZELLE_EMAIL}
       VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY}
+      # Admin Security Configuration
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     ports:
       - "5000:5000"
     networks:

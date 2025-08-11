@@ -44,6 +44,8 @@ Preferred communication style: Simple, everyday language.
 ### Authentication and Authorization
 - **Session Management**: Express sessions with PostgreSQL session store (connect-pg-simple)
 - **Access Control**: Route-based access control for admin and seller interfaces
+- **Admin Password Protection**: Secure authentication system for sensitive admin functions (export data, reset system)
+- **Environment-based Security**: Admin password configured via ADMIN_PASSWORD environment variable
 - **Security**: CORS configuration and secure session handling
 
 ### API Architecture
