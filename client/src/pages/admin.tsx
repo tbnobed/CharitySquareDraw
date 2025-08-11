@@ -229,26 +229,64 @@ export default function AdminPage() {
       const response = await fetch('/api/export');
       const data = await response.json();
       
-      // Convert to CSV format
-      const csvHeaders = ['Name', 'Email', 'Phone', 'Squares', 'Total Amount', 'Payment Status', 'Date'];
+      // Convert to CSV format with all rounds
+      const csvHeaders = ['Round #', 'Name', 'Email', 'Phone', 'Squares', 'Total Amount', 'Payment Status', 'Date', 'Winner', 'Round Status'];
       const csvRows = [csvHeaders.join(',')];
       
-      if (data.participants && data.participants.length > 0) {
-        data.participants.forEach((participant: Participant) => {
-          const row = [
-            `"${participant.name}"`,
-            `"${participant.email}"`,
-            `"${participant.phone}"`,
-            `"${participant.squares.map(s => `#${s}`).join('; ')}"`,
-            `$${(participant.totalAmount / 100).toFixed(2)}`,
-            participant.paymentStatus,
-            `"${new Date(participant.createdAt || Date.now()).toLocaleDateString()}"`
-          ];
-          csvRows.push(row.join(','));
+      if (data.rounds && data.rounds.length > 0) {
+        data.rounds.forEach((roundData: any) => {
+          const round = roundData.round;
+          const participants = roundData.participants || [];
+          const winner = roundData.winner;
+          
+          if (participants.length > 0) {
+            participants.forEach((participant: Participant) => {
+              const isWinner = winner?.winner?.id === participant.id ? 'YES' : 'NO';
+              const row = [
+                `"Round ${round.roundNumber}"`,
+                `"${participant.name}"`,
+                `"${participant.email}"`,
+                `"${participant.phone}"`,
+                `"${participant.squares.map(s => `#${s}`).join('; ')}"`,
+                `$${(participant.totalAmount / 100).toFixed(2)}`,
+                participant.paymentStatus,
+                `"${new Date(participant.createdAt || Date.now()).toLocaleDateString()}"`,
+                isWinner,
+                round.status
+              ];
+              csvRows.push(row.join(','));
+            });
+          } else {
+            // Add empty row for rounds with no participants
+            const row = [
+              `"Round ${round.roundNumber}"`,
+              '"No participants"',
+              '""',
+              '""',
+              '""',
+              '$0.00',
+              '""',
+              `"${new Date(round.createdAt || Date.now()).toLocaleDateString()}"`,
+              winner ? 'N/A' : 'NO',
+              round.status
+            ];
+            csvRows.push(row.join(','));
+          }
         });
       } else {
-        // Add empty row if no participants
-        csvRows.push('"No participants yet","","","","","",""');
+        // Add empty row if no rounds
+        csvRows.push('"No rounds found","","","","","","","","",""');
+      }
+      
+      // Add summary row
+      if (data.summary) {
+        csvRows.push(''); // Empty line
+        csvRows.push('"SUMMARY"');
+        csvRows.push(`"Total Rounds:","${data.summary.totalRounds}"`);
+        csvRows.push(`"Completed Rounds:","${data.summary.completedRounds}"`);
+        csvRows.push(`"Active Rounds:","${data.summary.activeRounds}"`);
+        csvRows.push(`"Total Revenue:","$${(data.summary.totalRevenue / 100).toFixed(2)}"`);
+        csvRows.push(`"Export Date:","${new Date(data.exportDate).toLocaleString()}"`);
       }
       
       const csvContent = csvRows.join('\n');
@@ -256,7 +294,7 @@ export default function AdminPage() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `square-game-participants-round-${data.gameRound?.roundNumber || 'current'}.csv`;
+      a.download = `square-game-all-rounds-${new Date().toISOString().split('T')[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -264,7 +302,7 @@ export default function AdminPage() {
 
       toast({
         title: "CSV Exported",
-        description: "Participant data has been downloaded as CSV file.",
+        description: `All rounds data exported successfully (${data.summary?.totalRounds || 0} rounds).`,
       });
     } catch (error) {
       toast({

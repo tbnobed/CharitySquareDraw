@@ -81,10 +81,6 @@ export type Square = typeof squares.$inferSelect;
 export type RoundWinner = GameRound & { winner?: Participant };
 export type ParticipantForm = z.infer<typeof participantFormSchema>;
 
-export type GameRound = typeof gameRounds.$inferSelect;
-export type Participant = typeof participants.$inferSelect;
-export type Square = typeof squares.$inferSelect;
-
 export interface GameStats {
   totalRevenue: number;
   participantCount: number;

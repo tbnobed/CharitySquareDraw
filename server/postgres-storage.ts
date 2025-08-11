@@ -67,6 +67,18 @@ export class PostgresStorage implements IStorage {
     }
   }
 
+  async getAllGameRounds(): Promise<GameRound[]> {
+    try {
+      return await db
+        .select()
+        .from(gameRounds)
+        .orderBy(gameRounds.roundNumber);
+    } catch (error) {
+      console.error('Error getting all game rounds:', error);
+      return [];
+    }
+  }
+
   async createGameRound(gameRound: InsertGameRound): Promise<GameRound> {
     const id = randomUUID();
     const newGameRound: GameRound = {
@@ -500,7 +512,7 @@ export class PostgresStorage implements IStorage {
           )
         );
       
-      console.log('Found reserved squares to clean:', expiredSquares.length, expiredSquares.map(s => ({ number: s.number, participantId: s.participantId })));
+      console.log('Found reserved squares to clean:', expiredSquares.length, expiredSquares.map((s: Square) => ({ number: s.number, participantId: s.participantId })));
 
       // Release expired reservations and clean up participants
       if (expiredSquares.length > 0) {
@@ -531,7 +543,7 @@ export class PostgresStorage implements IStorage {
             const remainingSquares = await db
               .select()
               .from(squares)
-              .where(eq(squares.participantId, participantId));
+              .where(sql`${squares.participantId} = ${participantId}`);
             
             // If no remaining squares, delete the participant
             if (remainingSquares.length === 0) {

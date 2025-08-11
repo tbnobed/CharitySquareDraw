@@ -544,24 +544,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Export data
   app.get("/api/export", async (req, res) => {
     try {
-      const currentRound = await storage.getCurrentGameRound();
-      if (!currentRound) {
-        // Return empty data instead of error if no game round
-        return res.json({ 
-          participants: [], 
-          gameRound: null,
-          message: "No active game round" 
+      const allRounds = await storage.getAllGameRounds();
+      const winners = await storage.getWinners();
+      
+      if (allRounds.length === 0) {
+        return res.json({
+          rounds: [],
+          message: "No game rounds found"
         });
       }
 
-      const participants = await storage.getParticipants(currentRound.id);
+      // Build export data with all rounds, their participants, and winners
+      const exportData = [];
+      
+      for (const round of allRounds) {
+        const participants = await storage.getParticipants(round.id);
+        const winner = winners.find(w => w.id === round.id);
+        
+        exportData.push({
+          round,
+          participants,
+          winner: winner || null
+        });
+      }
       
       res.json({
-        participants,
-        gameRound: currentRound,
-        exportDate: new Date().toISOString()
+        rounds: exportData,
+        exportDate: new Date().toISOString(),
+        summary: {
+          totalRounds: allRounds.length,
+          completedRounds: allRounds.filter(r => r.status === 'completed').length,
+          activeRounds: allRounds.filter(r => r.status === 'active').length,
+          totalRevenue: allRounds.reduce((sum, round) => sum + round.totalRevenue, 0)
+        }
       });
     } catch (error) {
+      console.error('Export error:', error);
       res.status(500).json({ error: "Failed to export data" });
     }
   });

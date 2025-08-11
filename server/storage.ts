@@ -5,6 +5,7 @@ export interface IStorage {
   // Game Rounds
   getCurrentGameRound(): Promise<GameRound | undefined>;
   getGameRound(id: string): Promise<GameRound | undefined>;
+  getAllGameRounds(): Promise<GameRound[]>;
   createGameRound(gameRound: InsertGameRound): Promise<GameRound>;
   updateGameRound(id: string, updates: Partial<GameRound>): Promise<GameRound | undefined>;
   updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined>;
@@ -70,6 +71,10 @@ export class MemStorage implements IStorage {
 
   async getGameRound(id: string): Promise<GameRound | undefined> {
     return this.gameRounds.get(id);
+  }
+
+  async getAllGameRounds(): Promise<GameRound[]> {
+    return Array.from(this.gameRounds.values()).sort((a, b) => a.roundNumber - b.roundNumber);
   }
 
   async createGameRound(insertGameRound: InsertGameRound): Promise<GameRound> {
