@@ -82,8 +82,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         <div 
           className={`grid grid-cols-11 w-full ${
             readonly 
-              ? 'gap-1 sm:gap-3 lg:gap-4' 
-              : 'gap-1 sm:gap-3'
+              ? 'gap-2 sm:gap-3 lg:gap-4' 
+              : 'gap-2 sm:gap-3'
           }`} 
           data-testid="game-board"
 
