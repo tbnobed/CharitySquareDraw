@@ -92,7 +92,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   readonly 
                     ? 'font-medium text-xs sm:text-sm' 
                     : 'font-semibold text-xs sm:text-sm'
-                } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-red-600 text-white cursor-not-allowed hover:bg-red-600 border-0 p-0`}
+                } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-red-600 text-white cursor-not-allowed hover:bg-red-600 border-0 p-0 h-auto min-h-0`}
                 style={{ 
                   width: readonly 
                     ? 'calc((100% - 10 * 0.125rem) / 11)' 
