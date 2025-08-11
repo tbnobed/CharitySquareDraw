@@ -704,6 +704,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin password verification endpoint
+  app.post("/api/admin/verify-password", async (req, res) => {
+    try {
+      const { password } = req.body;
+      const adminPassword = process.env.ADMIN_PASSWORD;
+      
+      if (!adminPassword) {
+        return res.status(500).json({ error: "Admin password not configured" });
+      }
+      
+      if (password === adminPassword) {
+        res.json({ success: true });
+      } else {
+        res.status(401).json({ error: "Invalid password" });
+      }
+    } catch (error) {
+      console.error('Error verifying admin password:', error);
+      res.status(500).json({ error: "Failed to verify password" });
+    }
+  });
+
   const httpServer = createServer(app);
 
   // WebSocket server temporarily disabled to fix connection loops

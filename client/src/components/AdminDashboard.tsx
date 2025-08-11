@@ -45,6 +45,10 @@ export function AdminDashboard({
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [showManualWinnerDialog, setShowManualWinnerDialog] = useState(false);
   const [manualWinnerSquare, setManualWinnerSquare] = useState("");
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
   
   const soldSquares = squares.filter(square => square.status === "sold");
 
@@ -83,6 +87,53 @@ export function AdminDashboard({
       onManualWinner(squareNumber);
       setShowManualWinnerDialog(false);
       setManualWinnerSquare("");
+    }
+  };
+
+  const requireAuthentication = (action: string) => {
+    if (isAuthenticated) {
+      executeSecureAction(action);
+    } else {
+      setPendingAction(action);
+      setShowPasswordDialog(true);
+    }
+  };
+
+  const executeSecureAction = (action: string) => {
+    switch (action) {
+      case 'export':
+        onExportData();
+        break;
+      case 'reset':
+        setShowResetDialog(true);
+        break;
+    }
+  };
+
+  const handlePasswordSubmit = async () => {
+    try {
+      const response = await fetch('/api/admin/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword }),
+      });
+      
+      if (response.ok) {
+        setIsAuthenticated(true);
+        setShowPasswordDialog(false);
+        setAdminPassword("");
+        
+        if (pendingAction) {
+          executeSecureAction(pendingAction);
+          setPendingAction(null);
+        }
+      } else {
+        alert("Incorrect password. Access denied.");
+        setAdminPassword("");
+      }
+    } catch (error) {
+      alert("Error verifying password. Please try again.");
+      setAdminPassword("");
     }
   };
 
@@ -262,7 +313,7 @@ export function AdminDashboard({
           </CardHeader>
           <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 space-y-2 sm:space-y-3">
             <Button
-              onClick={onExportData}
+              onClick={() => requireAuthentication('export')}
               disabled={isLoading}
               variant="outline"
               className="w-full"
@@ -272,7 +323,7 @@ export function AdminDashboard({
               Export Data
             </Button>
             <Button
-              onClick={() => setShowResetDialog(true)}
+              onClick={() => requireAuthentication('reset')}
               disabled={isLoading}
               variant="outline"
               className="w-full text-red-600 border-red-300 hover:bg-red-50"
@@ -529,6 +580,53 @@ export function AdminDashboard({
               data-testid="button-confirm-manual-winner"
             >
               Set Winner
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Admin Password Dialog */}
+      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Admin Authentication Required</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <p className="text-gray-600">
+              This action requires admin authentication. Please enter the admin password to continue.
+            </p>
+            <div>
+              <Label htmlFor="admin-password">Admin Password</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="Enter admin password"
+                className="mt-1"
+                data-testid="input-admin-password"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handlePasswordSubmit();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => {
+              setShowPasswordDialog(false);
+              setAdminPassword("");
+              setPendingAction(null);
+            }}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handlePasswordSubmit}
+              disabled={!adminPassword.trim()}
+              data-testid="button-submit-password"
+            >
+              Authenticate
             </Button>
           </DialogFooter>
         </DialogContent>
