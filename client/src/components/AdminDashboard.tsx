@@ -302,7 +302,7 @@ export function AdminDashboard({
               <p className="text-sm">Winners will appear here after rounds are completed</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[400px] overflow-y-auto">
               {winners.map((roundWinner) => (
                 <div
                   key={roundWinner.id}
