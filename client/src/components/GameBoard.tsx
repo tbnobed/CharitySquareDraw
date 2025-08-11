@@ -131,11 +131,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               data-testid={`square-${number}`}
               onClick={() => handleSquareClick(number)}
               disabled={isDisabled || readonly}
-              className={`aspect-square flex items-center justify-center ${
-                readonly 
-                  ? 'font-medium text-xs sm:text-sm' 
-                  : 'font-semibold text-xs sm:text-sm'
-              } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
+              className="gap-2 whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 aspect-square flex items-center justify-center font-semibold text-xs sm:text-sm rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-green-500 text-white hover:bg-green-600 active:scale-95 pl-[0px] pr-[0px]"
               style={{ 
                 // Mobile: smaller sizes for 16:9, Desktop: original sizes
                 minHeight: readonly 
@@ -155,7 +151,6 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         })}
         </div>
       </div>
-      
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4 text-xs sm:text-sm">
           <div className="flex items-center space-x-1 sm:space-x-2">
