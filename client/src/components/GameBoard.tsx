@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { type Square } from "@shared/schema";
 
@@ -11,6 +12,14 @@ interface GameBoardProps {
 }
 
 export function GameBoard({ squares, selectedSquares, otherSelections = [], onSquareSelect, readonly = false, layoutMode = 'real-world' }: GameBoardProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const getSquareStatus = (squareNumber: number) => {
     const square = squares.find(s => s.number === squareNumber);
     if (!square) return 'available';
@@ -73,10 +82,11 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         <div 
           className={`grid grid-cols-11 w-full ${
             readonly 
-              ? 'gap-2 sm:gap-3 lg:gap-4' 
-              : 'gap-2 sm:gap-3'
+              ? 'gap-1 sm:gap-3 lg:gap-4' 
+              : 'gap-1 sm:gap-3'
           }`} 
           data-testid="game-board"
+
         >
           {gridLayout.flat().map((cell, index) => {
           if (cell === "BONUS") {
@@ -89,15 +99,16 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     : 'font-semibold text-xs sm:text-sm'
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
+                  // Mobile: smaller sizes for 16:9, Desktop: original sizes
                   minHeight: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                    : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                   minWidth: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                    : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                   fontSize: readonly 
-                    ? 'clamp(8px, 2.5vw, 12px)' 
-                    : 'clamp(9px, 2.8vw, 14px)'
+                    ? isMobile ? 'clamp(7px, 2vw, 8px)' : 'clamp(8px, 2.5vw, 12px)'
+                    : isMobile ? 'clamp(8px, 2.2vw, 9px)' : 'clamp(9px, 2.8vw, 14px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -122,15 +133,16 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   : 'font-semibold text-xs sm:text-sm'
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
+                // Mobile: smaller sizes for 16:9, Desktop: original sizes
                 minHeight: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                  : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                 minWidth: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                  : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                 fontSize: readonly 
-                  ? 'clamp(11px, 3vw, 15px)' 
-                  : 'clamp(12px, 3.2vw, 17px)'
+                  ? isMobile ? 'clamp(9px, 2.5vw, 11px)' : 'clamp(11px, 3vw, 15px)'
+                  : isMobile ? 'clamp(10px, 2.8vw, 12px)' : 'clamp(12px, 3.2vw, 17px)'
               }}
             >
               {number}
