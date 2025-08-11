@@ -69,9 +69,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   const gridLayout = layoutMode === 'sequential' ? sequentialLayout : realWorldLayout;
 
   return (
-    <div className="space-y-3 sm:space-y-4 lg:space-y-6 w-full">
-      {/* Mobile container with aspect ratio optimization */}
-      <div className="w-full max-w-[100vw] overflow-hidden">
+    <div className="space-y-4 sm:space-y-6 w-full">
         <div 
           className={`grid grid-cols-11 w-full ${
             readonly 
@@ -92,11 +90,11 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   minHeight: readonly 
-                    ? 'clamp(24px, 8vw, 44px)' 
-                    : 'clamp(28px, 9vw, 52px)',
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
                   minWidth: readonly 
-                    ? 'clamp(24px, 8vw, 44px)' 
-                    : 'clamp(28px, 9vw, 52px)',
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
                   fontSize: readonly 
                     ? 'clamp(8px, 2.5vw, 12px)' 
                     : 'clamp(9px, 2.8vw, 14px)'
@@ -125,11 +123,11 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 minHeight: readonly 
-                  ? 'clamp(24px, 8vw, 44px)' 
-                  : 'clamp(28px, 9vw, 52px)',
+                  ? 'clamp(32px, 10vw, 44px)' 
+                  : 'clamp(36px, 11vw, 52px)',
                 minWidth: readonly 
-                  ? 'clamp(24px, 8vw, 44px)' 
-                  : 'clamp(28px, 9vw, 52px)',
+                  ? 'clamp(32px, 10vw, 44px)' 
+                  : 'clamp(36px, 11vw, 52px)',
                 fontSize: readonly 
                   ? 'clamp(11px, 3vw, 15px)' 
                   : 'clamp(12px, 3.2vw, 17px)'
@@ -139,7 +137,6 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             </Button>
           );
         })}
-        </div>
       </div>
       
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
