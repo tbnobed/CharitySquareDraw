@@ -51,6 +51,13 @@
   --spacing: 0.25rem;
 }
 
+/* Mobile-specific game board gap spacing */
+@media (max-width: 640px) {
+  [data-testid="game-board"] {
+    gap: 0.75rem !important; /* 12px - larger gap for mobile only */
+  }
+}
+
 .dark {
   --background: hsl(0 0% 0%);
   --foreground: hsl(200 6.6667% 91.1765%);
