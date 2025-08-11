@@ -103,8 +103,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   maxHeight: readonly ? '44px' : '52px',
                   maxWidth: readonly ? '44px' : '52px',
                   fontSize: readonly 
-                    ? 'clamp(5px, 1.2vw, 10px)' 
-                    : 'clamp(6px, 1.4vw, 12px)'
+                    ? 'clamp(7px, 1.8vw, 15px)' 
+                    : 'clamp(8px, 2vw, 17px)'
                 }}
                 data-testid="bonus-square"
               >
