@@ -459,6 +459,14 @@ export function AdminDashboard({
               <li>All square reservations and sales</li>
               <li>Revenue tracking</li>
             </ul>
+            <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md p-3">
+              <p className="text-blue-800 text-sm font-medium">
+                📊 Automatic Backup
+              </p>
+              <p className="text-blue-700 text-sm mt-1">
+                All current data will be automatically exported as a CSV file before the reset.
+              </p>
+            </div>
             <p className="mt-3 text-red-600 font-medium">
               This action cannot be undone!
             </p>

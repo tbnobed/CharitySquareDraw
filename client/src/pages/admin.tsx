@@ -157,13 +157,26 @@ export default function AdminPage() {
     },
   });
 
-  // Reset system mutation
+  // Reset system mutation with auto export
   const resetSystemMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/reset-system'),
+    mutationFn: async () => {
+      // First, automatically export all data before reset
+      try {
+        await handleExportData();
+        // Small delay to ensure export completes
+        await new Promise(resolve => setTimeout(resolve, 500));
+      } catch (error) {
+        console.error('Export before reset failed:', error);
+        // Continue with reset even if export fails
+      }
+      
+      // Then perform the reset
+      return apiRequest('POST', '/api/reset-system');
+    },
     onSuccess: () => {
       toast({
         title: "System Reset Complete",
-        description: "System has been reset back to Round #1!",
+        description: "Data exported and system reset back to Round #1!",
       });
       refetchGame();
       refetchStats();

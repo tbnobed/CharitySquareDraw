@@ -49,6 +49,7 @@ Preferred communication style: Simple, everyday language.
 ### API Architecture
 - **RESTful Endpoints**: Standard REST API for CRUD operations
 - **Marketing Endpoints**: Specialized endpoints for participant data export, winner tracking, and historical analysis
+- **Export Features**: Enhanced multi-round CSV export with automatic backup before system reset
 - **Admin Management**: Game round completion, new round creation, and comprehensive winner management
 - **Real-time Updates**: WebSocket endpoints for live board updates
 - **Error Handling**: Centralized error handling with proper HTTP status codes
