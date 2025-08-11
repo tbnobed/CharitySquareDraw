@@ -109,10 +109,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     : 'clamp(8px, 2vw, 17px)'
                 }}
               >
-                <span className="leading-none text-center whitespace-nowrap overflow-hidden">
-                  <span className="hidden sm:inline">BONUS</span>
-                  <span className="sm:hidden">BON</span>
-                </span>
+                ★
               </Button>
             );
           }
