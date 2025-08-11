@@ -185,7 +185,7 @@ export default function ReceiptPage() {
                   ))}
                 </div>
                 <div className="text-sm text-blue-700">
-                  <p><strong>{participant.squares.length}</strong> squares at <strong>${pricePerSquare.toFixed(2)}</strong> each</p>
+                  <p><strong>{participant.squares.length}</strong> squares at <strong>${(pricePerSquare / 100).toFixed(2)}</strong> each</p>
                 </div>
               </div>
             </div>
