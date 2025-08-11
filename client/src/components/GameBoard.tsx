@@ -45,17 +45,55 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
     onSquareSelect?.(squareNumber);
   };
 
+  // Define the exact grid layout from the image
+  const gridLayout = [
+    [59, 15, 26, 3, 25, 6, 17, 53, 30, 5, 62],
+    [55, 33, 44, 16, 39, 13, 36, 48, 45, 20, 57],
+    [61, 46, 9, 51, 58, "BONUS", 64, 19, 12, 10, 60],
+    [2, 28, 34, 50, 40, 24, 42, 27, 31, 35, 54],
+    [4, 32, 43, 38, 21, 37, 23, 49, 7, 41, 63],
+    [65, 8, 1, 11, 52, 47, 18, 29, 22, 14, 56]
+  ];
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div 
-        className={`grid grid-cols-7 sm:grid-cols-10 ${
+        className={`grid grid-cols-11 ${
           readonly 
             ? 'gap-1 sm:gap-2 lg:gap-3' 
             : 'gap-1 sm:gap-2'
         }`} 
         data-testid="game-board"
       >
-        {Array.from({ length: 65 }, (_, i) => i + 1).map(number => {
+        {gridLayout.flat().map((cell, index) => {
+          if (cell === "BONUS") {
+            return (
+              <div
+                key="bonus"
+                className={`aspect-square flex items-center justify-center ${
+                  readonly 
+                    ? 'font-medium text-xs sm:text-sm' 
+                    : 'font-semibold text-xs sm:text-sm'
+                } rounded-md sm:rounded-lg bg-purple-600 text-white cursor-not-allowed`}
+                style={{ 
+                  minHeight: readonly 
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
+                  minWidth: readonly 
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
+                  fontSize: readonly 
+                    ? 'clamp(8px, 2.5vw, 12px)' 
+                    : 'clamp(9px, 2.8vw, 14px)'
+                }}
+                data-testid="bonus-square"
+              >
+                BONUS
+              </div>
+            );
+          }
+
+          const number = cell as number;
           const status = getSquareStatus(number);
           const isDisabled = status === 'sold' || status === 'reserved';
           
@@ -89,7 +127,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
       </div>
       
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-xs sm:text-sm">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4 text-xs sm:text-sm">
           <div className="flex items-center space-x-1 sm:space-x-2">
             <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded"></div>
             <span className="text-gray-600">Available</span>
@@ -97,6 +135,10 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
           <div className="flex items-center space-x-1 sm:space-x-2">
             <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded"></div>
             <span className="text-gray-600">Sold</span>
+          </div>
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-purple-600 rounded"></div>
+            <span className="text-gray-600">Bonus</span>
           </div>
           {!readonly && (
             <>
