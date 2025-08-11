@@ -285,6 +285,74 @@ export function AdminDashboard({
         </Card>
       </div>
 
+      {/* Round Winners Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-yellow-600" />
+            Round Winners History
+            {winnersLoading && <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {winners.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <Trophy className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+              <p>No completed rounds with winners yet</p>
+              <p className="text-sm">Winners will appear here after rounds are completed</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {winners.map((roundWinner) => (
+                <div
+                  key={roundWinner.id}
+                  className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4"
+                  data-testid={`winner-round-${roundWinner.roundNumber}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                        {roundWinner.roundNumber}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100" data-testid={`winner-name-${roundWinner.roundNumber}`}>
+                          {roundWinner.winner?.name || 'Unknown Winner'}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Square #{roundWinner.winnerSquare}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
+                        <DollarSign className="w-4 h-4" />
+                        <span className="font-bold" data-testid={`winner-pot-${roundWinner.roundNumber}`}>
+                          {formatCurrency(roundWinner.totalRevenue)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        <Calendar className="w-3 h-3" />
+                        <span data-testid={`winner-date-${roundWinner.roundNumber}`}>
+                          {roundWinner.completedAt ? new Date(roundWinner.completedAt).toLocaleDateString() : 'Unknown Date'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {roundWinner.winner && (
+                    <div className="mt-2 pt-2 border-t border-yellow-200 dark:border-yellow-700">
+                      <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                        <span>📧 {roundWinner.winner.email}</span>
+                        <span>📞 {formatPhone(roundWinner.winner.phone)}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Mobile-First Bottom Section */}
       <div className="grid lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
         {/* Game Board Preview - Full Width on Mobile */}
@@ -375,74 +443,6 @@ export function AdminDashboard({
           </Card>
         </div>
       </div>
-
-      {/* Round Winners Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-yellow-600" />
-            Round Winners History
-            {winnersLoading && <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {winners.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <Trophy className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>No completed rounds with winners yet</p>
-              <p className="text-sm">Winners will appear here after rounds are completed</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {winners.map((roundWinner) => (
-                <div
-                  key={roundWinner.id}
-                  className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4"
-                  data-testid={`winner-round-${roundWinner.roundNumber}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
-                        {roundWinner.roundNumber}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900 dark:text-gray-100" data-testid={`winner-name-${roundWinner.roundNumber}`}>
-                          {roundWinner.winner?.name || 'Unknown Winner'}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Square #{roundWinner.winnerSquare}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                        <DollarSign className="w-4 h-4" />
-                        <span className="font-bold" data-testid={`winner-pot-${roundWinner.roundNumber}`}>
-                          {formatCurrency(roundWinner.totalRevenue)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        <Calendar className="w-3 h-3" />
-                        <span data-testid={`winner-date-${roundWinner.roundNumber}`}>
-                          {roundWinner.completedAt ? new Date(roundWinner.completedAt).toLocaleDateString() : 'Unknown Date'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  {roundWinner.winner && (
-                    <div className="mt-2 pt-2 border-t border-yellow-200 dark:border-yellow-700">
-                      <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
-                        <span>📧 {roundWinner.winner.email}</span>
-                        <span>📞 {formatPhone(roundWinner.winner.phone)}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Reset System Dialog */}
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
