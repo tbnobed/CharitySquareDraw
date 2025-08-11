@@ -71,10 +71,10 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   return (
     <div className="space-y-4 sm:space-y-6 w-full">
       <div 
-        className={`grid grid-cols-11 w-full ${
+        className={`grid grid-cols-11 w-full max-w-full overflow-hidden ${
           readonly 
-            ? 'gap-2 sm:gap-3 lg:gap-4' 
-            : 'gap-2 sm:gap-3'
+            ? 'gap-1 sm:gap-2 md:gap-3 lg:gap-4' 
+            : 'gap-1 sm:gap-2 md:gap-3'
         }`} 
         data-testid="game-board"
       >
@@ -90,14 +90,14 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   minHeight: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? 'clamp(24px, 6vw, 44px)' 
+                    : 'clamp(28px, 7vw, 52px)',
                   minWidth: readonly 
-                    ? 'clamp(32px, 10vw, 44px)' 
-                    : 'clamp(36px, 11vw, 52px)',
+                    ? 'clamp(24px, 6vw, 44px)' 
+                    : 'clamp(28px, 7vw, 52px)',
                   fontSize: readonly 
-                    ? 'clamp(8px, 2.5vw, 12px)' 
-                    : 'clamp(9px, 2.8vw, 14px)'
+                    ? 'clamp(7px, 1.8vw, 12px)' 
+                    : 'clamp(8px, 2vw, 14px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -123,14 +123,14 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 minHeight: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? 'clamp(24px, 6vw, 44px)' 
+                  : 'clamp(28px, 7vw, 52px)',
                 minWidth: readonly 
-                  ? 'clamp(32px, 10vw, 44px)' 
-                  : 'clamp(36px, 11vw, 52px)',
+                  ? 'clamp(24px, 6vw, 44px)' 
+                  : 'clamp(28px, 7vw, 52px)',
                 fontSize: readonly 
-                  ? 'clamp(11px, 3vw, 15px)' 
-                  : 'clamp(12px, 3.2vw, 17px)'
+                  ? 'clamp(8px, 2.2vw, 15px)' 
+                  : 'clamp(10px, 2.5vw, 17px)'
               }}
             >
               {number}
@@ -150,7 +150,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             <span className="text-gray-600">Sold</span>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
-            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-purple-600 rounded"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-600 rounded"></div>
             <span className="text-gray-600">Bonus</span>
           </div>
           {!readonly && (

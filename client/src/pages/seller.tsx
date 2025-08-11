@@ -421,15 +421,17 @@ export default function SellerPage() {
                 </div>
                 
                 {/* Mobile-Optimized Game Board */}
-                <div className="w-full">
-                  <GameBoard
-                    squares={squares}
-                    selectedSquares={selectedSquares}
-                    otherSelections={otherSelections}
-                    onSquareSelect={handleSquareSelect}
-                    readonly={gameData?.gameRound?.status === 'completed'}
-                    layoutMode={layoutMode}
-                  />
+                <div className="w-full overflow-hidden">
+                  <div className="max-w-full">
+                    <GameBoard
+                      squares={squares}
+                      selectedSquares={selectedSquares}
+                      otherSelections={otherSelections}
+                      onSquareSelect={handleSquareSelect}
+                      readonly={gameData?.gameRound?.status === 'completed'}
+                      layoutMode={layoutMode}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
