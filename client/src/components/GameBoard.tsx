@@ -88,8 +88,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 key="bonus"
                 className={`aspect-square flex items-center justify-center ${
                   readonly 
-                    ? 'font-medium text-xs sm:text-sm' 
-                    : 'font-semibold text-xs sm:text-sm'
+                    ? 'font-bold text-xs sm:text-sm' 
+                    : 'font-bold text-xs sm:text-sm'
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   width: readonly 
@@ -103,12 +103,15 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   maxHeight: readonly ? '44px' : '52px',
                   maxWidth: readonly ? '44px' : '52px',
                   fontSize: readonly 
-                    ? 'clamp(6px, 1.5vw, 12px)' 
-                    : 'clamp(7px, 1.8vw, 14px)'
+                    ? 'clamp(5px, 1.2vw, 10px)' 
+                    : 'clamp(6px, 1.4vw, 12px)'
                 }}
                 data-testid="bonus-square"
               >
-                BONUS
+                <span className="leading-none text-center whitespace-nowrap overflow-hidden">
+                  <span className="hidden sm:inline">BONUS</span>
+                  <span className="sm:hidden">BON</span>
+                </span>
               </div>
             );
           }
