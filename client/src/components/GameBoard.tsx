@@ -101,7 +101,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 }}
                 data-testid="bonus-square"
               >
-                BONUS
+                ★
               </div>
             );
           }
@@ -150,8 +150,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             <span className="text-gray-600">Sold</span>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
-            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-purple-600 rounded"></div>
-            <span className="text-gray-600">Bonus</span>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-600 rounded"></div>
+            <span className="text-gray-600">★ Bonus</span>
           </div>
           {!readonly && (
             <>
