@@ -56,16 +56,20 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   ];
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div 
-        className={`grid grid-cols-11 ${
-          readonly 
-            ? 'gap-1 sm:gap-2 lg:gap-3' 
-            : 'gap-1 sm:gap-2'
-        }`} 
-        data-testid="game-board"
-      >
-        {gridLayout.flat().map((cell, index) => {
+    <div className="space-y-4 sm:space-y-6 w-full">
+      <div className="w-full overflow-x-auto">
+        <div 
+          className={`grid grid-cols-11 ${
+            readonly 
+              ? 'gap-2 sm:gap-3 lg:gap-4' 
+              : 'gap-2 sm:gap-3'
+          } min-w-fit mx-auto`} 
+          data-testid="game-board"
+          style={{
+            minWidth: readonly ? '680px' : '720px'
+          }}
+        >
+          {gridLayout.flat().map((cell, index) => {
           if (cell === "BONUS") {
             return (
               <div
@@ -124,6 +128,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             </Button>
           );
         })}
+        </div>
       </div>
       
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
