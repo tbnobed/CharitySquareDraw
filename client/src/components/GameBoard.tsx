@@ -71,14 +71,11 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
   return (
     <div className="space-y-4 sm:space-y-6 w-full">
       <div 
-        className={`grid grid-cols-11 w-full max-w-full overflow-hidden ${
+        className={`grid grid-cols-11 w-full ${
           readonly 
-            ? 'gap-0.5 sm:gap-1 md:gap-2 lg:gap-3' 
-            : 'gap-0.5 sm:gap-1 md:gap-2'
+            ? 'gap-2 sm:gap-3 lg:gap-4' 
+            : 'gap-2 sm:gap-3'
         }`} 
-        style={{
-          containerType: 'inline-size'
-        }}
         data-testid="game-board"
       >
           {gridLayout.flat().map((cell, index) => {
@@ -86,33 +83,25 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             return (
               <div
                 key="bonus"
-                data-testid="bonus-square"
                 className={`aspect-square flex items-center justify-center ${
                   readonly 
                     ? 'font-medium text-xs sm:text-sm' 
                     : 'font-semibold text-xs sm:text-sm'
-                } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-red-600 text-white cursor-not-allowed`}
+                } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
-                  width: readonly 
-                    ? 'calc((95vw - 10 * 0.125rem) / 11)' 
-                    : 'calc((100% - 10 * 0.125rem) / 11)',
-                  height: readonly 
-                    ? 'calc((95vw - 10 * 0.125rem) / 11)' 
-                    : 'calc((100% - 10 * 0.125rem) / 11)',
-                  minHeight: '20px',
-                  minWidth: '20px',
-                  maxHeight: readonly ? '80px' : '52px',
-                  maxWidth: readonly ? '80px' : '52px',
+                  minHeight: readonly 
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
+                  minWidth: readonly 
+                    ? 'clamp(32px, 10vw, 44px)' 
+                    : 'clamp(36px, 11vw, 52px)',
                   fontSize: readonly 
-                    ? 'clamp(7px, 1.8vw, 15px)' 
-                    : 'clamp(8px, 2vw, 17px)',
-                  lineHeight: '1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                    ? 'clamp(8px, 2.5vw, 12px)' 
+                    : 'clamp(9px, 2.8vw, 14px)'
                 }}
+                data-testid="bonus-square"
               >
-                ★
+                BONUS
               </div>
             );
           }
@@ -133,19 +122,15 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   : 'font-semibold text-xs sm:text-sm'
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                width: readonly 
-                  ? 'calc((95vw - 10 * 0.125rem) / 11)' 
-                  : 'calc((100% - 10 * 0.125rem) / 11)',
-                height: readonly 
-                  ? 'calc((95vw - 10 * 0.125rem) / 11)' 
-                  : 'calc((100% - 10 * 0.125rem) / 11)',
-                minHeight: '20px',
-                minWidth: '20px',
-                maxHeight: readonly ? '80px' : '52px',
-                maxWidth: readonly ? '80px' : '52px',
+                minHeight: readonly 
+                  ? 'clamp(32px, 10vw, 44px)' 
+                  : 'clamp(36px, 11vw, 52px)',
+                minWidth: readonly 
+                  ? 'clamp(32px, 10vw, 44px)' 
+                  : 'clamp(36px, 11vw, 52px)',
                 fontSize: readonly 
-                  ? 'clamp(7px, 1.8vw, 15px)' 
-                  : 'clamp(8px, 2vw, 17px)'
+                  ? 'clamp(11px, 3vw, 15px)' 
+                  : 'clamp(12px, 3.2vw, 17px)'
               }}
             >
               {number}
@@ -165,7 +150,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             <span className="text-gray-600">Sold</span>
           </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
-            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-600 rounded"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-purple-600 rounded"></div>
             <span className="text-gray-600">Bonus</span>
           </div>
           {!readonly && (

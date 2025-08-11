@@ -398,7 +398,7 @@ export default function SellerPage() {
           {/* Game Board - Mobile Optimized */}
           <div className="lg:col-span-3 lg:order-1">
             <Card>
-              <CardContent className="p-2 sm:p-3 md:p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 sm:mb-4 space-y-2 sm:space-y-0">
                   <h2 className="text-lg sm:text-xl font-bold text-gray-900">Select Squares</h2>
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
@@ -421,17 +421,15 @@ export default function SellerPage() {
                 </div>
                 
                 {/* Mobile-Optimized Game Board */}
-                <div className="w-full overflow-hidden">
-                  <div className="w-full max-w-full" style={{ maxWidth: '100%' }}>
-                    <GameBoard
-                      squares={squares}
-                      selectedSquares={selectedSquares}
-                      otherSelections={otherSelections}
-                      onSquareSelect={handleSquareSelect}
-                      readonly={gameData?.gameRound?.status === 'completed'}
-                      layoutMode={layoutMode}
-                    />
-                  </div>
+                <div className="w-full">
+                  <GameBoard
+                    squares={squares}
+                    selectedSquares={selectedSquares}
+                    otherSelections={otherSelections}
+                    onSquareSelect={handleSquareSelect}
+                    readonly={gameData?.gameRound?.status === 'completed'}
+                    layoutMode={layoutMode}
+                  />
                 </div>
               </CardContent>
             </Card>
