@@ -74,7 +74,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   readonly 
                     ? 'font-medium text-xs sm:text-sm' 
                     : 'font-semibold text-xs sm:text-sm'
-                } rounded-md sm:rounded-lg bg-purple-600 text-white cursor-not-allowed`}
+                } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   minHeight: readonly 
                     ? 'clamp(32px, 10vw, 44px)' 
