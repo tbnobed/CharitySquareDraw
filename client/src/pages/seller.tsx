@@ -349,7 +349,7 @@ export default function SellerPage() {
       </header>
 
       {/* Main Content - Mobile-First Layout */}
-      <div className="px-3 sm:px-4 py-3 sm:py-4 max-w-6xl mx-auto w-full">
+      <div className="px-3 sm:px-4 py-3 sm:py-4 max-w-screen-xl mx-auto w-full">
         {/* Winner Display - Compact for Mobile */}
         <WinnerDisplay className="mb-3 sm:mb-4" />
         
