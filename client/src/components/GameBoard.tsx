@@ -104,8 +104,12 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   maxHeight: readonly ? '44px' : '52px',
                   maxWidth: readonly ? '44px' : '52px',
                   fontSize: readonly 
-                    ? 'clamp(10px, 2.5vw, 18px)' 
-                    : 'clamp(12px, 3vw, 20px)'
+                    ? 'clamp(7px, 1.8vw, 15px)' 
+                    : 'clamp(8px, 2vw, 17px)',
+                  lineHeight: '1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 ★
