@@ -75,8 +75,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         <div 
           className={`grid grid-cols-11 w-full ${
             readonly 
-              ? 'gap-1 xs:gap-2 sm:gap-3 lg:gap-4' 
-              : 'gap-1 xs:gap-2 sm:gap-3'
+              ? 'gap-2 sm:gap-3 lg:gap-4' 
+              : 'gap-2 sm:gap-3'
           }`} 
           data-testid="game-board"
         >
@@ -92,14 +92,14 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
                   minHeight: readonly 
-                    ? 'clamp(24px, 7vw, 44px)' 
-                    : 'clamp(28px, 8vw, 52px)',
+                    ? 'clamp(24px, 8vw, 44px)' 
+                    : 'clamp(28px, 9vw, 52px)',
                   minWidth: readonly 
-                    ? 'clamp(24px, 7vw, 44px)' 
-                    : 'clamp(28px, 8vw, 52px)',
+                    ? 'clamp(24px, 8vw, 44px)' 
+                    : 'clamp(28px, 9vw, 52px)',
                   fontSize: readonly 
-                    ? 'clamp(10px, 2.5vw, 14px)' 
-                    : 'clamp(12px, 3vw, 16px)'
+                    ? 'clamp(8px, 2.5vw, 12px)' 
+                    : 'clamp(9px, 2.8vw, 14px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -125,14 +125,14 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
                 minHeight: readonly 
-                  ? 'clamp(24px, 7vw, 44px)' 
-                  : 'clamp(28px, 8vw, 52px)',
+                  ? 'clamp(24px, 8vw, 44px)' 
+                  : 'clamp(28px, 9vw, 52px)',
                 minWidth: readonly 
-                  ? 'clamp(24px, 7vw, 44px)' 
-                  : 'clamp(28px, 8vw, 52px)',
+                  ? 'clamp(24px, 8vw, 44px)' 
+                  : 'clamp(28px, 9vw, 52px)',
                 fontSize: readonly 
-                  ? 'clamp(10px, 2.5vw, 15px)' 
-                  : 'clamp(11px, 3vw, 17px)'
+                  ? 'clamp(11px, 3vw, 15px)' 
+                  : 'clamp(12px, 3.2vw, 17px)'
               }}
             >
               {number}
