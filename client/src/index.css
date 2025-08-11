@@ -54,7 +54,7 @@
 /* Mobile-specific game board gap spacing */
 @media (max-width: 640px) {
   [data-testid="game-board"] {
-    gap: 0.75rem !important; /* 12px - larger gap for mobile only */
+    gap: 1.25rem !important; /* 20px - much larger gap for mobile only */
   }
 }
 
