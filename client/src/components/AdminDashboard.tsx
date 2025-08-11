@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DollarSign, Users, Grid3x3, Percent, Trophy, RotateCcw, Download, Settings, RefreshCw, Trash2, Calendar } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { type GameStats, type Participant, type Square, type RoundWinner } from "@shared/schema";
 import { useQuery } from "@tanstack/react-query";
 import { GameBoard } from "./GameBoard";
@@ -500,6 +500,9 @@ export function AdminDashboard({
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Reset System to Round #1</DialogTitle>
+            <DialogDescription>
+              This will completely reset the system and clear all data.
+            </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <p className="text-gray-600">
@@ -542,6 +545,9 @@ export function AdminDashboard({
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Enter Manual Winner</DialogTitle>
+            <DialogDescription>
+              Enter the square number that the chicken selected as the winner.
+            </DialogDescription>
           </DialogHeader>
           <div className="py-4 space-y-4">
             <p className="text-gray-600">
@@ -590,6 +596,9 @@ export function AdminDashboard({
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Admin Authentication Required</DialogTitle>
+            <DialogDescription>
+              This action requires admin authentication. Please enter the admin password to continue.
+            </DialogDescription>
           </DialogHeader>
           <div className="py-4 space-y-4">
             <p className="text-gray-600">
