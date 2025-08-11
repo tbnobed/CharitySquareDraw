@@ -79,14 +79,18 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
 
   return (
     <div className="space-y-4 sm:space-y-6 w-full">
+      <div className="flex justify-center w-full">
         <div 
-          className={`grid grid-cols-11 w-full ${
+          className={`grid grid-cols-11 ${
             readonly 
               ? 'gap-1 sm:gap-3 lg:gap-4' 
               : 'gap-1 sm:gap-3'
           }`} 
           data-testid="game-board"
-
+          style={{
+            // Constrain width on mobile for better centering
+            maxWidth: isMobile ? '95vw' : '100%'
+          }}
         >
           {gridLayout.flat().map((cell, index) => {
           if (cell === "BONUS") {
@@ -149,6 +153,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             </Button>
           );
         })}
+        </div>
       </div>
       
       <div className="border-t border-gray-200 pt-3 sm:pt-4">
