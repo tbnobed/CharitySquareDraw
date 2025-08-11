@@ -97,11 +97,7 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
             return (
               <div
                 key="bonus"
-                className={`aspect-square flex items-center justify-center ${
-                  readonly 
-                    ? 'font-medium text-xs sm:text-sm' 
-                    : 'font-semibold text-xs sm:text-sm'
-                } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
+                className="aspect-square flex items-center justify-center font-semibold text-xs sm:text-sm rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed ml-[-1px] mr-[-1px] mt-[3px] mb-[3px] pt-[0px] pb-[0px] pl-[0px] pr-[0px]"
                 style={{ 
                   // Mobile: smaller sizes for 16:9, Desktop: original sizes
                   minHeight: readonly 
@@ -115,9 +111,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     : isMobile ? 'clamp(8px, 2.2vw, 9px)' : 'clamp(9px, 2.8vw, 14px)'
                 }}
                 data-testid="bonus-square"
-              >
-                ★
-              </div>
+              >★
+                              </div>
             );
           }
 
