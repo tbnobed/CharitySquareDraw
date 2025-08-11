@@ -379,7 +379,7 @@ export default function AdminPage() {
 
       {/* Main Content - Mobile-First Layout */}
       <div className="flex-1 overflow-y-auto">
-        <div className="px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6 w-full">
+        <div className="px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6 max-w-5xl mx-auto w-full">
           {/* Winner Display - Compact for Mobile */}
           <WinnerDisplay className="mb-3 sm:mb-4 lg:mb-6" />
           
