@@ -84,13 +84,15 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
           {gridLayout.flat().map((cell, index) => {
           if (cell === "BONUS") {
             return (
-              <div
+              <Button
                 key="bonus"
+                data-testid="bonus-square"
+                disabled={true}
                 className={`aspect-square flex items-center justify-center ${
                   readonly 
-                    ? 'font-bold text-xs sm:text-sm' 
-                    : 'font-bold text-xs sm:text-sm'
-                } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
+                    ? 'font-medium text-xs sm:text-sm' 
+                    : 'font-semibold text-xs sm:text-sm'
+                } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation bg-red-600 text-white cursor-not-allowed hover:bg-red-600 border-0 p-0`}
                 style={{ 
                   width: readonly 
                     ? 'calc((100% - 10 * 0.125rem) / 11)' 
@@ -106,13 +108,12 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     ? 'clamp(7px, 1.8vw, 15px)' 
                     : 'clamp(8px, 2vw, 17px)'
                 }}
-                data-testid="bonus-square"
               >
                 <span className="leading-none text-center whitespace-nowrap overflow-hidden">
                   <span className="hidden sm:inline">BONUS</span>
                   <span className="sm:hidden">BON</span>
                 </span>
-              </div>
+              </Button>
             );
           }
 
