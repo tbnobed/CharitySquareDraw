@@ -82,8 +82,8 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
         <div 
           className={`grid grid-cols-11 w-full ${
             readonly 
-              ? 'gap-2 sm:gap-3 lg:gap-4' 
-              : 'gap-2 sm:gap-3'
+              ? 'gap-1 sm:gap-3 lg:gap-4' 
+              : 'gap-1 sm:gap-3'
           }`} 
           data-testid="game-board"
 
@@ -99,16 +99,16 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                     : 'font-semibold text-xs sm:text-sm'
                 } rounded-md sm:rounded-lg bg-red-600 text-white cursor-not-allowed`}
                 style={{ 
-                  // Mobile: 5% smaller sizes for 16:9, Desktop: original sizes
+                  // Mobile: smaller sizes for 16:9, Desktop: original sizes
                   minHeight: readonly 
-                    ? isMobile ? 'clamp(21px, 6.6vw, 30px)' : 'clamp(32px, 10vw, 44px)'
-                    : isMobile ? 'clamp(25px, 7.6vw, 34px)' : 'clamp(36px, 11vw, 52px)',
+                    ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                    : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                   minWidth: readonly 
-                    ? isMobile ? 'clamp(21px, 6.6vw, 30px)' : 'clamp(32px, 10vw, 44px)'
-                    : isMobile ? 'clamp(25px, 7.6vw, 34px)' : 'clamp(36px, 11vw, 52px)',
+                    ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                    : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                   fontSize: readonly 
-                    ? isMobile ? 'clamp(6px, 1.9vw, 7px)' : 'clamp(8px, 2.5vw, 12px)'
-                    : isMobile ? 'clamp(7px, 2.1vw, 8px)' : 'clamp(9px, 2.8vw, 14px)'
+                    ? isMobile ? 'clamp(7px, 2vw, 8px)' : 'clamp(8px, 2.5vw, 12px)'
+                    : isMobile ? 'clamp(8px, 2.2vw, 9px)' : 'clamp(9px, 2.8vw, 14px)'
                 }}
                 data-testid="bonus-square"
               >
@@ -133,16 +133,16 @@ export function GameBoard({ squares, selectedSquares, otherSelections = [], onSq
                   : 'font-semibold text-xs sm:text-sm'
               } rounded-md sm:rounded-lg transition-all duration-200 touch-manipulation ${getSquareClassName(status)}`}
               style={{ 
-                // Mobile: 5% smaller sizes for 16:9, Desktop: original sizes
+                // Mobile: smaller sizes for 16:9, Desktop: original sizes
                 minHeight: readonly 
-                  ? isMobile ? 'clamp(21px, 6.6vw, 30px)' : 'clamp(32px, 10vw, 44px)'
-                  : isMobile ? 'clamp(25px, 7.6vw, 34px)' : 'clamp(36px, 11vw, 52px)',
+                  ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                  : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                 minWidth: readonly 
-                  ? isMobile ? 'clamp(21px, 6.6vw, 30px)' : 'clamp(32px, 10vw, 44px)'
-                  : isMobile ? 'clamp(25px, 7.6vw, 34px)' : 'clamp(36px, 11vw, 52px)',
+                  ? isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(32px, 10vw, 44px)'
+                  : isMobile ? 'clamp(26px, 8vw, 36px)' : 'clamp(36px, 11vw, 52px)',
                 fontSize: readonly 
-                  ? isMobile ? 'clamp(8px, 2.4vw, 10px)' : 'clamp(11px, 3vw, 15px)'
-                  : isMobile ? 'clamp(9px, 2.7vw, 11px)' : 'clamp(12px, 3.2vw, 17px)'
+                  ? isMobile ? 'clamp(9px, 2.5vw, 11px)' : 'clamp(11px, 3vw, 15px)'
+                  : isMobile ? 'clamp(10px, 2.8vw, 12px)' : 'clamp(12px, 3.2vw, 17px)'
               }}
             >
               {number}

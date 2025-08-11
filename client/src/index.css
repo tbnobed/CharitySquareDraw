@@ -51,25 +51,6 @@
   --spacing: 0.25rem;
 }
 
-/* Mobile-specific game board gap spacing */
-@media (max-width: 640px) {
-  [data-testid="game-board"] {
-    grid-gap: 6px !important; /* 6px gap between squares on mobile */
-    gap: 6px !important;
-  }
-  
-  /* Make squares smaller on mobile to fit with gaps */
-  [data-testid="game-board"] > * {
-    min-width: clamp(18px, 6vw, 28px) !important;
-    min-height: clamp(18px, 6vw, 28px) !important;
-  }
-  
-  [data-testid="bonus-square"] {
-    min-width: clamp(18px, 6vw, 28px) !important;
-    min-height: clamp(18px, 6vw, 28px) !important;
-  }
-}
-
 .dark {
   --background: hsl(0 0% 0%);
   --foreground: hsl(200 6.6667% 91.1765%);
