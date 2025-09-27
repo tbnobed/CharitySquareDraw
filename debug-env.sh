@@ -20,7 +20,7 @@ fi
 # Check if environment variables are set in current shell
 echo "🔍 Environment variables in current shell:"
 echo "VITE_VENMO_USERNAME: ${VITE_VENMO_USERNAME:-'(not set)'}"
-echo "VITE_ZELLE_EMAIL: ${VITE_ZELLE_EMAIL:-'(not set)'}"
+echo "VITE_PAYPAL_ME_USERNAME: ${VITE_PAYPAL_ME_USERNAME:-'(not set)'}"
 echo ""
 
 # Test what Docker would see during build
@@ -29,13 +29,13 @@ if [ -f .env ]; then
     source .env
     echo "After loading .env:"
     echo "VITE_VENMO_USERNAME: ${VITE_VENMO_USERNAME:-'(not set)'}"
-    echo "VITE_ZELLE_EMAIL: ${VITE_ZELLE_EMAIL:-'(not set)'}"
+    echo "VITE_PAYPAL_ME_USERNAME: ${VITE_PAYPAL_ME_USERNAME:-'(not set)'}"
 else
     echo "Cannot test - no .env file found"
 fi
 
 echo ""
 echo "💡 Next steps:"
-echo "1. Create .env file with VITE_VENMO_USERNAME and VITE_ZELLE_EMAIL"
+echo "1. Create .env file with VITE_VENMO_USERNAME and VITE_PAYPAL_ME_USERNAME"
 echo "2. Run: ./build-docker.sh"
 echo "3. Check QR codes in payment modal"

@@ -14,7 +14,7 @@ DB_PASSWORD=your_secure_database_password
 
 # Payment Account Information (Required for QR codes)
 VITE_VENMO_USERNAME=this_is_a_test
-VITE_ZELLE_EMAIL=test_zelle_email@example.com
+VITE_PAYPAL_ME_USERNAME=test_paypal_username
 
 # Stripe Payment Configuration (Optional)
 STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
@@ -48,7 +48,7 @@ docker-compose up -d
 
 After rebuilding, your QR codes should show:
 - **Venmo**: `@this_is_a_test` (instead of `@nonprofitname`)
-- **Zelle**: `test_zelle_email@example.com` (instead of `nonprofit@email.com`)
+- **PayPal**: `test_paypal_username` (instead of `nonprofitname`)
 
 ## Why This Happens
 
@@ -65,7 +65,7 @@ Replace the test values with your actual payment accounts:
 ```bash
 # Real payment accounts
 VITE_VENMO_USERNAME=your_real_venmo_username
-VITE_ZELLE_EMAIL=your_real_zelle_email@domain.com
+VITE_PAYPAL_ME_USERNAME=your_real_paypal_username
 ```
 
 Then rebuild the Docker image to embed your real payment information.

@@ -19,7 +19,7 @@ source .env
 set +a
 
 # Check required variables
-required_vars=("VITE_VENMO_USERNAME" "VITE_ZELLE_EMAIL" "DB_PASSWORD")
+required_vars=("VITE_VENMO_USERNAME" "VITE_PAYPAL_ME_USERNAME" "DB_PASSWORD")
 missing_vars=()
 
 for var in "${required_vars[@]}"; do
@@ -37,7 +37,7 @@ fi
 
 echo "✅ Environment variables loaded successfully:"
 echo "   VITE_VENMO_USERNAME: $VITE_VENMO_USERNAME"
-echo "   VITE_ZELLE_EMAIL: $VITE_ZELLE_EMAIL"
+echo "   VITE_PAYPAL_ME_USERNAME: $VITE_PAYPAL_ME_USERNAME"
 
 # Build with docker-compose
 echo "🔨 Building Docker images..."

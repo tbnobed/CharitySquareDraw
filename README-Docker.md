@@ -11,7 +11,7 @@
    ```bash
    # Required payment account information
    VITE_VENMO_USERNAME=your_actual_venmo_username
-   VITE_ZELLE_EMAIL=your_actual_zelle_email@domain.com
+   VITE_PAYPAL_ME_USERNAME=your_actual_paypal_username
    
    # Database password
    DB_PASSWORD=your_secure_database_password
@@ -35,7 +35,7 @@
 
 ### Environment Variables in Docker
 
-The `VITE_` prefixed environment variables (Venmo username, Zelle email, Stripe public key) are **embedded during build time** into the frontend bundle. This means:
+The `VITE_` prefixed environment variables (Venmo username, PayPal username, Stripe public key) are **embedded during build time** into the frontend bundle. This means:
 
 - You must set these variables in your `.env` file **before** building the Docker image
 - Changes to these variables require rebuilding the Docker image
@@ -67,14 +67,14 @@ docker-compose up -d
 
 - **Database passwords**: Only visible to the backend container
 - **Stripe secret keys**: Only visible to the backend container  
-- **Venmo/Zelle info**: Embedded in frontend (visible to users, which is expected)
+- **Venmo/PayPal info**: Embedded in frontend (visible to users, which is expected)
 - **Stripe public key**: Embedded in frontend (designed to be public)
 
 ## Troubleshooting
 
 ### Environment Variables Not Working
 
-If your Venmo/Zelle information isn't showing up in QR codes:
+If your Venmo/PayPal information isn't showing up in QR codes:
 
 1. Check your `.env` file has the correct values
 2. Rebuild the Docker image: `./build-docker.sh`
