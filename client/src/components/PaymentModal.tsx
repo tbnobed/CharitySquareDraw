@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, QrCode, X } from "lucide-react";
-import { generateVenmoQR, generateZelleQR } from "@/lib/qr-utils";
+import { generateVenmoQR, generatePayPalQR } from "@/lib/qr-utils";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -25,16 +25,16 @@ export function PaymentModal({
   isConfirming 
 }: PaymentModalProps) {
   const [venmoQR, setVenmoQR] = useState<string>("");
-  const [zelleQR, setZelleQR] = useState<string>("");
+  const [paypalQR, setPaypalQR] = useState<string>("");
 
   const handleGenerateVenmoQR = async () => {
     const qr = await generateVenmoQR(amount, `Square Game - ${squares.join(", ")}`);
     setVenmoQR(qr);
   };
 
-  const handleGenerateZelleQR = async () => {
-    const qr = await generateZelleQR(amount, `Square Game - ${squares.join(", ")}`);
-    setZelleQR(qr);
+  const handleGeneratePayPalQR = async () => {
+    const qr = await generatePayPalQR(amount, `Square Game - ${squares.join(", ")}`);
+    setPaypalQR(qr);
   };
 
   return (
@@ -93,27 +93,27 @@ export function PaymentModal({
             <div className="border border-gray-200 rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                    <span className="text-green-600 font-bold text-sm">Z</span>
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                    <span className="text-blue-600 font-bold text-sm">P</span>
                   </div>
-                  <span className="font-medium text-gray-900">Zelle</span>
+                  <span className="font-medium text-gray-900">PayPal</span>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleGenerateZelleQR}
-                  data-testid="button-zelle-qr"
+                  onClick={handleGeneratePayPalQR}
+                  data-testid="button-paypal-qr"
                 >
                   <QrCode className="mr-2 h-4 w-4" />
                   Generate QR
                 </Button>
               </div>
               
-              {zelleQR && (
-                <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="zelle-qr">
-                  <img src={zelleQR} alt="Zelle QR Code" className="w-32 h-32 mx-auto mb-3" />
-                  <p className="text-sm text-gray-600">Scan to pay with Zelle</p>
-                  <p className="text-xs text-gray-500 mt-1">{import.meta.env.VITE_ZELLE_EMAIL || 'zelle@email.com'}</p>
+              {paypalQR && (
+                <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="paypal-qr">
+                  <img src={paypalQR} alt="PayPal QR Code" className="w-32 h-32 mx-auto mb-3" />
+                  <p className="text-sm text-gray-600">Scan to pay with PayPal</p>
+                  <p className="text-xs text-gray-500 mt-1">@{import.meta.env.VITE_PAYPAL_ME_USERNAME || 'paypal-username'}</p>
                 </div>
               )}
             </div>

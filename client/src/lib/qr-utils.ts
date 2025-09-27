@@ -11,14 +11,14 @@ export async function generateVenmoQR(amount: number, note: string, username?: s
   }
 }
 
-export async function generateZelleQR(amount: number, memo: string, email?: string): Promise<string> {
-  const zelleEmail = email || import.meta.env.VITE_ZELLE_EMAIL || 'nonprofit@email.com';
-  // Zelle doesn't have a standard URL scheme, so we'll create a generic payment QR
-  const zelleData = `mailto:${zelleEmail}?subject=Zelle Payment Request&body=Amount: $${amount}%0AMemo: ${encodeURIComponent(memo)}`;
+export async function generatePayPalQR(amount: number, memo: string, username?: string): Promise<string> {
+  const paypalUsername = username || import.meta.env.VITE_PAYPAL_ME_USERNAME || 'nonprofitname';
+  // PayPal.me URL format: https://paypal.me/username/amount
+  const paypalUrl = `https://paypal.me/${paypalUsername}/${(amount / 100).toFixed(2)}`;
   try {
-    return await QRCode.toDataURL(zelleData);
+    return await QRCode.toDataURL(paypalUrl);
   } catch (error) {
-    console.error('Error generating Zelle QR code:', error);
+    console.error('Error generating PayPal QR code:', error);
     return '';
   }
 }
