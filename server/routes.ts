@@ -7,6 +7,7 @@ import { eq, desc, sql } from "drizzle-orm";
 import { db } from "./db";
 import { z } from "zod";
 import { registerMarketingRoutes } from "./routes-marketing";
+import { emailService } from "./email-service";
 
 const clients = new Set<WebSocket>();
 
@@ -224,6 +225,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type: 'STATS_UPDATE',
         data: { totalRevenue: (currentRound?.totalRevenue || 0) + participant.totalAmount }
       });
+
+      // Send email receipt
+      if (currentRound) {
+        try {
+          await emailService.sendReceipt({
+            participant,
+            gameRound: currentRound,
+            totalAmount: participant.totalAmount,
+            squareNumbers: participant.squares,
+          });
+          console.log(`Receipt email sent to ${participant.email}`);
+        } catch (emailError) {
+          console.error('Failed to send receipt email:', emailError);
+          // Don't fail the payment confirmation if email fails
+        }
+      }
 
       res.json({ participant, squares });
     } catch (error) {
