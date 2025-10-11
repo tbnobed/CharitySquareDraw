@@ -82,7 +82,16 @@ export function PaymentModal({
               </div>
               
               {venmoQR && (
-                <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="venmo-qr">
+                <div className="bg-gray-50 rounded-lg p-6 text-center relative" data-testid="venmo-qr">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setVenmoQR("")}
+                    className="absolute top-2 right-2 h-6 w-6 p-0"
+                    data-testid="button-close-venmo-qr"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                   <img src={venmoQR} alt="Venmo QR Code" className="w-32 h-32 mx-auto mb-3" />
                   <p className="text-sm text-gray-600">Scan to pay with Venmo</p>
                   <p className="text-xs text-gray-500 mt-1">@{import.meta.env.VITE_VENMO_USERNAME || 'venmo-username'}</p>
@@ -110,7 +119,16 @@ export function PaymentModal({
               </div>
               
               {paypalQR && (
-                <div className="bg-gray-50 rounded-lg p-6 text-center" data-testid="paypal-qr">
+                <div className="bg-gray-50 rounded-lg p-6 text-center relative" data-testid="paypal-qr">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setPaypalQR("")}
+                    className="absolute top-2 right-2 h-6 w-6 p-0"
+                    data-testid="button-close-paypal-qr"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                   <img src={paypalQR} alt="PayPal QR Code" className="w-32 h-32 mx-auto mb-3" />
                   <p className="text-sm text-gray-600">Scan to pay with PayPal</p>
                   <p className="text-xs text-gray-500 mt-1">@{import.meta.env.VITE_PAYPAL_ME_USERNAME || 'paypal-username'}</p>
