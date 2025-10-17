@@ -35,11 +35,12 @@ Preferred communication style: Simple, everyday language.
 - **Fallback Storage**: In-memory storage implementation for development/testing environments
 
 ### Database Schema Design
-- **Game Rounds**: Manages multiple fundraising rounds with status tracking, winner recording, and completion timestamps
+- **Game Rounds**: Manages multiple fundraising rounds with status tracking, winner recording, completion timestamps, and configurable winner percentage (default 50%)
 - **Participants**: Stores participant information, contact details, payment status, and game round association for marketing purposes
 - **Squares**: Individual square entities with availability status, ownership tracking, and reservation timestamps
 - **Relationships**: Foreign key relationships between game rounds, participants, and squares
 - **Marketing Features**: Complete historical data retention for participant tracking, winner records, and fundraising analytics
+- **Winner Split Configuration**: Each game round has a configurable winner percentage (0-100%) that determines pot distribution between winner and charity
 
 ### Authentication and Authorization
 - **Session Management**: Express sessions with PostgreSQL session store (connect-pg-simple)
@@ -104,3 +105,30 @@ Preferred communication style: Simple, everyday language.
 
 ### Replit Integration
 - **Replit-specific Tools**: Development banner, runtime error modal, and cartographer for Replit environment optimization
+
+## Recent Updates
+
+### Winner Percentage Split Feature (October 2025)
+- **Configurable Split**: Admins can configure what percentage of the pot goes to the winner vs charity (default 50/50)
+- **Database Schema**: Added `winnerPercentage` field to `game_rounds` table with default value of 50
+- **Admin UI**: Added winner percentage control in admin dashboard with nullish coalescing to handle 0% edge case
+- **API Enhancement**: Updated winner endpoints to calculate and return `winnerAmount` and `charityAmount` based on percentage
+- **Display Updates**: Winner displays, toast notifications, and receipt pages now show the split amounts clearly
+- **Docker Integration**: Automated database migrations included in Docker deployment
+
+## Deployment
+
+### Docker Deployment
+- **Multi-stage Build**: Optimized Docker build with production bundle
+- **Automatic Migrations**: Database schema changes applied automatically on container startup via `docker-startup.sh`
+- **Health Checks**: Built-in health checks for both application and database
+- **Environment Variables**: Comprehensive environment configuration via `.env` file
+- **Persistent Storage**: PostgreSQL data and application logs persisted via Docker volumes
+- **Security**: Non-root user execution, secure session handling, and configurable admin password
+
+### Deployment Files
+- **Dockerfile**: Multi-stage build with TypeScript compilation and production bundling
+- **docker-compose.yml**: Service orchestration for app and PostgreSQL database
+- **docker-startup.sh**: Startup script that runs migrations before starting server
+- **.env.example**: Template for all required and optional environment variables
+- **DOCKER-DEPLOYMENT.md**: Complete deployment guide with troubleshooting
