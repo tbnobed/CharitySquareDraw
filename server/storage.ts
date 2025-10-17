@@ -9,6 +9,7 @@ export interface IStorage {
   createGameRound(gameRound: InsertGameRound): Promise<GameRound>;
   updateGameRound(id: string, updates: Partial<GameRound>): Promise<GameRound | undefined>;
   updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined>;
+  updateWinnerPercentage(gameRoundId: string, winnerPercentage: number): Promise<GameRound | undefined>;
   completeGameRound(id: string, winnerSquare: number): Promise<GameRound | undefined>;
 
   // Participants
@@ -84,6 +85,7 @@ export class MemStorage implements IStorage {
       roundNumber: insertGameRound.roundNumber,
       status: insertGameRound.status || "active",
       pricePerSquare: insertGameRound.pricePerSquare || 1000, // default $10.00 (stored in cents)
+      winnerPercentage: insertGameRound.winnerPercentage || 50, // default 50% to winner
       totalRevenue: insertGameRound.totalRevenue || 0,
       startedAt: new Date(),
       completedAt: null,
@@ -109,6 +111,15 @@ export class MemStorage implements IStorage {
     if (!gameRound) return undefined;
     
     const updated = { ...gameRound, pricePerSquare };
+    this.gameRounds.set(gameRoundId, updated);
+    return updated;
+  }
+
+  async updateWinnerPercentage(gameRoundId: string, winnerPercentage: number): Promise<GameRound | undefined> {
+    const gameRound = this.gameRounds.get(gameRoundId);
+    if (!gameRound) return undefined;
+    
+    const updated = { ...gameRound, winnerPercentage };
     this.gameRounds.set(gameRoundId, updated);
     return updated;
   }

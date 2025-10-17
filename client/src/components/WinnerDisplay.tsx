@@ -6,6 +6,9 @@ interface Winner {
   name: string;
   square: number;
   totalPot: number;
+  winnerPercentage: number;
+  winnerAmount: number;
+  charityAmount: number;
   roundNumber: number;
   completedAt: string;
 }
@@ -30,7 +33,8 @@ export function WinnerDisplay({ className }: WinnerDisplayProps) {
     return null;
   }
 
-  const formattedPot = (winner.totalPot / 100).toFixed(2);
+  const formattedWinnerAmount = (winner.winnerAmount / 100).toFixed(2);
+  const formattedCharityAmount = (winner.charityAmount / 100).toFixed(2);
   const completedDate = new Date(winner.completedAt).toLocaleDateString();
 
   return (
@@ -51,13 +55,16 @@ export function WinnerDisplay({ className }: WinnerDisplayProps) {
               Square #{winner.square}
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-right space-y-1">
             <div className="flex items-center gap-1 text-green-600 dark:text-green-400">
               <DollarSign className="w-4 h-4" />
-              <span className="text-base font-bold" data-testid="winner-pot">
-                ${formattedPot}
+              <span className="text-base font-bold" data-testid="winner-amount">
+                ${formattedWinnerAmount}
               </span>
             </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Charity: ${formattedCharityAmount}
+            </p>
             <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
               <Calendar className="w-3 h-3" />
               <span data-testid="winner-date">{completedDate}</span>

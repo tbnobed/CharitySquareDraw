@@ -136,6 +136,25 @@ export default function AdminPage() {
     },
   });
 
+  // Update winner percentage mutation
+  const updateWinnerPercentageMutation = useMutation({
+    mutationFn: (winnerPercentage: number) => apiRequest('POST', '/api/update-winner-percentage', { winnerPercentage }),
+    onSuccess: () => {
+      toast({
+        title: "Winner Percentage Updated",
+        description: "Winner percentage has been updated successfully!",
+      });
+      refetchGame();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update winner percentage. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   // New round mutation
   const newRoundMutation = useMutation({
     mutationFn: () => apiRequest('POST', '/api/new-round'),
@@ -392,6 +411,7 @@ export default function AdminPage() {
             onNewRound={() => newRoundMutation.mutate()}
             onExportData={handleExportData}
             onUpdatePrice={(price) => updatePriceMutation.mutate(price)}
+            onUpdateWinnerPercentage={(percentage) => updateWinnerPercentageMutation.mutate(percentage)}
             onResetSystem={() => resetSystemMutation.mutate()}
             onManualWinner={(squareNumber) => manualWinnerMutation.mutate(squareNumber)}
             onCleanupReservations={() => cleanupReservationsMutation.mutate()}

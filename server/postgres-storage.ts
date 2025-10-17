@@ -86,6 +86,7 @@ export class PostgresStorage implements IStorage {
       roundNumber: gameRound.roundNumber,
       status: gameRound.status || 'active',
       pricePerSquare: gameRound.pricePerSquare || 1000,
+      winnerPercentage: gameRound.winnerPercentage || 50,
       totalRevenue: gameRound.totalRevenue || 0,
       winnerSquare: gameRound.winnerSquare || null,
       startedAt: new Date(),
@@ -125,6 +126,10 @@ export class PostgresStorage implements IStorage {
 
   async updatePricePerSquare(gameRoundId: string, pricePerSquare: number): Promise<GameRound | undefined> {
     return this.updateGameRound(gameRoundId, { pricePerSquare });
+  }
+
+  async updateWinnerPercentage(gameRoundId: string, winnerPercentage: number): Promise<GameRound | undefined> {
+    return this.updateGameRound(gameRoundId, { winnerPercentage });
   }
 
   async completeGameRound(id: string, winnerSquare: number): Promise<GameRound | undefined> {

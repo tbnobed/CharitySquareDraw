@@ -401,6 +401,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update winner percentage
+  app.post("/api/update-winner-percentage", async (req, res) => {
+    try {
+      const { winnerPercentage } = req.body;
+      
+      if (typeof winnerPercentage !== 'number' || winnerPercentage < 0 || winnerPercentage > 100) {
+        return res.status(400).json({ error: "Winner percentage must be between 0 and 100" });
+      }
+
+      const currentRound = await storage.getCurrentGameRound();
+      if (!currentRound) {
+        return res.status(404).json({ error: "No active game round" });
+      }
+
+      const updatedRound = await storage.updateWinnerPercentage(currentRound.id, winnerPercentage);
+      res.json({ success: true, gameRound: updatedRound });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update winner percentage" });
+    }
+  });
+
   // Get winner for a specific round (for receipts)
   app.get("/api/winner/:roundId", async (req, res) => {
     try {
@@ -429,11 +450,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json({ winner: null });
       }
       
+      const winnerPercentage = gameRound.winnerPercentage || 50;
+      const winnerAmount = Math.round((gameRound.totalRevenue * winnerPercentage) / 100);
+      const charityAmount = gameRound.totalRevenue - winnerAmount;
+      
       res.json({
         winner: {
           name: winnerParticipant.name,
           square: gameRound.winnerSquare,
           totalPot: gameRound.totalRevenue,
+          winnerPercentage: winnerPercentage,
+          winnerAmount: winnerAmount,
+          charityAmount: charityAmount,
           roundNumber: gameRound.roundNumber,
           completedAt: gameRound.completedAt
         }
@@ -464,11 +492,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
         
         if (winnerParticipant) {
+          const winnerPercentage = currentRound.winnerPercentage || 50;
+          const winnerAmount = Math.round((currentRound.totalRevenue * winnerPercentage) / 100);
+          const charityAmount = currentRound.totalRevenue - winnerAmount;
+          
           return res.json({
             winner: {
               name: winnerParticipant.name,
               square: currentRound.winnerSquare,
               totalPot: currentRound.totalRevenue,
+              winnerPercentage: winnerPercentage,
+              winnerAmount: winnerAmount,
+              charityAmount: charityAmount,
               roundNumber: currentRound.roundNumber,
               completedAt: currentRound.completedAt
             }

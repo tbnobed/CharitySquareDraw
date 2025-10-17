@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { type GameStats, type Participant, type Square, type RoundWinner } from "@shared/schema";
 import { useQuery } from "@tanstack/react-query";
 import { GameBoard } from "./GameBoard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface AdminDashboardProps {
   stats: GameStats;
@@ -20,6 +20,7 @@ interface AdminDashboardProps {
   onNewRound: () => void;
   onExportData: () => void;
   onUpdatePrice: (price: number) => void;
+  onUpdateWinnerPercentage: (percentage: number) => void;
   onResetSystem: () => void;
   onManualWinner: (squareNumber: number) => void;
   onCleanupReservations: () => void;
@@ -35,13 +36,15 @@ export function AdminDashboard({
   onNewRound, 
   onExportData,
   onUpdatePrice,
+  onUpdateWinnerPercentage,
   onResetSystem,
   onManualWinner,
   onCleanupReservations,
   isLoading 
 }: AdminDashboardProps) {
   const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`;
-  const [priceInput, setPriceInput] = useState((gameRound?.pricePerSquare || 1000) / 100);
+  const [priceInput, setPriceInput] = useState((gameRound?.pricePerSquare ?? 1000) / 100);
+  const [winnerPercentageInput, setWinnerPercentageInput] = useState(gameRound?.winnerPercentage ?? 50);
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [showManualWinnerDialog, setShowManualWinnerDialog] = useState(false);
   const [manualWinnerSquare, setManualWinnerSquare] = useState("");
@@ -60,6 +63,14 @@ export function AdminDashboard({
 
   const winners = winnersData?.winners || [];
 
+  // Sync input states when gameRound changes
+  useEffect(() => {
+    if (gameRound) {
+      setPriceInput((gameRound.pricePerSquare ?? 1000) / 100);
+      setWinnerPercentageInput(gameRound.winnerPercentage ?? 50);
+    }
+  }, [gameRound]);
+
   const formatPhone = (phone: string) => {
     const cleaned = phone.replace(/\D/g, '');
     const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -73,6 +84,12 @@ export function AdminDashboard({
     const priceInCents = Math.round(priceInput * 100);
     if (priceInCents > 0) {
       onUpdatePrice(priceInCents);
+    }
+  };
+
+  const handleWinnerPercentageUpdate = () => {
+    if (winnerPercentageInput >= 0 && winnerPercentageInput <= 100) {
+      onUpdateWinnerPercentage(winnerPercentageInput);
     }
   };
 
@@ -214,25 +231,49 @@ export function AdminDashboard({
               <h3 className="text-lg sm:text-xl font-bold text-gray-900">Round #{stats.currentRound}</h3>
               <p className="text-sm sm:text-base text-gray-600">{stats.squaresSold} squares sold</p>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <Settings className="h-4 w-4 text-gray-500" />
-                <Label htmlFor="price-input" className="text-sm font-medium whitespace-nowrap">Price per Square:</Label>
+            <div className="flex flex-col space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <Settings className="h-4 w-4 text-gray-500" />
+                  <Label htmlFor="price-input" className="text-sm font-medium whitespace-nowrap">Price per Square:</Label>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm">$</span>
+                  <Input
+                    id="price-input"
+                    type="number"
+                    value={priceInput}
+                    onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
+                    onBlur={handlePriceUpdate}
+                    onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
+                    className="w-20 text-sm"
+                    min="0.01"
+                    step="0.01"
+                    data-testid="input-price"
+                  />
+                </div>
               </div>
-              <div className="flex items-center space-x-1">
-                <span className="text-sm">$</span>
-                <Input
-                  id="price-input"
-                  type="number"
-                  value={priceInput}
-                  onChange={(e) => setPriceInput(parseFloat(e.target.value) || 0)}
-                  onBlur={handlePriceUpdate}
-                  onKeyDown={(e) => e.key === 'Enter' && handlePriceUpdate()}
-                  className="w-20 text-sm"
-                  min="0.01"
-                  step="0.01"
-                  data-testid="input-price"
-                />
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <Trophy className="h-4 w-4 text-gray-500" />
+                  <Label htmlFor="winner-percentage-input" className="text-sm font-medium whitespace-nowrap">Winner Gets:</Label>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Input
+                    id="winner-percentage-input"
+                    type="number"
+                    value={winnerPercentageInput}
+                    onChange={(e) => setWinnerPercentageInput(parseInt(e.target.value) || 0)}
+                    onBlur={handleWinnerPercentageUpdate}
+                    onKeyDown={(e) => e.key === 'Enter' && handleWinnerPercentageUpdate()}
+                    className="w-16 text-sm"
+                    min="0"
+                    max="100"
+                    data-testid="input-winner-percentage"
+                  />
+                  <span className="text-sm">%</span>
+                  <span className="text-xs text-gray-500 ml-2">(Charity gets {100 - winnerPercentageInput}%)</span>
+                </div>
               </div>
             </div>
           </div>
