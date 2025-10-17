@@ -55,6 +55,10 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=deps /app/node_modules ./node_modules
 
+# Copy drizzle-kit from build dependencies for migrations
+COPY --from=build-deps /app/node_modules/drizzle-kit ./node_modules/drizzle-kit
+COPY --from=build-deps /app/node_modules/.bin/drizzle-kit ./node_modules/.bin/drizzle-kit
+
 # Copy the built public folder from vite (this contains index.html and assets)
 COPY --from=builder /app/dist/public ./dist/public
 
