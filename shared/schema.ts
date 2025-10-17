@@ -8,6 +8,7 @@ export const gameRounds = pgTable("game_rounds", {
   roundNumber: integer("round_number").notNull(),
   status: text("status").notNull().default("active"), // "active", "completed"
   pricePerSquare: integer("price_per_square").notNull().default(10), // price in cents
+  winnerPercentage: integer("winner_percentage").notNull().default(50), // percentage of pot that goes to winner (0-100)
   startedAt: timestamp("started_at").notNull().defaultNow(),
   completedAt: timestamp("completed_at"),
   winnerSquare: integer("winner_square"),
