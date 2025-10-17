@@ -36,6 +36,9 @@ COPY . .
 RUN npm run build
 RUN npx esbuild server/production-entry.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/server-bundle.js
 
+# Build migration runner
+RUN npx esbuild server/run-migrations.ts --platform=node --packages=external --bundle --format=esm --outfile=dist/run-migrations.js
+
 # Production image
 FROM node:20-alpine AS runner
 WORKDIR /app
@@ -44,8 +47,8 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 chicken-poop-bingo
 
-# Install PostgreSQL client for database operations
-RUN apk add --no-cache postgresql-client
+# Install PostgreSQL client and bash for database operations and entrypoint script
+RUN apk add --no-cache postgresql-client bash
 
 # Copy built application
 COPY --from=builder /app/dist ./dist
@@ -57,8 +60,15 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy the built public folder from vite (this contains index.html and assets)
 COPY --from=builder /app/dist/public ./dist/public
 
-# Make bundled server executable
+# Copy migrations folder
+COPY --from=builder /app/migrations ./migrations
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+
+# Make bundled server and entrypoint executable
 RUN chmod +x dist/server-bundle.js
+RUN chmod +x docker-entrypoint.sh
 
 # Set ownership
 RUN chown -R chicken-poop-bingo:nodejs /app
@@ -71,5 +81,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/game', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Start the application
-CMD ["node", "dist/server-bundle.js"]
+# Start the application using entrypoint (runs migrations then server)
+CMD ["./docker-entrypoint.sh"]
