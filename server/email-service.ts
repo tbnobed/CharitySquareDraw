@@ -54,6 +54,8 @@ export class EmailService {
     const { participant, gameRound, totalAmount, squareNumbers } = data;
     const formattedAmount = (totalAmount / 100).toFixed(2);
     const squaresList = squareNumbers.map(num => `#${num}`).join(', ');
+    const winnerPercentage = gameRound.winnerPercentage || 50;
+    const charityPercentage = 100 - winnerPercentage;
 
     return `
 <!DOCTYPE html>

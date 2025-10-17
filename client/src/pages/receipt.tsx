@@ -33,7 +33,7 @@ export default function ReceiptPage() {
   });
 
   // Get the winner for this specific round
-  const { data: winnerData } = useQuery<{winner: {name: string; square: number; totalPot: number; roundNumber: number; completedAt: string} | null}>({
+  const { data: winnerData } = useQuery<{winner: {name: string; square: number; totalPot: number; winnerPercentage: number; winnerAmount: number; charityAmount: number; roundNumber: number; completedAt: string} | null}>({
     queryKey: ['/api/winner', participant?.gameRoundId, participant?.id], // Add participant ID to make cache unique
     queryFn: () => fetch(`/api/winner/${participant?.gameRoundId}`).then(res => res.json()),
     enabled: !!participant?.gameRoundId,
@@ -98,9 +98,17 @@ export default function ReceiptPage() {
                 <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   🎉 {winnerData.winner.name} won square #{winnerData.winner.square}
                 </p>
-                <p className="text-green-600 dark:text-green-400 font-bold text-lg">
-                  Total Pot: ${(winnerData.winner.totalPot / 100).toFixed(2)}
-                </p>
+                <div className="mt-2">
+                  <p className="text-green-600 dark:text-green-400 font-bold text-xl">
+                    Winner: ${(winnerData.winner.winnerAmount / 100).toFixed(2)}
+                  </p>
+                  <p className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                    Charity: ${(winnerData.winner.charityAmount / 100).toFixed(2)}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    ({winnerData.winner.winnerPercentage}% / {100 - winnerData.winner.winnerPercentage}% split)
+                  </p>
+                </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                   {winnerData.winner.completedAt && format(new Date(winnerData.winner.completedAt), 'MMM dd, yyyy • h:mm a')}
                 </p>
