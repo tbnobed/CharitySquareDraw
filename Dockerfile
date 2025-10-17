@@ -52,18 +52,13 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/shared ./shared
 COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/drizzle.config.ts ./
 COPY --from=deps /app/node_modules ./node_modules
 
 # Copy the built public folder from vite (this contains index.html and assets)
 COPY --from=builder /app/dist/public ./dist/public
 
-# Copy startup script
-COPY docker-startup.sh ./docker-startup.sh
-
-# Make bundled server and startup script executable
+# Make bundled server executable
 RUN chmod +x dist/server-bundle.js
-RUN chmod +x docker-startup.sh
 
 # Set ownership
 RUN chown -R chicken-poop-bingo:nodejs /app
@@ -76,5 +71,5 @@ EXPOSE 5000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/game', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Start the application using startup script (handles migrations + server)
-CMD ["./docker-startup.sh"]
+# Start the application using bundled server
+CMD ["node", "dist/server-bundle.js"]
