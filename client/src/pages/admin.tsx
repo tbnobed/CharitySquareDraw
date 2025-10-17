@@ -101,9 +101,11 @@ export default function AdminPage() {
     mutationFn: () => apiRequest('POST', '/api/draw-winner'),
     onSuccess: async (response) => {
       const data = await response.json();
+      const winnerAmountFormatted = (data.winnerAmount / 100).toFixed(2);
+      const charityAmountFormatted = (data.charityAmount / 100).toFixed(2);
       toast({
         title: "Winner Drawn!",
-        description: `Square #${data.winnerSquare} wins $${(data.totalPot / 100).toFixed(2)}!`,
+        description: `Square #${data.winnerSquare} wins $${winnerAmountFormatted}! Charity gets $${charityAmountFormatted}.`,
       });
       refetchGame();
       refetchStats();
@@ -239,9 +241,11 @@ export default function AdminPage() {
     mutationFn: (squareNumber: number) => apiRequest('POST', '/api/manual-winner', { squareNumber }),
     onSuccess: async (response) => {
       const data = await response.json();
+      const winnerAmountFormatted = (data.winnerAmount / 100).toFixed(2);
+      const charityAmountFormatted = (data.charityAmount / 100).toFixed(2);
       toast({
         title: "Winner Set!",
-        description: `Square #${data.winnerSquare} has been set as the winner!`,
+        description: `Square #${data.winnerSquare} wins $${winnerAmountFormatted}! Charity gets $${charityAmountFormatted}.`,
       });
       refetchGame();
       refetchStats();

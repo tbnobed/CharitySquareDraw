@@ -357,6 +357,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get winner participant details
       const winnerParticipant = await storage.getParticipant(winner!);
       
+      // Calculate winner and charity amounts
+      const winnerPercentage = currentRound.winnerPercentage || 50;
+      const winnerAmount = Math.round((currentRound.totalRevenue * winnerPercentage) / 100);
+      const charityAmount = currentRound.totalRevenue - winnerAmount;
+      
       // Broadcast winner information
       broadcast({
         type: 'WINNER_DRAWN',
@@ -365,6 +370,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           winnerId: winner,
           winnerName: winnerParticipant?.name || 'Unknown',
           totalPot: currentRound.totalRevenue,
+          winnerPercentage: winnerPercentage,
+          winnerAmount: winnerAmount,
+          charityAmount: charityAmount,
           roundNumber: currentRound.roundNumber
         }
       });
@@ -373,7 +381,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         winnerSquare: winnerSquare.number,
         winnerId: winner,
         winnerName: winnerParticipant?.name || 'Unknown',
-        totalPot: currentRound.totalRevenue 
+        totalPot: currentRound.totalRevenue,
+        winnerPercentage: winnerPercentage,
+        winnerAmount: winnerAmount,
+        charityAmount: charityAmount
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to draw winner" });
@@ -697,6 +708,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get winner participant details
       const winnerParticipant = await storage.getParticipant(square.participantId!);
 
+      // Calculate winner and charity amounts
+      const winnerPercentage = currentRound.winnerPercentage || 50;
+      const winnerAmount = Math.round((currentRound.totalRevenue * winnerPercentage) / 100);
+      const charityAmount = currentRound.totalRevenue - winnerAmount;
+
       broadcast({
         type: 'WINNER_DRAWN',
         data: { 
@@ -705,6 +721,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           winnerName: winnerParticipant?.name || 'Unknown',
           gameRoundId: currentRound.id,
           totalPot: currentRound.totalRevenue,
+          winnerPercentage: winnerPercentage,
+          winnerAmount: winnerAmount,
+          charityAmount: charityAmount,
           roundNumber: currentRound.roundNumber
         }
       });
@@ -715,6 +734,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         winnerId: square.participantId!,
         winnerName: winnerParticipant?.name || 'Unknown',
         totalPot: currentRound.totalRevenue,
+        winnerPercentage: winnerPercentage,
+        winnerAmount: winnerAmount,
+        charityAmount: charityAmount,
         message: `Square #${squareNumber} selected as winner!` 
       });
     } catch (error) {
